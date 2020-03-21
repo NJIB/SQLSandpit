@@ -1,133 +1,136 @@
 $(document).ready(function() {
-  // Getting jQuery references to the post body, title, form, and author select
+  // Getting jQuery references to the comment body, title, form, and person select
   const bodyInput = $('#body');
   const titleInput = $('#title');
   const cmsForm = $('#cms');
-  const authorSelect = $('#author');
+  const personSelect = $('#person');
   // Adding an event listener for when the form is submitted
   $(cmsForm).on('submit', handleFormSubmit);
-  // Gets the part of the url that comes after the "?" (which we have if we're updating a post)
+  // Gets the part of the url that comes after the "?" (which we have if we're updating a comment)
   const url = window.location.search;
-  let postId;
-  let authorId;
-  // Sets a flag for whether or not we're updating a post to be false initially
+  let commentId;
+  let personId;
+  // Sets a flag for whether or not we're updating a comment to be false initially
   let updating = false;
 
-  // If we have this section in our url, we pull out the post id from the url
-  // In '?post_id=1', postId is 1
-  if (url.indexOf('?post_id=') !== -1) {
-    postId = url.split('=')[1];
-    getPostData(postId, 'post');
+  // If we have this section in our url, we pull out the comment id from the url
+  // In '?comment_id=1', commentId is 1
+  if (url.indexOf('?comment_id=') !== -1) {
+    commentId = url.split('=')[1];
+    getCommentData(commentId, 'comment');
   }
-  // Otherwise if we have an author_id in our url, preset the author select box to be our Author
-  else if (url.indexOf('?author_id=') !== -1) {
-    authorId = url.split('=')[1];
+  // Otherwise if we have an person_id in our url, preset the person select box to be our Person
+  else if (url.indexOf('?person_id=') !== -1) {
+    personId = url.split('=')[1];
   }
 
-  // Getting the authors, and their posts
-  getAuthors();
+  // Getting the persons, and their comments
+  getPersons();
 
-  // A function for handling what happens when the form to create a new post is submitted
+  // A function for handling what happens when the form to create a new comment is submitted
   function handleFormSubmit(event) {
     event.preventDefault();
-    // Wont submit the post if we are missing a body, title, or author
-    if (!titleInput.val().trim() || !bodyInput.val().trim() || !authorSelect.val()) {
+    // Wont submit the comment if we are missing a body, title, or person
+    if (!titleInput.val().trim() || !bodyInput.val().trim() || !personSelect.val()) {
       return;
     }
-    // Constructing a newPost object to hand to the database
-    const newPost = {
+    // Constructing a newComment object to hand to the database
+    const newComment = {
       title: titleInput
           .val()
           .trim(),
       body: bodyInput
           .val()
           .trim(),
-      AuthorId: authorSelect.val(),
+      PersonId: personSelect.val(),
     };
 
-    // If we're updating a post run updatePost to update a post
-    // Otherwise run submitPost to create a whole new post
+    // If we're updating a comment run updateComment to update a comment
+    // Otherwise run submitComment to create a whole new comment
     if (updating) {
-      newPost.id = postId;
-      updatePost(newPost);
+      newComment.id = commentId;
+      updateComment(newComment);
     } else {
-      submitPost(newPost);
+      submitComment(newComment);
     }
   }
 
-  // Submits a new post and brings user to blog page upon completion
-  function submitPost(post) {
-    $.post('/api/posts', post, function() {
-      window.location.href = '/blog';
+  // Submits a new comment and brings user to comment page upon completion
+  function submitComment(comment) {
+    $.post('/api/comments', comment, function() {
+      window.location.href = '/comment';
     });
   }
 
-  // Gets post data for the current post if we're editing, or if we're adding to an author's existing posts
-  function getPostData(id, type) {
+  // Gets comment data for the current comment if we're editing, or if we're adding to an person's existing comments
+  function getCommentData(id, type) {
     let queryUrl;
     switch (type) {
-      case 'post':
-        queryUrl = '/api/posts/' + id;
+      case 'comment':
+        queryUrl = '/api/comments/' + id;
         break;
-      case 'author':
-        queryUrl = '/api/authors/' + id;
+      case 'person':
+        queryUrl = '/api/persons/' + id;
         break;
       default:
         return;
     }
+
+    console.log("queryUrl: ", queryUrl);
+
     $.get(queryUrl, function(data) {
       if (data) {
-        console.log(data.AuthorId || data.id);
-        // If this post exists, prefill our cms forms with its data
+        console.log(data.PersonId || data.id);
+        // If this comment exists, prefill our cms forms with its data
         titleInput.val(data.title);
         bodyInput.val(data.body);
-        authorId = data.AuthorId || data.id;
-        // If we have a post with this id, set a flag for us to know to update the post
+        personId = data.PersonId || data.id;
+        // If we have a comment with this id, set a flag for us to know to update the comment
         // when we hit submit
         updating = true;
       }
     });
   }
 
-  // A function to get Authors and then render our list of Authors
-  function getAuthors() {
-    $.get('/api/authors', renderAuthorList);
+  // A function to get Persons and then render our list of Persons
+  function getPersons() {
+    $.get('/api/persons', renderPersonList);
   }
-  // Function to either render a list of authors, or if there are none, direct the user to the page
-  // to create an author first
-  function renderAuthorList(data) {
+  // Function to either render a list of persons, or if there are none, direct the user to the page
+  // to create an person first
+  function renderPersonList(data) {
     if (!data.length) {
-      window.location.href = '/authors';
+      window.location.href = '/persons';
     }
     $('.hidden').removeClass('hidden');
     const rowsToAdd = [];
     for (let i = 0; i < data.length; i++) {
-      rowsToAdd.push(createAuthorRow(data[i]));
+      rowsToAdd.push(createPersonRow(data[i]));
     }
-    authorSelect.empty();
+    personSelect.empty();
     console.log(rowsToAdd);
-    console.log(authorSelect);
-    authorSelect.append(rowsToAdd);
-    authorSelect.val(authorId);
+    console.log(personSelect);
+    personSelect.append(rowsToAdd);
+    personSelect.val(personId);
   }
 
-  // Creates the author options in the dropdown
-  function createAuthorRow(author) {
+  // Creates the person options in the dropdown
+  function createPersonRow(person) {
     const listOption = $('<option>');
-    listOption.attr('value', author.id);
-    listOption.text(author.name);
+    listOption.attr('value', person.id);
+    listOption.text(person.name);
     return listOption;
   }
 
-  // Update a given post, bring user to the blog page when done
-  function updatePost(post) {
+  // Update a given comment, bring user to the comment page when done
+  function updateComment(comment) {
     $.ajax({
       method: 'PUT',
-      url: '/api/posts',
-      data: post,
+      url: '/api/comments',
+      data: comment,
     })
         .then(function() {
-          window.location.href = '/blog';
+          window.location.href = '/comment';
         });
   }
 });

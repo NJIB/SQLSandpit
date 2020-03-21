@@ -15,33 +15,33 @@
 	<div class="container">
 		<div class="row mt-4">
       <div class="col-md-2 col-sm-2">
-        <a class="btn btn-light" href="/blog">Go to Blog</a>
+        <a class="btn btn-light" href="/comment">Go to comment</a>
       </div>
 			<div class="col-md-2 col-sm-2">
-        <a class="btn btn-light" href="/cms">New Post</a>
+        <a class="btn btn-light" href="/cms">New Comment</a>
       </div>
     </div>
 		<div class="row">
 			<div class="col-md-8 offset-md-2">
-				<div class="author-container">
-					<h1>Authors</h1>
+				<div class="person-container">
+					<h1>Persons</h1>
 					<table class="table table-striped">
 						<thead>
 							<tr>
 								<th>Name</th>
-								<th># of Posts</th>
-								<th>See Author's Posts</th>
-								<th>New Post</th>
-								<th>Delete Author</th>
+								<th># of Comments</th>
+								<th>See Person's Comments</th>
+								<th>New Comment</th>
+								<th>Delete Person</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr id="form-row">
-								<form id="author-form">
+								<form id="person-form">
 									<td colspan="4">
-										<input placeholder="Enter a name" id="author-name" type="text" />
+										<input placeholder="Enter a name" id="person-name" type="text" />
 									</td>
-									<td><button type="submit" class="btn btn-success">Create Author</button>
+									<td><button type="submit" class="btn btn-success">Create Person</button>
 									</td>
 								</form>
 							</tr>
@@ -52,7 +52,7 @@
 		</div>
 		</d>
 		<!-- Custom Script -->
-		<script src="js/author.js" type="text/javascript"></script>
+		<script src="js/person.js" type="text/javascript"></script>
 
 </body>
 

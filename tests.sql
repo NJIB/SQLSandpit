@@ -1,7 +1,7 @@
 SHOW TABLES;
 
-DESCRIBE Posts;
+DESCRIBE Comments;
 
-DESCRIBE Authors;
+DESCRIBE Persons;
 
-SELECT * FROM Posts;
+SELECT * FROM Comments;

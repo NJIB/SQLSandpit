@@ -1,5 +1,5 @@
 // *********************************************************************************
-// post-api-routes.js - this file offers a set of routes for displaying and saving data to the db
+// comment-api-routes.js - this file offers a set of routes for displaying and saving data to the db
 // *********************************************************************************
 
 // Dependencies
@@ -11,22 +11,22 @@ const db = require('../models');
 // Routes
 // =============================================================
 module.exports = function(app) {
-  // GET route for getting all of the posts
-  app.get('/api/posts', async (req, res) => {
-    // Add sequelize code to find all posts, and return them to the user with res.json
+  // GET route for getting all of the comments
+  app.get('/api/comments', async (req, res) => {
+    // Add sequelize code to find all comments, and return them to the user with res.json
     const query = {};
-    if (req.query.author_id) {
-      query.AuthorId = req.query.author_id;
+    if (req.query.person_id) {
+      query.PersonId = req.query.person_id;
     }
     // In our findAll argument, we add a 'where' property, that could be empty
-    // depending on whether or not the request has an 'author_id' key/value pait in the query string.
+    // depending on whether or not the request has an 'person_id' key/value pait in the query string.
     // We also add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Author
+    // In this case, just db.Person
     try {
-      const data = await db.Post.findAll({
+      const data = await db.Comment.findAll({
         where: query,
-        include: [db.Author],
+        include: [db.Person],
       });
       res.json(data);
     } catch (error) {
@@ -34,27 +34,27 @@ module.exports = function(app) {
     }
   });
 
-  // Get route for returning posts of a specific category
-  app.get('/api/posts/category/:category', async (req, res) => {
-    // Add sequelize code to find all posts where the category is equal to req.params.category,
+  // Get route for returning comments of a specific category
+  app.get('/api/comments/category/:category', async (req, res) => {
+    // Add sequelize code to find all comments where the category is equal to req.params.category,
     // return the result to the user with res.json
     // We build up the query object with a category property.
-    // If the request has an 'author_id' key/value pair in the query string, we
-    // we add an AuthorId property to the query object.
+    // If the request has an 'person_id' key/value pair in the query string, we
+    // we add an PersonId property to the query object.
     // Then entire query object will be passed as the object for 'where' in the findAll argument.
     const query = {
       category: req.params.category,
     };
-    if (req.query.author_id) {
-      query.AuthorId = req.query.author_id;
+    if (req.query.person_id) {
+      query.PersonId = req.query.person_id;
     }
     // We also add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Author
+    // In this case, just db.Person
     try {
-      const data = await db.Post.findAll({
+      const data = await db.Comment.findAll({
         where: query,
-        include: [db.Author],
+        include: [db.Person],
       });
       res.json(data);
     } catch (error) {
@@ -62,17 +62,17 @@ module.exports = function(app) {
     }
   });
 
-  // Get route for retrieving a single post
-  app.get('/api/posts/:id', async (req, res) => {
-    // Add sequelize code to find a single post where the id is equal to req.params.id,
+  // Get route for retrieving a single comment
+  app.get('/api/comments/:id', async (req, res) => {
+    // Add sequelize code to find a single comment where the id is equal to req.params.id,
     // return the result to the user with res.json
     // We add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Author
+    // In this case, just db.Person
     try {
-      const data = await db.Post.findOne({
+      const data = await db.Comment.findOne({
         where: {id: req.params.id},
-        include: [db.Author],
+        include: [db.Person],
       });
       res.json(data);
     } catch (error) {
@@ -80,24 +80,24 @@ module.exports = function(app) {
     }
   });
 
-  // POST route for saving a new post
-  app.post('/api/posts', async (req, res) => {
-    // Add sequelize code for creating a post using req.body,
+  // POST route for saving a new comment
+  app.post('/api/comments', async (req, res) => {
+    // Add sequelize code for creating a comment using req.body,
     // then return the result using res.json
     try {
-      const result = await db.Post.create(req.body);
+      const result = await db.Comment.create(req.body);
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});
     }
   });
 
-  // DELETE route for deleting posts
-  app.delete('/api/posts/:id', async (req, res) => {
-    // Add sequelize code to delete a post where the id is equal to req.params.id,
+  // DELETE route for deleting comments
+  app.delete('/api/comments/:id', async (req, res) => {
+    // Add sequelize code to delete a comment where the id is equal to req.params.id,
     // then return the result to the user using res.json
     try {
-      const result = await db.Post.destroy(
+      const result = await db.Comment.destroy(
           {
             where: {id: req.params.id},
           },
@@ -110,14 +110,14 @@ module.exports = function(app) {
     }
   });
 
-  // PUT route for updating posts
-  app.put('/api/posts', async (req, res) => {
-    // Add code here to update a post using the values in req.body, where the id is equal to
+  // PUT route for updating comments
+  app.put('/api/comments', async (req, res) => {
+    // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     const {id, title, body, category} = req.body;
 
     try {
-      const result = await db.Post.update(
+      const result = await db.Comment.update(
           {title, body, category},
           {where: {id}},
       );

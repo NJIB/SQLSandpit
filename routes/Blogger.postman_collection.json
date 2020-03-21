@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "3903a303-b98f-4e5a-b36b-035ca1c07e53",
-		"name": "Blogger",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_commentman_id": "3903a303-b98f-4e5a-b36b-035ca1c07e53",
+		"name": "Sandpit",
+		"schema": "https://schema.getcommentman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/posts",
+					"raw": "http://localhost:8080/api/comments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -19,7 +19,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"posts"
+						"comments"
 					]
 				}
 			},
@@ -31,7 +31,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/posts/2",
+					"raw": "http://localhost:8080/api/comments/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -39,7 +39,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"posts",
+						"comments",
 						"2"
 					]
 				}
@@ -52,7 +52,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/posts?author_id=1",
+					"raw": "http://localhost:8080/api/comments?person_id=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -60,11 +60,11 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"posts"
+						"comments"
 					],
 					"query": [
 						{
-							"key": "author_id",
+							"key": "person_id",
 							"value": "1"
 						}
 					]
@@ -78,7 +78,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/posts/category/weekend?author_id=1",
+					"raw": "http://localhost:8080/api/comments/category/weekend?person_id=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -86,13 +86,13 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"posts",
+						"comments",
 						"category",
 						"weekend"
 					],
 					"query": [
 						{
-							"key": "author_id",
+							"key": "person_id",
 							"value": "1"
 						}
 					]
@@ -106,7 +106,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/authors/1",
+					"raw": "http://localhost:8080/api/persons/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -114,7 +114,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"authors",
+						"persons",
 						"1"
 					]
 				}
@@ -127,7 +127,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/authors",
+					"raw": "http://localhost:8080/api/persons",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -135,7 +135,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"authors"
+						"persons"
 					]
 				}
 			},
@@ -163,7 +163,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/authors",
+					"raw": "http://localhost:8080/api/persons",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -171,7 +171,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"authors"
+						"persons"
 					]
 				}
 			},
@@ -191,7 +191,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"title\": \"My Day at the museum\",\n\t\"body\": \"awesome....\",\n\t\"category\": \"Holiday\",\n\t\"AuthorId\": 3\n}",
+					"raw": "{\n\t\"title\": \"My Day at the museum\",\n\t\"body\": \"awesome....\",\n\t\"category\": \"Holiday\",\n\t\"PersonId\": 3\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -199,7 +199,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/posts",
+					"raw": "http://localhost:8080/api/comments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -207,7 +207,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"posts"
+						"comments"
 					]
 				}
 			},
@@ -235,7 +235,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/posts",
+					"raw": "http://localhost:8080/api/comments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -243,7 +243,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"posts"
+						"comments"
 					]
 				}
 			},
@@ -271,7 +271,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/authors",
+					"raw": "http://localhost:8080/api/persons",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -279,7 +279,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"authors"
+						"persons"
 					]
 				}
 			},
@@ -291,7 +291,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/authors/2",
+					"raw": "http://localhost:8080/api/persons/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -299,7 +299,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"authors",
+						"persons",
 						"2"
 					]
 				}
@@ -312,7 +312,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/posts/2",
+					"raw": "http://localhost:8080/api/comments/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -320,7 +320,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"posts",
+						"comments",
 						"2"
 					]
 				}

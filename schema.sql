@@ -1,4 +1,4 @@
--- Drops the blogger if it exists currently --
-DROP DATABASE IF EXISTS blogger;
--- Creates the "blogger" database --
-CREATE DATABASE blogger;
+-- Drops the sandpit if it exists currently --
+DROP DATABASE IF EXISTS sandpit;
+-- Creates the "sandpit" database --
+CREATE DATABASE sandpit;
