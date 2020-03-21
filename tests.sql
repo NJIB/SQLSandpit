@@ -1,0 +1,7 @@
+SHOW TABLES;
+
+DESCRIBE Posts;
+
+DESCRIBE Authors;
+
+SELECT * FROM Posts;
