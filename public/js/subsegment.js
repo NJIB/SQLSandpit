@@ -139,7 +139,7 @@ $(document).ready(function() {
     blogContainer.empty();
     const messageH2 = $('<h2>');
     messageH2.css({'text-align': 'center', 'margin-top': '50px'});
-    messageH2.html('No subsegments yet' + partial + ', navigate <a href=\'/cms' + query +
+    messageH2.html('No subsegments yet' + partial + ', navigate <a href=\'/sms' + query +
     '\'>here</a> in order to get started.');
     blogContainer.append(messageH2);
   }
