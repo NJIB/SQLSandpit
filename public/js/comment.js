@@ -66,16 +66,21 @@ $(document).ready(function() {
   function createNewRow(comment) {
     let formattedDate = new Date(comment.createdAt);
     formattedDate = moment(formattedDate).format('MMMM Do YYYY, h:mm:ss a');
+    
     const newCommentCard = $('<div>');
     newCommentCard.addClass('card');
+    
     const newCommentCardHeading = $('<div>');
     newCommentCardHeading.addClass('card-header');
+    
     const deleteBtn = $('<button>');
     deleteBtn.text('x');
     deleteBtn.addClass('delete btn btn-danger');
+
     const editBtn = $('<button>');
     editBtn.text('EDIT');
     editBtn.addClass('edit btn btn-info');
+    
     const newCommentTitle = $('<h2>');
     const newCommentDate = $('<small>');
     const newCommentPerson = $('<h5>');
@@ -86,8 +91,10 @@ $(document).ready(function() {
       'margin-top':
       '-10px',
     });
+
     const newCommentCardBody = $('<div>');
     newCommentCardBody.addClass('card-body');
+    
     const newCommentBody = $('<p>');
     newCommentTitle.text(comment.title + ' ');
     newCommentBody.text(comment.body);

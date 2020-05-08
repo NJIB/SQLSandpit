@@ -28,6 +28,8 @@ app.use(express.static('public'));
 require('./routes/html-routes')(app);
 require('./routes/person-api-routes')(app);
 require('./routes/comment-api-routes')(app);
+require('./routes/segment-api-routes')(app);
+require('./routes/subsegment-api-routes')(app);
 
 // Syncing our sequelize models Starting our Express app
 // =============================================================

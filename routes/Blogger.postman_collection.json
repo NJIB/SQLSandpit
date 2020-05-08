@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_commentman_id": "3903a303-b98f-4e5a-b36b-035ca1c07e53",
-		"name": "Sandpit",
-		"schema": "https://schema.getcommentman.com/json/collection/v2.1.0/collection.json"
+		"_subsegmentman_id": "3903a303-b98f-4e5a-b36b-035ca1c07e53",
+		"name": "Segment",
+		"schema": "https://schema.getsubsegmentman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/comments",
+					"raw": "http://localhost:8080/api/subsegments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -19,7 +19,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"comments"
+						"subsegments"
 					]
 				}
 			},
@@ -31,7 +31,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/comments/2",
+					"raw": "http://localhost:8080/api/subsegments/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -39,7 +39,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"comments",
+						"subsegments",
 						"2"
 					]
 				}
@@ -52,7 +52,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/comments?person_id=1",
+					"raw": "http://localhost:8080/api/subsegments?segment_id=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -60,11 +60,11 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"comments"
+						"subsegments"
 					],
 					"query": [
 						{
-							"key": "person_id",
+							"key": "segment_id",
 							"value": "1"
 						}
 					]
@@ -78,7 +78,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/comments/category/weekend?person_id=1",
+					"raw": "http://localhost:8080/api/subsegments/category/weekend?segment_id=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -86,13 +86,13 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"comments",
+						"subsegments",
 						"category",
 						"weekend"
 					],
 					"query": [
 						{
-							"key": "person_id",
+							"key": "segment_id",
 							"value": "1"
 						}
 					]
@@ -106,7 +106,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/persons/1",
+					"raw": "http://localhost:8080/api/segments/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -114,7 +114,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"persons",
+						"segments",
 						"1"
 					]
 				}
@@ -127,7 +127,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/persons",
+					"raw": "http://localhost:8080/api/segments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -135,7 +135,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"persons"
+						"segments"
 					]
 				}
 			},
@@ -163,7 +163,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/persons",
+					"raw": "http://localhost:8080/api/segments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -171,7 +171,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"persons"
+						"segments"
 					]
 				}
 			},
@@ -199,7 +199,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/comments",
+					"raw": "http://localhost:8080/api/subsegments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -207,7 +207,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"comments"
+						"subsegments"
 					]
 				}
 			},
@@ -235,7 +235,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/comments",
+					"raw": "http://localhost:8080/api/subsegments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -243,7 +243,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"comments"
+						"subsegments"
 					]
 				}
 			},
@@ -271,7 +271,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/persons",
+					"raw": "http://localhost:8080/api/segments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -279,7 +279,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"persons"
+						"segments"
 					]
 				}
 			},
@@ -291,7 +291,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/persons/2",
+					"raw": "http://localhost:8080/api/segments/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -299,7 +299,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"persons",
+						"segments",
 						"2"
 					]
 				}
@@ -312,7 +312,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/comments/2",
+					"raw": "http://localhost:8080/api/subsegments/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -320,7 +320,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"comments",
+						"subsegments",
 						"2"
 					]
 				}

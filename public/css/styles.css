@@ -4,9 +4,19 @@ button.submit {
 
 form#cms {
   margin-top: 50px;
+  width: 80%;
+}
+
+form#sms {
+  margin-top: 50px;
+  width: 80%;
 }
 
 #cms textarea {
+  resize: none;
+}
+
+#sms textarea {
   resize: none;
 }
 
@@ -45,3 +55,30 @@ button.edit {
 .top-30 {
   margin-top: 30px;
 }
+
+.segment-container {
+  margin-top: 50px;
+}
+
+.segment-list {
+  margin-top: 25px;
+}
+
+.subsegment-container {
+  margin-top: 30px;
+}
+
+.subsegment {
+  margin-top: 30px;
+}
+
+.hidden {
+  display: none;
+}
+
+#segment-name {
+  width: 100%;
+  height: 35px;
+  margin-top: 5px;
+}
+

@@ -21,13 +21,34 @@ module.exports = function(app) {
     res.sendFile(path.join(__dirname, '../public/cms.html'));
   });
 
+  // Route to the cms page
+  app.get('/sms', function(req, res) {
+    res.sendFile(path.join(__dirname, '../public/sms.html'));
+  });
+
   // comment route loads comment.html
   app.get('/comment', function(req, res) {
     res.sendFile(path.join(__dirname, '../public/comment.html'));
   });
 
+    // subsegment route loads subsegment.html
+    app.get('/subsegment', function(req, res) {
+      res.sendFile(path.join(__dirname, '../public/subsegment.html'));
+    });
+
+    // sgmt_rev_goals route loads sgmt_rev_goals.html
+    app.get('/sgmt_rev_goals', function(req, res) {
+      res.sendFile(path.join(__dirname, '../public/sgmt_rev_goals.html'));
+    }); 
+
   // persons route loads person-manager.html
   app.get('/persons', function(req, res) {
     res.sendFile(path.join(__dirname, '../public/person-manager.html'));
   });
+
+    // segments route loads segment-manager.html
+    app.get('/segments', function(req, res) {
+      res.sendFile(path.join(__dirname, '../public/segment-manager.html'));
+    });
+  
 };
