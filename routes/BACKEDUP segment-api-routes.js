@@ -36,9 +36,9 @@ module.exports = function(app) {
 
   app.post('/api/segments', async (req, res) => {
     // Create an Segment with the data available to us in req.body
-    const {name} = req.body;
+    const {segment} = req.body;    
     try {
-      const result = await db.Segment.create({name});
+      const result = await db.Segment.create({segment});
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});
@@ -47,8 +47,8 @@ module.exports = function(app) {
 
   app.delete('/api/segments/:id', async (req, res) => {
     // Delete the Segment with the id available to us in req.params.id
-    // Due to the association set up in the model, deleting an segment
-    // will delete all of their subsegments as well.
+    // Due to the association set up in the model, deleting an Segment
+    // will delete all of their comments as well.
     try {
       const result = await db.Segment.destroy(
           {
@@ -63,15 +63,15 @@ module.exports = function(app) {
     }
   });
 
-  // PUT route for updating subsegments
+  // PUT route for updating comments
   app.put('/api/segments', async (req, res) => {
-    // Add code here to update a subsegment using the values in req.body, where the id is equal to
+    // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
-    const {id, name} = req.body;
+    const {id, segment} = req.body;
 
     try {
       const result = await db.Segment.update(
-          {name},
+          {segment},
           {where: {id}},
       );
       const affectedRowCount = result[0];

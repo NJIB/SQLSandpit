@@ -1,9 +1,4 @@
--- -- Drops the sandpit if it exists currently --
--- DROP DATABASE IF EXISTS sandpit;
--- -- Creates the "sandpit" database --
--- CREATE DATABASE sandpit;
-
 -- Drops the sandpit if it exists currently --
-DROP DATABASE IF EXISTS segment;
+DROP DATABASE IF EXISTS sandpit;
 -- Creates the "sandpit" database --
-CREATE DATABASE segment;
+CREATE DATABASE sandpit;

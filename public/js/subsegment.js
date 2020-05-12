@@ -83,9 +83,9 @@ $(document).ready(function() {
     
     const newSubSegmentTitle = $('<h2>');
     const newSubSegmentDate = $('<small>');
-    const newSubSegmentPerson = $('<h5>');
-    newSubSegmentPerson.text('Written by: ' + subsegment.Person.name);
-    newSubSegmentPerson.css({
+    const newSubSegmentSegment = $('<h5>');
+    newSubSegmentSegment.text('Written by: ' + subsegment.Segment.name);
+    newSubSegmentSegment.css({
       'float': 'right',
       'color': 'blue',
       'margin-top':
@@ -103,7 +103,7 @@ $(document).ready(function() {
     newSubSegmentCardHeading.append(deleteBtn);
     newSubSegmentCardHeading.append(editBtn);
     newSubSegmentCardHeading.append(newSubSegmentTitle);
-    newSubSegmentCardHeading.append(newSubSegmentPerson);
+    newSubSegmentCardHeading.append(newSubSegmentSegment);
     newSubSegmentCardBody.append(newSubSegmentBody);
     newSubSegmentCard.append(newSubSegmentCardHeading);
     newSubSegmentCard.append(newSubSegmentCardBody);
@@ -134,7 +134,7 @@ $(document).ready(function() {
     const query = window.location.search;
     let partial = '';
     if (id) {
-      partial = ' for Person #' + id;
+      partial = ' for Segment #' + id;
     }
     blogContainer.empty();
     const messageH2 = $('<h2>');

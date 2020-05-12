@@ -26,8 +26,8 @@ app.use(express.static('public'));
 // Routes
 // ===============================
 require('./routes/html-routes')(app);
-require('./routes/person-api-routes')(app);
-require('./routes/comment-api-routes')(app);
+// require('./routes/person-api-routes')(app);
+// require('./routes/comment-api-routes')(app);
 require('./routes/segment-api-routes')(app);
 require('./routes/subsegment-api-routes')(app);
 
