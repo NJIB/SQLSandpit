@@ -77,8 +77,15 @@ button.edit {
 }
 
 #segment-name {
-  width: 100%;
+  width: 30%;
   height: 35px;
-  margin-top: 5px;
+  margin: 5px;
+  padding: 10px;
 }
 
+#segment-value {
+  width: 30%;
+  height: 35px;
+  margin: 5px;
+  padding: 10px;
+}

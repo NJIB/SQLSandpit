@@ -1,6 +1,7 @@
 $(document).ready(function() {
   // Getting references to the name input and segment container, as well as the table body
   const nameInput = $('#segment-name');
+  const valueInput = $('#segment-value');
 
   const segmentList = $('tbody');
   const segmentContainer = $('.segment-container');
@@ -21,12 +22,16 @@ $(document).ready(function() {
       return;
     }
 
+    console.log("valueInput: ", valueInput.val().trim());
+
     // Calling the upsertSegment function and passing in the value of the name input
     upsertSegment({
       name: nameInput
           .val()
           .trim(),
-      // deal_size: 0,
+      deal_size: valueInput
+          .val()
+          .trim(),
       // deals_count: 0,
       // sgmt_rev: 0,    
     });

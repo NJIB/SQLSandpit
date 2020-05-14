@@ -7,6 +7,11 @@ module.exports = function(sequelize, DataTypes) {
         len: [1, 160],
       },
     },
+    deal_size: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+
   });
 
   Segment.associate = function(models) {
