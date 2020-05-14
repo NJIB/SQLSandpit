@@ -24,17 +24,18 @@ $(document).ready(function() {
 
     console.log("valueInput: ", valueInput.val().trim());
 
-    // Calling the upsertSegment function and passing in the value of the name input
-    upsertSegment({
+    const segmentData = {
       name: nameInput
           .val()
           .trim(),
-      deal_size: valueInput
-          .val()
-          .trim(),
-      // deals_count: 0,
-      // sgmt_rev: 0,    
-    });
+      value: valueInput
+          // .val()
+          // .trim()      
+    }
+
+    console.log("segmentData object: ", segmentData)
+
+    upsertSegment(segmentData);
   }
 
   // A function for creating an segment. Calls getSegments upon completion
@@ -55,7 +56,7 @@ $(document).ready(function() {
     }
     newTr.append('<td><a href=\'/subsegment?segment_id=' + segmentData.id + '\'>Go to SubSegments</a></td>');
     newTr.append('<td><a href=\'/sms?segment_id=' + segmentData.id + '\'>Create a SubSegment</a></td>');
-    newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-segment\'>Delete Segment</a></td>');
+    newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-segment\'>X</a></td>');
     return newTr;
   }
 

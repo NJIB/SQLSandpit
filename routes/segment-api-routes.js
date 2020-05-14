@@ -36,10 +36,10 @@ module.exports = function(app) {
 
   app.post('/api/segments', async (req, res) => {
     // Create an Segment with the data available to us in req.body
-    console.log(req.body);
-    const {name} = req.body;
+    console.log("req.body: ", req.body);
+    const {name, value} = req.body;
     try {
-      const result = await db.Segment.create({name});
+      const result = await db.Segment.create({name, value});
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});
