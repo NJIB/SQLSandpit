@@ -29,8 +29,8 @@ $(document).ready(function() {
           .val()
           .trim(),
       value: valueInput
-          // .val()
-          // .trim()      
+          .val()
+          .trim()      
     }
 
     console.log("segmentData object: ", segmentData)
@@ -49,13 +49,14 @@ $(document).ready(function() {
     const newTr = $('<tr>');
     newTr.data('segment', segmentData);
     newTr.append('<td>' + segmentData.name + '</td>');
+    newTr.append('<td>$' + segmentData.value + '</td>');
     if (segmentData.SubSegments) {
       newTr.append('<td> ' + segmentData.SubSegments.length + '</td>');
     } else {
       newTr.append('<td>0</td>');
     }
-    newTr.append('<td><a href=\'/subsegment?segment_id=' + segmentData.id + '\'>Go to SubSegments</a></td>');
-    newTr.append('<td><a href=\'/sms?segment_id=' + segmentData.id + '\'>Create a SubSegment</a></td>');
+    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/subsegment?segment_id=' + segmentData.id + '\'>...</a></td>');
+    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/sms?segment_id=' + segmentData.id + '\'>+</a></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-segment\'>X</a></td>');
     return newTr;
   }
