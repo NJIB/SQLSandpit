@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>CMS - Express</title>
+	<title>SMS - Express</title>
 	<!-- Latest compiled and minified CSS & JS -->
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/flatly/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/styles.css" media="screen" title="no title">
@@ -15,33 +15,38 @@
 	<div class="container">
 		<div class="row mt-4">
       <div class="col-md-2 col-sm-2">
-        <a class="btn btn-light" href="/comment">Go to comment</a>
+        <a class="btn btn-light" href="/subsegment">Go to subsegment</a>
       </div>
 			<div class="col-md-2 col-sm-2">
-        <a class="btn btn-light" href="/cms">New Comment</a>
+        <a class="btn btn-light" href="/sms">New Sub-Segment</a>
       </div>
     </div>
 		<div class="row">
 			<div class="col-md-8 offset-md-2">
-				<div class="person-container">
-					<h1>Persons</h1>
+				<div class="segment-container">
+					<h1>Segments</h1>
 					<table class="table table-striped">
 						<thead>
 							<tr>
 								<th>Name</th>
-								<th># of Comments</th>
-								<th>See Person's Comments</th>
-								<th>New Comment</th>
-								<th>Delete Person</th>
+								<th>Deal Size</th>
+								<th>Deal Count</th>
+								<th>Segment Revenue</th>
+								<th># of SubSegments</th>
+								<th>SubSegments</th>
+								<th>New SubSegment</th>
+								<th>Delete</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr id="form-row">
-								<form id="person-form">
+								<form id="segment-form">
 									<td colspan="4">
-										<input placeholder="Enter a name" id="person-name" type="text" />
+										<input placeholder="Segment" id="segment-name" type="text" />
+										<input placeholder="Deal size" id="segment-deal_size" type="text" />
+										<input placeholder="Deal count" id="segment-deal_count" type="text" />
 									</td>
-									<td><button type="submit" class="btn btn-success">Create Person</button>
+									<td><button type="submit" class="btn btn-success">Create Segment</button>
 									</td>
 								</form>
 							</tr>
@@ -52,7 +57,7 @@
 		</div>
 		</d>
 		<!-- Custom Script -->
-		<script src="js/person.js" type="text/javascript"></script>
+		<script src="js/segment.js" type="text/javascript"></script>
 
 </body>
 
