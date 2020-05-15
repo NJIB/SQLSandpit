@@ -37,9 +37,14 @@ module.exports = function(app) {
   app.post('/api/segments', async (req, res) => {
     // Create an Segment with the data available to us in req.body
     console.log("req.body: ", req.body);
-    const {name, value} = req.body;
+    const {name, deal_size, deal_count} = req.body;
+
+    const sgmt_rev = (deal_size * deal_count);
+    console.log("sgmt_rev: ", sgmt_rev);
+
     try {
-      const result = await db.Segment.create({name, value});
+      const result = await db.Segment.create({name, deal_size, deal_count, sgmt_rev});
+      // const result = await db.Segment.create({name, deal_size, deal_count});
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});

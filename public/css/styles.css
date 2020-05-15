@@ -83,7 +83,21 @@ button.edit {
   padding: 10px;
 }
 
-#segment-value {
+#segment-deal_size {
+  width: 30%;
+  height: 35px;
+  margin: 5px;
+  padding: 10px;
+}
+
+#segment-deal_count {
+  width: 30%;
+  height: 35px;
+  margin: 5px;
+  padding: 10px;
+}
+
+#segment-revenue {
   width: 30%;
   height: 35px;
   margin: 5px;

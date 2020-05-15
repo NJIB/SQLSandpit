@@ -1,7 +1,8 @@
 $(document).ready(function() {
   // Getting references to the name input and segment container, as well as the table body
   const nameInput = $('#segment-name');
-  const valueInput = $('#segment-value');
+  const dealsizeInput = $('#segment-deal_size');
+  const dealcountInput = $('#segment-deal_count');
 
   const segmentList = $('tbody');
   const segmentContainer = $('.segment-container');
@@ -22,15 +23,25 @@ $(document).ready(function() {
       return;
     }
 
-    console.log("valueInput: ", valueInput.val().trim());
+    console.log("nameInput: ", nameInput.val().trim());
+    console.log("dealsizeInput: ", dealsizeInput.val().trim());
+    console.log("dealcountInput: ", dealcountInput.val().trim());
+
+
+    // const sgmt_rev = (dealsizeInput.val().trim() * dealsizeInput.val().trim());
+    // console.log("sgmt_rev: ", sgmt_rev);
 
     const segmentData = {
       name: nameInput
           .val()
           .trim(),
-      value: valueInput
+      deal_size: dealsizeInput
           .val()
-          .trim()      
+          .trim(),
+      deal_count: dealcountInput
+          .val()
+          .trim(),
+      // sgmt_rev: sgmt_rev
     }
 
     console.log("segmentData object: ", segmentData)
@@ -49,7 +60,9 @@ $(document).ready(function() {
     const newTr = $('<tr>');
     newTr.data('segment', segmentData);
     newTr.append('<td>' + segmentData.name + '</td>');
-    newTr.append('<td>$' + segmentData.value + '</td>');
+    newTr.append('<td>$' + segmentData.deal_size + '</td>');
+    newTr.append('<td>' + segmentData.deal_count + '</td>');
+    newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
     if (segmentData.SubSegments) {
       newTr.append('<td> ' + segmentData.SubSegments.length + '</td>');
     } else {
