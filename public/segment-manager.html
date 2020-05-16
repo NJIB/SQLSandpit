@@ -14,15 +14,16 @@
 <body>
 	<div class="container">
 		<div class="row mt-4">
-      <div class="col-md-2 col-sm-2">
-        <a class="btn btn-light" href="/subsegment">Go to subsegment</a>
-      </div>
 			<div class="col-md-2 col-sm-2">
-        <a class="btn btn-light" href="/sms">New Sub-Segment</a>
-      </div>
-    </div>
+				<a class="btn btn-light" href="/subsegment">Go to subsegment</a>
+			</div>
+			<div class="col-md-2 col-sm-2">
+				<a class="btn btn-light" href="/sms">New Sub-Segment</a>
+			</div>
+		</div>
 		<div class="row">
-			<div class="col-md-8 offset-md-2">
+			<!-- <div class="col-md-8 offset-md-2"> -->
+			<div class="col-md-12">
 				<div class="segment-container">
 					<h1>Segments</h1>
 					<table class="table table-striped">
@@ -32,6 +33,12 @@
 								<th>Deal Size</th>
 								<th>Deal Count</th>
 								<th>Segment Revenue</th>
+								<th>Deal Size % YOY Change</th>
+								<th>Deal Count % YOY Change</th>
+								<th>Update</th>
+								<th>Next Year Deal Size</th>
+								<th>Next Year Deal Count</th>
+								<th>Next Year Segment Revenue</th>					
 								<th># of SubSegments</th>
 								<th>SubSegments</th>
 								<th>New SubSegment</th>
@@ -41,7 +48,8 @@
 						<tbody>
 							<tr id="form-row">
 								<form id="segment-form">
-									<td colspan="4">
+									<td colspan="9">
+										<h4>Add a new Segment:</h4>
 										<input placeholder="Segment" id="segment-name" type="text" />
 										<input placeholder="Deal size" id="segment-deal_size" type="text" />
 										<input placeholder="Deal count" id="segment-deal_count" type="text" />

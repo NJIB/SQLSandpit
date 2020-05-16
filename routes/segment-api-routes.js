@@ -71,13 +71,15 @@ module.exports = function(app) {
 
   // PUT route for updating subsegments
   app.put('/api/segments', async (req, res) => {
-    // Add code here to update a subsegment using the values in req.body, where the id is equal to
+    // Add code here to update a segment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
-    const {id, name} = req.body;
+    // const {id, name} = req.body;
+    const {id, name, deal_size, deal_count, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev} = req.body;
+    console.log("name: ", name);
 
     try {
       const result = await db.Segment.update(
-          {name},
+          {name, deal_size, deal_count, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev},
           {where: {id}},
       );
       const affectedRowCount = result[0];

@@ -10,6 +10,7 @@ $(document).ready(function() {
   // an Segment
   $(document).on('submit', '#segment-form', handleSegmentFormSubmit);
   $(document).on('click', '.delete-segment', handleDeleteButtonPress);
+  $(document).on('click', '.update', handleUpdateButtonPress);
 
   // Getting the initial list of Segments
   getSegments();
@@ -41,7 +42,6 @@ $(document).ready(function() {
       deal_count: dealcountInput
           .val()
           .trim(),
-      // sgmt_rev: sgmt_rev
     }
 
     console.log("segmentData object: ", segmentData)
@@ -56,13 +56,38 @@ $(document).ready(function() {
   }
 
   // Function for creating a new list row for segments
-  function createSegmentRow(segmentData) {
+  function createSegmentRow(segmentData,i) {
+
+    const deal_size_yoy_id = "deal_size_yoy"+ (i+1);
+    const deal_count_yoy_id = "deal_count_yoy"+ (i+1);
+
     const newTr = $('<tr>');
     newTr.data('segment', segmentData);
     newTr.append('<td>' + segmentData.name + '</td>');
     newTr.append('<td>$' + segmentData.deal_size + '</td>');
     newTr.append('<td>' + segmentData.deal_count + '</td>');
     newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
+
+    if (segmentData.deal_size_yoy) {
+      newTr.append('<td>' + '<input placeholder=' + segmentData.deal_size_yoy + ' id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
+    } else {
+      newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
+    }
+
+    if (segmentData.deal_count_yoy) {
+      newTr.append('<td>' + '<input placeholder=' + segmentData.deal_count_yoy + ' id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
+    } else {
+      newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
+    }
+
+      // Potentially only show button, if change field is populated?
+    newTr.append('<td>' + '<button class="btn btn-success update">></button>' + '</td>');
+
+    newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
+    newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
+    newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
+    
+
     if (segmentData.SubSegments) {
       newTr.append('<td> ' + segmentData.SubSegments.length + '</td>');
     } else {
@@ -79,7 +104,8 @@ $(document).ready(function() {
     $.get('/api/segments', function(data) {
       const rowsToAdd = [];
       for (let i = 0; i < data.length; i++) {
-        rowsToAdd.push(createSegmentRow(data[i]));
+        // rowsToAdd.push(createSegmentRow(data[i]));
+        rowsToAdd.push(createSegmentRow(data[i],i));
       }
       renderSegmentList(rowsToAdd);
       nameInput.val('');
@@ -116,4 +142,47 @@ $(document).ready(function() {
     })
         .then(getSegments);
   }
+
+  function handleUpdateButtonPress() {
+
+    const listItemData = $(this).parent('td').parent('tr').data('segment');
+    console.log("listItemData: ", listItemData);
+    
+    const id = listItemData.id;
+    console.log("listItemData.id: ", listItemData.id);
+
+    const dealsizeyoychangeInput = $('#deal_size_yoy'+listItemData.id);
+    const dealcountyoychangeInput = $('#deal_count_yoy'+listItemData.id);
+    const nextyearDealsize = (listItemData.deal_size * (1+(dealsizeyoychangeInput.val()/100)));
+    console.log("nextyearDealsize: ", nextyearDealsize);
+    const nextyearDealcount = (listItemData.deal_count * (1+(dealcountyoychangeInput.val()/100)));
+    console.log("nextyearDealcount: ", nextyearDealcount);
+    const nextyearSgmtrev = (nextyearDealsize * nextyearDealcount);
+    console.log("nextyearSgmtrev: ", nextyearSgmtrev);
+
+
+    const segmentData = {
+      id: listItemData.id,
+      name: listItemData.name,
+      deal_size: listItemData.deal_size,
+      deal_count: listItemData.deal_count,
+      deal_size_yoy: dealsizeyoychangeInput.val()*1,
+      deal_count_yoy: dealcountyoychangeInput.val()*1,
+      next_year_deal_size: nextyearDealsize,
+      next_year_deal_count: nextyearDealcount,
+      next_year_sgmt_rev: nextyearSgmtrev
+    }
+
+    console.log("segmentData object: ", segmentData)
+
+
+    $.ajax({
+      method: 'PUT',
+      url: '/api/segments',
+      data: segmentData,
+    })
+        .then(getSegments);
+  }
+
+
 });
