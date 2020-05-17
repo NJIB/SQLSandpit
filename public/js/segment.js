@@ -6,6 +6,9 @@ $(document).ready(function() {
 
   const segmentList = $('tbody');
   const segmentContainer = $('.segment-container');
+
+  var ctx = $('#myChart');
+
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Segment
   $(document).on('submit', '#segment-form', handleSegmentFormSubmit);
