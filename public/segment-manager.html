@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="css/styles.css" media="screen" title="no title">
 
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-	
+
 	<script src="https://code.jquery.com/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
@@ -41,7 +41,7 @@
 								<th>Update</th>
 								<th>Next Year Deal Size</th>
 								<th>Next Year Deal Count</th>
-								<th>Next Year Segment Revenue</th>					
+								<th>Next Year Segment Revenue</th>
 								<th># of SubSegments</th>
 								<th>SubSegments</th>
 								<th>New SubSegment</th>
@@ -67,48 +67,69 @@
 			</div>
 		</div>
 
-		<canvas id="myChart" width="400" height="400"></canvas>
+		<!-- <canvas id="myChart" width="400" height="400"></canvas> -->
+		<canvas id="myBubbleChart" width="400" height="400"></canvas>
 
 		<script>
-		var ctx = $('#myChart');
+			// var ctx = $('#myChart');
+			var ctx = $('#myBubbleChart');
 
 
-		var myChart = new Chart(ctx, {
-			type: 'bar',
-			data: {
-				labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-				datasets: [{
-					label: '# of Votes',
-					data: [12, 19, 3, 5, 2, 3],
-					backgroundColor: [
-						'rgba(255, 99, 132, 0.2)',
-						'rgba(54, 162, 235, 0.2)',
-						'rgba(255, 206, 86, 0.2)',
-						'rgba(75, 192, 192, 0.2)',
-						'rgba(153, 102, 255, 0.2)',
-						'rgba(255, 159, 64, 0.2)'
-					],
-					borderColor: [
-						'rgba(255, 99, 132, 1)',
-						'rgba(54, 162, 235, 1)',
-						'rgba(255, 206, 86, 1)',
-						'rgba(75, 192, 192, 1)',
-						'rgba(153, 102, 255, 1)',
-						'rgba(255, 159, 64, 1)'
-					],
-					borderWidth: 1
-				}]
-			},
-			options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						}
-					}]
-				}
-			}
-		});
+			var myBubbleChart = new Chart(ctx, {
+			type: 'bubble',
+			data:{"datasets":[{
+				label:"First Dataset",
+				data:[{
+					x:20,
+					y:30,
+					r:15
+				},
+				{
+				x:40,
+				y:10,
+				r:10
+			}],
+			backgroundColor:
+			'rgb(255, 99, 132)'
+		}]
+	}});
+
+		// var myChart = new Chart(ctx, {
+		// 	type: 'bar',
+		// 	data: {
+		// 		labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+		// 		datasets: [{
+		// 			label: '# of Votes',
+		// 			data: [12, 19, 3, 5, 2, 3],
+		// 			backgroundColor: [
+		// 				'rgba(255, 99, 132, 0.2)',
+		// 				'rgba(54, 162, 235, 0.2)',
+		// 				'rgba(255, 206, 86, 0.2)',
+		// 				'rgba(75, 192, 192, 0.2)',
+		// 				'rgba(153, 102, 255, 0.2)',
+		// 				'rgba(255, 159, 64, 0.2)'
+		// 			],
+		// 			borderColor: [
+		// 				'rgba(255, 99, 132, 1)',
+		// 				'rgba(54, 162, 235, 1)',
+		// 				'rgba(255, 206, 86, 1)',
+		// 				'rgba(75, 192, 192, 1)',
+		// 				'rgba(153, 102, 255, 1)',
+		// 				'rgba(255, 159, 64, 1)'
+		// 			],
+		// 			borderWidth: 1
+		// 		}]
+		// 	},
+		// 	options: {
+		// 		scales: {
+		// 			yAxes: [{
+		// 				ticks: {
+		// 					beginAtZero: true
+		// 				}
+		// 			}]
+		// 		}
+		// 	}
+		// });
 		</script>
 
 		</d>
