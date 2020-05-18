@@ -6,8 +6,10 @@ $(document).ready(function() {
 
   const segmentList = $('tbody');
   const segmentContainer = $('.segment-container');
+  const chartArea = $('#myChart');
 
-  var ctx = $('#myChart');
+  var ctx = $('#myBubbleChart');
+  let chartData = [{}];
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Segment
@@ -30,10 +32,6 @@ $(document).ready(function() {
     console.log("nameInput: ", nameInput.val().trim());
     console.log("dealsizeInput: ", dealsizeInput.val().trim());
     console.log("dealcountInput: ", dealcountInput.val().trim());
-
-
-    // const sgmt_rev = (dealsizeInput.val().trim() * dealsizeInput.val().trim());
-    // console.log("sgmt_rev: ", sgmt_rev);
 
     const segmentData = {
       name: nameInput
@@ -99,6 +97,9 @@ $(document).ready(function() {
     newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/subsegment?segment_id=' + segmentData.id + '\'>...</a></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/sms?segment_id=' + segmentData.id + '\'>+</a></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-segment\'>X</a></td>');
+    
+    buildChartObject(segmentData);
+    
     return newTr;
   }
 
@@ -112,6 +113,8 @@ $(document).ready(function() {
       }
       renderSegmentList(rowsToAdd);
       nameInput.val('');
+      dealsizeInput.val('');
+      dealcountInput.val('');
     });
   }
 
@@ -125,6 +128,47 @@ $(document).ready(function() {
     } else {
       renderEmpty();
     }
+  }
+
+  // A function for rendering the list of segments to the page
+  function buildChartObject(segmentData) {
+
+    chartData.push({
+      x: segmentData.deal_size,
+      y: segmentData.deal_count,
+      r: (segmentData.sgmt_rev/100)
+    });
+
+    console.log("chartData: ", chartData);
+
+    renderChart(chartData);
+  }
+
+  function renderChart(chartData) {
+    var ctx = $('#myBubbleChart');
+
+    var myBubbleChart = new Chart(ctx, {
+      type: 'bubble',
+      data: {
+        "datasets": [{
+          label: "Segment Revenue",
+          data: chartData,
+          backgroundColor:
+            'rgb(255, 99, 132)'
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: false
+            }
+          }],
+        }
+      }
+    });
+
+    ctx.prepend(myBubbleChart);
   }
 
   // Function for handling what to render when there are no segments
