@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   // Getting references to the name input and segment container, as well as the table body
   const nameInput = $('#segment-name');
   const dealsizeInput = $('#segment-deal_size');
@@ -6,10 +6,12 @@ $(document).ready(function() {
 
   const segmentList = $('tbody');
   const segmentContainer = $('.segment-container');
-  const chartArea = $('#myChart');
+  const chart1Area = $('#myBubbleChart1');
+  const chart2Area = $('#myBubbleChart2');
 
   var ctx = $('#myBubbleChart');
-  let chartData = [{}];
+  let chart1Data = [{}];
+  let chart2Data = [{}];
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Segment
@@ -23,7 +25,7 @@ $(document).ready(function() {
   // A function to handle what happens when the form is submitted to create a new Segment
   function handleSegmentFormSubmit(event) {
     event.preventDefault();
-    
+
     // Don't do anything if the name fields hasn't been filled out
     if (!nameInput.val().trim().trim()) {
       return;
@@ -35,14 +37,14 @@ $(document).ready(function() {
 
     const segmentData = {
       name: nameInput
-          .val()
-          .trim(),
+        .val()
+        .trim(),
       deal_size: dealsizeInput
-          .val()
-          .trim(),
+        .val()
+        .trim(),
       deal_count: dealcountInput
-          .val()
-          .trim(),
+        .val()
+        .trim()
     }
 
     console.log("segmentData object: ", segmentData)
@@ -53,14 +55,17 @@ $(document).ready(function() {
   // A function for creating an segment. Calls getSegments upon completion
   function upsertSegment(segmentData) {
     $.post('/api/segments', segmentData)
-        .then(getSegments);
+      .then(getSegments);
   }
 
   // Function for creating a new list row for segments
-  function createSegmentRow(segmentData,i) {
+  function createSegmentRow(segmentData, i) {
 
-    const deal_size_yoy_id = "deal_size_yoy"+ (i+1);
-    const deal_count_yoy_id = "deal_count_yoy"+ (i+1);
+    console.log('segmentData: ', segmentData);
+    // const deal_size_yoy_id = "deal_size_yoy" + (i + 1);
+    const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
+    // const deal_count_yoy_id = "deal_count_yoy" + (i + 1);
+    const deal_count_yoy_id = "deal_count_yoy" + segmentData.id;
 
     const newTr = $('<tr>');
     newTr.data('segment', segmentData);
@@ -81,13 +86,13 @@ $(document).ready(function() {
       newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
     }
 
-      // Potentially only show button, if change field is populated?
+    // Potentially only show button, if change field is populated?
     newTr.append('<td>' + '<button class="btn btn-success update">></button>' + '</td>');
 
     newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
     newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
     newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
-    
+
 
     if (segmentData.SubSegments) {
       newTr.append('<td> ' + segmentData.SubSegments.length + '</td>');
@@ -97,19 +102,22 @@ $(document).ready(function() {
     newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/subsegment?segment_id=' + segmentData.id + '\'>...</a></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/sms?segment_id=' + segmentData.id + '\'>+</a></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-segment\'>X</a></td>');
-    
+
     buildChartObject(segmentData);
-    
+
     return newTr;
   }
 
   // Function for retrieving segments and getting them ready to be rendered to the page
   function getSegments() {
-    $.get('/api/segments', function(data) {
+    $.get('/api/segments', function (data) {
+      
+      console.log('data: ', data);
+      
       const rowsToAdd = [];
       for (let i = 0; i < data.length; i++) {
         // rowsToAdd.push(createSegmentRow(data[i]));
-        rowsToAdd.push(createSegmentRow(data[i],i));
+        rowsToAdd.push(createSegmentRow(data[i], i));
       }
       renderSegmentList(rowsToAdd);
       nameInput.val('');
@@ -130,31 +138,41 @@ $(document).ready(function() {
     }
   }
 
-  // A function for rendering the list of segments to the page
+  // This populates the object for the Revenue Bubble Chart(s)
   function buildChartObject(segmentData) {
 
-    chartData.push({
+    chart1Data.push({
       x: segmentData.deal_size,
       y: segmentData.deal_count,
-      r: (segmentData.sgmt_rev/100)
+      r: (segmentData.sgmt_rev / 100)
     });
 
-    console.log("chartData: ", chartData);
+    console.log("chart1Data: ", chart1Data);
 
-    renderChart(chartData);
+    chart2Data.push({
+      x: segmentData.deal_size,
+      y: segmentData.deal_count,
+      r: (segmentData.sgmt_rev / 100)
+    });
+
+    console.log("chart2Data: ", chart2Data);
+
+    renderChart1(chart1Data);
+    renderChart2(chart2Data);
   }
 
-  function renderChart(chartData) {
-    var ctx = $('#myBubbleChart');
+  // This creates the display object for the Revenue Bubble Chart(s)
+  function renderChart1(chartData) {
+    var ctx = $('#myBubbleChart1');
 
     var myBubbleChart = new Chart(ctx, {
       type: 'bubble',
       data: {
         "datasets": [{
-          label: "Segment Revenue",
-          data: chartData,
+          label: "Segment Revenue - This Year",
+          data: chart1Data,
           backgroundColor:
-            'rgb(255, 99, 132)'
+            'red'
         }]
       },
       options: {
@@ -171,6 +189,35 @@ $(document).ready(function() {
     ctx.prepend(myBubbleChart);
   }
 
+  // This creates the display object for the Revenue Bubble Chart(s)
+  function renderChart2(chartData) {
+    var ctx = $('#myBubbleChart2');
+
+    var myBubbleChart = new Chart(ctx, {
+      type: 'bubble',
+      data: {
+        "datasets": [{
+          label: "Next Year Segment Revenue Plan",
+          data: chart2Data,
+          backgroundColor:
+            'green'
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: false
+            }
+          }],
+        }
+      }
+    });
+
+    ctx.prepend(myBubbleChart);
+  }
+
+
   // Function for handling what to render when there are no segments
   function renderEmpty() {
     const alertDiv = $('<div>');
@@ -182,28 +229,47 @@ $(document).ready(function() {
   // Function for handling what happens when the delete button is pressed
   function handleDeleteButtonPress() {
     const listItemData = $(this).parent('td').parent('tr').data('segment');
+
     const id = listItemData.id;
     $.ajax({
       method: 'DELETE',
       url: '/api/segments/' + id,
     })
-        .then(getSegments);
+      .then(getSegments);
   }
 
   function handleUpdateButtonPress() {
 
     const listItemData = $(this).parent('td').parent('tr').data('segment');
     console.log("listItemData: ", listItemData);
-    
+
     const id = listItemData.id;
     console.log("listItemData.id: ", listItemData.id);
 
-    const dealsizeyoychangeInput = $('#deal_size_yoy'+listItemData.id);
-    const dealcountyoychangeInput = $('#deal_count_yoy'+listItemData.id);
-    const nextyearDealsize = (listItemData.deal_size * (1+(dealsizeyoychangeInput.val()/100)));
-    console.log("nextyearDealsize: ", nextyearDealsize);
-    const nextyearDealcount = (listItemData.deal_count * (1+(dealcountyoychangeInput.val()/100)));
-    console.log("nextyearDealcount: ", nextyearDealcount);
+    let nextyearDealsize = 0;
+    let nextyearDealcount = 0;
+
+    const dealsizeyoychangeInput = $('#deal_size_yoy' + listItemData.id);
+    const dealcountyoychangeInput = $('#deal_count_yoy' + listItemData.id);
+
+    console.log('dealsizeyoychangeInput: ', dealsizeyoychangeInput.val());
+    if (dealsizeyoychangeInput === '') {
+      nextyearDealsize = listItemData.deal_size;
+      console.log("nextyearDealsize: ", nextyearDealsize);
+    } else {
+      nextyearDealsize = (listItemData.deal_size * (1 + (dealsizeyoychangeInput.val() / 100)));
+      console.log("nextyearDealsize: ", nextyearDealsize);
+    }
+
+    console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
+    if (dealcountyoychangeInput === '') {
+      nextyearDealcount = listItemData.deal_count;
+      console.log("nextyearDealcount: ", nextyearDealcount);
+    } else {
+      nextyearDealcount = (listItemData.deal_count * (1 + (dealcountyoychangeInput.val() / 100)));
+      console.log("nextyearDealcount: ", nextyearDealcount);
+    }
+
     const nextyearSgmtrev = (nextyearDealsize * nextyearDealcount);
     console.log("nextyearSgmtrev: ", nextyearSgmtrev);
 
@@ -213,8 +279,8 @@ $(document).ready(function() {
       name: listItemData.name,
       deal_size: listItemData.deal_size,
       deal_count: listItemData.deal_count,
-      deal_size_yoy: dealsizeyoychangeInput.val()*1,
-      deal_count_yoy: dealcountyoychangeInput.val()*1,
+      deal_size_yoy: dealsizeyoychangeInput.val() * 1,
+      deal_count_yoy: dealcountyoychangeInput.val() * 1,
       next_year_deal_size: nextyearDealsize,
       next_year_deal_count: nextyearDealcount,
       next_year_sgmt_rev: nextyearSgmtrev
@@ -228,7 +294,7 @@ $(document).ready(function() {
       url: '/api/segments',
       data: segmentData,
     })
-        .then(getSegments);
+      .then(getSegments);
   }
 
 
