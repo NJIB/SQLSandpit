@@ -150,9 +150,9 @@ $(document).ready(function () {
     console.log("chart1Data: ", chart1Data);
 
     chart2Data.push({
-      x: segmentData.deal_size,
-      y: segmentData.deal_count,
-      r: (segmentData.sgmt_rev / 100)
+      x: segmentData.next_year_deal_size,
+      y: segmentData.next_year_deal_count,
+      r: (segmentData.next_year_sgmt_rev / 100)
     });
 
     console.log("chart2Data: ", chart2Data);
