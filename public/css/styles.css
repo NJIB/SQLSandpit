@@ -117,3 +117,35 @@ button.edit {
   margin: 5px;
   padding: 10px;
 }
+
+.add_segment {
+  margin-top: 50px;
+  margin-bottom: 100px;
+  vertical-align: middle;
+}
+
+header {
+  position: relative;
+  height: 100px;
+  width: 100%;
+  margin-bottom: 50px;
+  text-align: left;
+  padding-left: 50px;
+  padding-top: 20px;
+  background-color: lightsteelblue;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  font-size: 40px;
+}
+
+
+footer {
+  position: relative;
+  height: 50px;
+  width: 100%;
+  margin-top: 100px;
+  text-align: center;
+  padding-top: 20px;
+  background-color: lightgray;
+  font-family: 'Courier New', Courier, monospace;
+}
