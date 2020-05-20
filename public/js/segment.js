@@ -110,6 +110,10 @@ $(document).ready(function () {
 
   // Function for retrieving segments and getting them ready to be rendered to the page
   function getSegments() {
+
+    chart1Data = [{}];
+    chart2Data = [{}];
+    
     $.get('/api/segments', function (data) {
       
       console.log('data: ', data);
@@ -177,10 +181,23 @@ $(document).ready(function () {
       },
       options: {
         scales: {
-          yAxes: [{
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Deal Size ($)',
+            },
             ticks: {
               beginAtZero: false
             }
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Deal Count (#)',
+            },
+            ticks: {
+              beginAtZero: false
+            },
           }],
         }
       }
@@ -205,7 +222,20 @@ $(document).ready(function () {
       },
       options: {
         scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Deal Size ($)',
+            },
+            ticks: {
+              beginAtZero: false
+            }
+          }],
           yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Deal Count (#)',
+            },
             ticks: {
               beginAtZero: false
             }
