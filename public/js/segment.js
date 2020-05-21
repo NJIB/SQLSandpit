@@ -5,11 +5,13 @@ $(document).ready(function () {
   const dealcountInput = $('#segment-deal_count');
 
   const segmentList = $('tbody');
+  const segmentTotals = $('tfooter');
   const segmentContainer = $('.segment-container');
-  const chart1Area = $('#myBubbleChart1');
-  const chart2Area = $('#myBubbleChart2');
+  let segmentRevTotal = 0;
 
-  var ctx = $('#myBubbleChart');
+  // const chart1Area = $('#myBubbleChart1');
+  // const chart2Area = $('#myBubbleChart2');
+  // var ctx = $('#myBubbleChart');
   let chart1Data = [{}];
   let chart2Data = [{}];
 
@@ -59,9 +61,9 @@ $(document).ready(function () {
   }
 
   // Function for creating a new list row for segments
-  function createSegmentRow(segmentData, i) {
+  function createSegmentRow(segmentData) {
 
-    console.log('segmentData: ', segmentData);
+    // console.log('segmentData: ', segmentData);
     // const deal_size_yoy_id = "deal_size_yoy" + (i + 1);
     const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
     // const deal_count_yoy_id = "deal_count_yoy" + (i + 1);
@@ -108,6 +110,18 @@ $(document).ready(function () {
     return newTr;
   }
 
+    // Function for creating a new list row for segments
+    function createSegmentTotals(segmentTotals) {
+
+      const totalTr = $('<tr>');
+      // totalTr.data('totals', segmentTotals);
+      totalTr.append('<td>'+'</td>');
+      totalTr.append('<td>'+'</td>');
+      totalTr.append('<td>$' + segmentTotals + '</td>');
+      return totalTr;
+    }
+  
+
   // Function for retrieving segments and getting them ready to be rendered to the page
   function getSegments() {
 
@@ -116,13 +130,21 @@ $(document).ready(function () {
     
     $.get('/api/segments', function (data) {
       
-      console.log('data: ', data);
+      // console.log('data: ', data);
       
+      segmentRevTotal = 0;
       const rowsToAdd = [];
+
       for (let i = 0; i < data.length; i++) {
         // rowsToAdd.push(createSegmentRow(data[i]));
         rowsToAdd.push(createSegmentRow(data[i], i));
+
+        segmentRevTotal += data[i].sgmt_rev;
       }
+
+      console.log("segmentRevTotal: ", segmentRevTotal);
+      // console.log("rowsToAdd: ", rowsToAdd);
+      
       renderSegmentList(rowsToAdd);
       nameInput.val('');
       dealsizeInput.val('');
@@ -135,8 +157,9 @@ $(document).ready(function () {
     segmentList.children().not(':last').remove();
     segmentContainer.children('.alert').remove();
     if (rows.length) {
-      console.log(rows);
+      // console.log(rows);
       segmentList.prepend(rows);
+      // segmentTotals.prepend(createSegmentTotals(segmentRevTotal));
     } else {
       renderEmpty();
     }
@@ -151,7 +174,7 @@ $(document).ready(function () {
       r: (segmentData.sgmt_rev / 100)
     });
 
-    console.log("chart1Data: ", chart1Data);
+    // console.log("chart1Data: ", chart1Data);
 
     chart2Data.push({
       x: segmentData.next_year_deal_size,
@@ -159,7 +182,7 @@ $(document).ready(function () {
       r: (segmentData.next_year_sgmt_rev / 100)
     });
 
-    console.log("chart2Data: ", chart2Data);
+    // console.log("chart2Data: ", chart2Data);
 
     renderChart1(chart1Data);
     renderChart2(chart2Data);
@@ -271,10 +294,10 @@ $(document).ready(function () {
   function handleUpdateButtonPress() {
 
     const listItemData = $(this).parent('td').parent('tr').data('segment');
-    console.log("listItemData: ", listItemData);
+    // console.log("listItemData: ", listItemData);
 
     const id = listItemData.id;
-    console.log("listItemData.id: ", listItemData.id);
+    // console.log("listItemData.id: ", listItemData.id);
 
     let nextyearDealsize = 0;
     let nextyearDealcount = 0;
@@ -282,26 +305,26 @@ $(document).ready(function () {
     const dealsizeyoychangeInput = $('#deal_size_yoy' + listItemData.id);
     const dealcountyoychangeInput = $('#deal_count_yoy' + listItemData.id);
 
-    console.log('dealsizeyoychangeInput: ', dealsizeyoychangeInput.val());
+    // console.log('dealsizeyoychangeInput: ', dealsizeyoychangeInput.val());
     if (dealsizeyoychangeInput === '') {
       nextyearDealsize = listItemData.deal_size;
-      console.log("nextyearDealsize: ", nextyearDealsize);
+      // console.log("nextyearDealsize: ", nextyearDealsize);
     } else {
       nextyearDealsize = (listItemData.deal_size * (1 + (dealsizeyoychangeInput.val() / 100)));
-      console.log("nextyearDealsize: ", nextyearDealsize);
+      // console.log("nextyearDealsize: ", nextyearDealsize);
     }
 
-    console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
+    // console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
     if (dealcountyoychangeInput === '') {
       nextyearDealcount = listItemData.deal_count;
-      console.log("nextyearDealcount: ", nextyearDealcount);
+      // console.log("nextyearDealcount: ", nextyearDealcount);
     } else {
       nextyearDealcount = (listItemData.deal_count * (1 + (dealcountyoychangeInput.val() / 100)));
-      console.log("nextyearDealcount: ", nextyearDealcount);
+      // console.log("nextyearDealcount: ", nextyearDealcount);
     }
 
     const nextyearSgmtrev = (nextyearDealsize * nextyearDealcount);
-    console.log("nextyearSgmtrev: ", nextyearSgmtrev);
+    // console.log("nextyearSgmtrev: ", nextyearSgmtrev);
 
 
     const segmentData = {
