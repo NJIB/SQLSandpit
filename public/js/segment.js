@@ -91,10 +91,26 @@ $(document).ready(function () {
     // Potentially only show button, if change field is populated?
     newTr.append('<td>' + '<button class="btn btn-success update">></button>' + '</td>');
 
+    if (!segmentData.next_year_deal_size) {
+      newTr.append('<td>$' + segmentData.deal_size + '</td>');
+    }
+    else {
     newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
-    newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
-    newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
+    }
 
+    if (!segmentData.next_year_deal_count) {
+      newTr.append('<td>$' + segmentData.deal_count + '</td>');
+    }
+    else {
+    newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
+    }
+
+    if (!segmentData.next_year_sgmt_rev) {
+      newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
+    }
+    else {
+      newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
+    };
 
     if (segmentData.SubSegments) {
       newTr.append('<td> ' + segmentData.SubSegments.length + '</td>');
@@ -110,41 +126,62 @@ $(document).ready(function () {
     return newTr;
   }
 
-    // Function for creating a new list row for segments
-    function createSegmentTotals(segmentTotals) {
+  // Function for creating a new list row for segments
+  function createSegmentTotals(title, segmentTotals, nextyearSgmtTotals) {
 
-      const totalTr = $('<tr>');
-      // totalTr.data('totals', segmentTotals);
-      totalTr.append('<td>'+'</td>');
-      totalTr.append('<td>'+'</td>');
-      totalTr.append('<td>$' + segmentTotals + '</td>');
-      return totalTr;
-    }
-  
+    const totalTr = $('<tr>');
+    // totalTr.data('totals', segmentTotals);
+    totalTr.append('<td><h4><b>' + title + '</b></h4></td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td><h4><b>$' + segmentTotals + '</b></h4></td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td><h4><b>$' + nextyearSgmtTotals + '</b></h4></td>');
+    return totalTr;
+  }
+
 
   // Function for retrieving segments and getting them ready to be rendered to the page
   function getSegments() {
 
     chart1Data = [{}];
     chart2Data = [{}];
-    
+
     $.get('/api/segments', function (data) {
-      
+
       // console.log('data: ', data);
-      
+
       segmentRevTotal = 0;
+      nextyearSgmtRevTotal = 0;
       const rowsToAdd = [];
 
       for (let i = 0; i < data.length; i++) {
         // rowsToAdd.push(createSegmentRow(data[i]));
         rowsToAdd.push(createSegmentRow(data[i], i));
 
+        // Calculating total segment revenue
         segmentRevTotal += data[i].sgmt_rev;
+        if (!data[i].next_year_sgmt_rev) {
+          nextyearSgmtRevTotal += data[i].sgmt_rev;
+        }
+        else {
+          nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
+        };
+
+        console.log("i: ", i);
+        console.log("data.length: ", data.length);
+        if ((i + 1) == data.length) {
+          rowsToAdd.push(createSegmentTotals("TOTAL", segmentRevTotal, nextyearSgmtRevTotal));
+        }
       }
 
       console.log("segmentRevTotal: ", segmentRevTotal);
       // console.log("rowsToAdd: ", rowsToAdd);
-      
+
       renderSegmentList(rowsToAdd);
       nameInput.val('');
       dealsizeInput.val('');
@@ -157,9 +194,8 @@ $(document).ready(function () {
     segmentList.children().not(':last').remove();
     segmentContainer.children('.alert').remove();
     if (rows.length) {
-      // console.log(rows);
+      // console.log("rows: ", rows);
       segmentList.prepend(rows);
-      // segmentTotals.prepend(createSegmentTotals(segmentRevTotal));
     } else {
       renderEmpty();
     }
