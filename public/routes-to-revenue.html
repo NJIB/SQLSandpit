@@ -67,7 +67,7 @@
 						</thead>
 						<tbody>
 							<tr id="form-row">
-								<form id="segment-form">
+								<!-- <form id="segment-form">
 									<td colspan="8" class="add_segment" style="background-color: yellow;">
 										<input placeholder="New segment name" id="segment-name" type="text" />
 										<input placeholder="Deal size" id="segment-deal_size" type="text" />
@@ -75,50 +75,61 @@
 									</td>
 									<td><button type="submit" class="btn btn-success">Create Segment > </button>
 									</td>
+								</form> -->
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="row">
+						<div class="col-md-5 col-sm-12">
+							<canvas id="myBubbleChart1" width="100" height="100"></canvas>
+						</div>
+						<div class="col-md-2 col-sm-12">
+							<img src='./images/right_arrow.png' alt='right arrow' style="width:100px;
+							 height:100px;
+							 margin-top: 150px;
+							 margin-bottom: 150px;
+							 margin-left: 50px;
+							 margin-right: 50px;">
+						</div>
+						<div class="col-md-5 col-sm-12">
+							<canvas id="myBubbleChart2" width="100" height="100"></canvas>
+						</div>
+					</div>
+			
+
+					<h3>Routes to Revenue</h3>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Hurdles/opportunities to be addressed</th>
+								<th></th>
+								<th>Markets</th>
+								<th>Buyers</th>
+								<th>Offerings</th>
+								<th>Productivity</th>
+								<th>Acquisition</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="form-row">
+								<form id="routes-form">
+									<td class="add_routes" style="background-color: yellow;">
+										<input placeholder="E.g. Retain existing customers" id="revroute1" type="text" />
+										<input placeholder="E.g. Up-sell existing customers to ..." id="revroute2" type="text" />
+										<input placeholder="E.g. Reduce late stage deal losses" id="revroute3" type="text" />
+									</td>
+									<td><button type="submit" class="btn btn-success">Submit > </button>
+									</td>
 								</form>
 							</tr>
 						</tbody>
-						<!-- <tfooter>
-							<tr id="form-row">
-							</tr>
-						</tfooter> -->
 					</table>
-
-					<!-- <div class="row add_segment">
-						<div class="col-md-3 col-sm-12">
-							<h4>Add a new segment:</h4>
-						</div>
-						<div class="col-md-9 col-sm-12">
-							<input placeholder="Segment" id="segment-name" type="text" style="width: 200px" />
-							<input placeholder="Deal size" id="segment-deal_size" type="text" style="width: 200px" />
-							<input placeholder="Deal count" id="segment-deal_count" type="text" style="width: 200px" />
-							<button type="submit" class="btn btn-success">Create Segment</button>
-						</div>
-					</div> -->
-
-
 
 				</div>
 			</div>
 		</div>
-
-		<div class="row">
-			<div class="col-md-5 col-sm-12">
-				<canvas id="myBubbleChart1" width="100" height="100"></canvas>
-			</div>
-			<div class="col-md-2 col-sm-12">
-				<img src='./images/right_arrow.png' alt='right arrow' style="width:100px;
-				 height:100px;
-				 margin-top: 150px;
-				 margin-bottom: 150px;
-				 margin-left: 50px;
-				 margin-right: 50px;">
-			</div>
-			<div class="col-md-5 col-sm-12">
-				<canvas id="myBubbleChart2" width="100" height="100"></canvas>
-			</div>
-		</div>
-
 		</d>
 
 		<!-- Custom Script -->
