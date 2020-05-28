@@ -1,7 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
   // Getting jQuery references to the subsegment body, title, form, and segment select
-  const bodyInput = $('#body');
-  const titleInput = $('#title');
+  // const bodyInput = $('#body');
+  const routeInput = $('#route');
   const rmsForm = $('#rms');
   const segmentSelect = $('#segment');
   // Adding an event listener for when the form is submitted
@@ -17,7 +17,7 @@ $(document).ready(function() {
   // In '?subsegment_id=1', subsegmentId is 1
   if (url.indexOf('?subsegment_id=') !== -1) {
     subsegmentId = url.split('=')[1];
-    getSubSegmentData(subsegmentId, 'subsegment');
+    getRouteData(subsegmentId, 'subsegment');
   }
   // Otherwise if we have an segment_id in our url, preset the segment select box to be our Segment
   else if (url.indexOf('?segment_id=') !== -1) {
@@ -27,43 +27,43 @@ $(document).ready(function() {
   // Getting the segments, and their subsegments
   getSegments();
 
+  getRoutes();
+
   // A function for handling what happens when the form to create a new subsegment is submitted
   function handleFormSubmit(event) {
     event.preventDefault();
     // Wont submit the subsegment if we are missing a body, title, or segment
-    if (!titleInput.val().trim() || !bodyInput.val().trim() || !segmentSelect.val()) {
-      return;
+    // if (!titleInput.val().trim() || !bodyInput.val().trim() || !segmentSelect.val()) {
+      if (!routeInput.val().trim() || !segmentSelect.val()) {
+        return;
     }
     // Constructing a newSubSegment object to hand to the database
-    const newSubSegment = {
-      title: titleInput
-          .val()
-          .trim(),
-      body: bodyInput
-          .val()
-          .trim(),
+    const newRoute = {
+      route: routeInput
+        .val()
+        .trim(),
       SegmentId: segmentSelect.val(),
     };
 
     // If we're updating a subsegment run updateSubSegment to update a subsegment
-    // Otherwise run submitSubSegment to create a whole new subsegment
+    // Otherwise run submitRoute to create a whole new subsegment
     if (updating) {
-      newSubSegment.id = subsegmentId;
-      updateSubSegment(newSubSegment);
+      newRoute.id = subsegmentId;
+      updateRoute(newRoute);
     } else {
-      submitSubSegment(newSubSegment);
+      submitRoute(newRoute);
     }
   }
 
   // Submits a new subsegment and brings user to subsegment page upon completion
-  function submitSubSegment(subsegment) {
-    $.post('/api/subsegments', subsegment, function() {
+  function submitRoute(route) {
+    $.post('/api/subsegments', route, function () {
       window.location.href = '/subsegment';
     });
   }
 
   // Gets subsegment data for the current subsegment if we're editing, or if we're adding to an segment's existing subsegments
-  function getSubSegmentData(id, type) {
+  function getRouteData(id, type) {
     let queryUrl;
     switch (type) {
       case 'subsegment':
@@ -78,7 +78,7 @@ $(document).ready(function() {
 
     console.log("queryUrl: ", queryUrl);
 
-    $.get(queryUrl, function(data) {
+    $.get(queryUrl, function (data) {
       if (data) {
         console.log(data.SegmentId || data.id);
         // If this subsegment exists, prefill our rms forms with its data
@@ -96,6 +96,12 @@ $(document).ready(function() {
   function getSegments() {
     $.get('/api/segments', renderSegmentList);
   }
+
+    // A function to get Routes and then render our list of Routes
+    function getRoutes() {
+      $.get('/api/routes', renderRouteList);
+    }
+  
   // Function to either render a list of segments, or if there are none, direct the user to the page
   // to create an segment first
   function renderSegmentList(data) {
@@ -114,6 +120,22 @@ $(document).ready(function() {
     segmentSelect.val(segmentId);
   }
 
+  function renderRouteList(data) {
+    // if (!data.length) {
+    //   window.location.href = '/segments';
+    // }
+    $('.hidden').removeClass('hidden');
+    const rowsToAdd = [];
+    for (let i = 0; i < data.length; i++) {
+      rowsToAdd.push(createRoutesRow(data[i]));
+    }
+    routeSelect.empty();
+    console.log(rowsToAdd);
+    console.log(routeSelect);
+    routeSelect.append(rowsToAdd);
+    routeSelect.val(segmentId);
+  }
+
   // Creates the segment options in the dropdown
   function createSegmentRow(segment) {
     const listOption = $('<option>');
@@ -122,15 +144,25 @@ $(document).ready(function() {
     return listOption;
   }
 
+  // Creates the segment options in the dropdown
+  function createRoutesRow(segment) {
+    let route_id;
+    const newTr = $('<tr>');
+    newTr.data('segment', segmentData);
+    newTr.append('<td>' + '<input placeholder=' + routeData.route + ' id=' + route_id + ' type="text" />' + '</td>');
+    return newTr;
+  }
+
+
   // Update a given subsegment, bring user to the subsegment page when done
-  function updateSubSegment(subsegment) {
+  function updateRoute(subsegment) {
     $.ajax({
       method: 'PUT',
       url: '/api/subsegments',
       data: subsegment,
     })
-        .then(function() {
-          window.location.href = '/subsegment';
-        });
+      .then(function () {
+        window.location.href = '/subsegment';
+      });
   }
 });
