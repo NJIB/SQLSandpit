@@ -31,6 +31,11 @@ module.exports = function (app) {
     res.sendFile(path.join(__dirname, '../public/sms.html'));
   });
 
+    // Route to the rms page
+    app.get('/rms', function (req, res) {
+      res.sendFile(path.join(__dirname, '../public/rms.html'));
+    });
+    
   // comment route loads comment.html
   app.get('/comment', function (req, res) {
     res.sendFile(path.join(__dirname, '../public/comment.html'));

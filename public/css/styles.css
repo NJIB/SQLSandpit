@@ -22,11 +22,20 @@ form#sms {
   width: 80%;
 }
 
+form#rms {
+  margin-top: 50px;
+  width: 80%;
+}
+
 #cms textarea {
   resize: none;
 }
 
 #sms textarea {
+  resize: none;
+}
+
+#rms textarea {
   resize: none;
 }
 

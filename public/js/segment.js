@@ -112,7 +112,7 @@ $(document).ready(function () {
     else {
       newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
     };
-    newTr.append('<td> <button class="btn btn-success update"><a style=\'cursor:pointer;color:white;\' href=\'/sms?segment_id=' + segmentData.id + '\' /a> >> </button></td>');
+    newTr.append('<td> <button class="btn btn-success update"><a style=\'cursor:pointer;color:white;\' href=\'/rms?segment_id=' + segmentData.id + '\' /a> >> </button></td>');
     if (segmentData.SubSegments) {
       newTr.append('<td> ' + segmentData.SubSegments.length + '</td>');
     } else {
@@ -246,7 +246,7 @@ $(document).ready(function () {
               labelString: 'Deal Size ($)',
             },
             ticks: {
-              beginAtZero: false
+              beginAtZero: true
             }
           }],
           yAxes: [{
@@ -255,7 +255,7 @@ $(document).ready(function () {
               labelString: 'Deal Count (#)',
             },
             ticks: {
-              beginAtZero: false
+              beginAtZero: true
             },
           }],
         }
@@ -287,7 +287,7 @@ $(document).ready(function () {
               labelString: 'Deal Size ($)',
             },
             ticks: {
-              beginAtZero: false
+              beginAtZero: true
             }
           }],
           yAxes: [{
@@ -296,7 +296,7 @@ $(document).ready(function () {
               labelString: 'Deal Count (#)',
             },
             ticks: {
-              beginAtZero: false
+              beginAtZero: true
             }
           }],
         }

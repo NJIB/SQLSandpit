@@ -126,7 +126,7 @@ $(document).ready(function() {
         .parent()
         .parent()
         .data('subsegment');
-    window.location.href = '/cms?subsegment_id=' + currentSubSegment.id;
+    window.location.href = '/rms?subsegment_id=' + currentSubSegment.id;
   }
 
   // This function displays a message when there are no subsegments
@@ -139,7 +139,7 @@ $(document).ready(function() {
     blogContainer.empty();
     const messageH2 = $('<h2>');
     messageH2.css({'text-align': 'center', 'margin-top': '50px'});
-    messageH2.html('No subsegments yet' + partial + ', navigate <a href=\'/sms' + query +
+    messageH2.html('No subsegments yet' + partial + ', navigate <a href=\'/rms' + query +
     '\'>here</a> in order to get started.');
     blogContainer.append(messageH2);
   }
