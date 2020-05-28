@@ -4,6 +4,7 @@ $(document).ready(function () {
   const routeInput = $('#route');
   const rmsForm = $('#rms');
   const segmentSelect = $('#segment');
+  const routeSelect = $('#route');
   // Adding an event listener for when the form is submitted
   $(rmsForm).on('submit', handleFormSubmit);
   // Gets the part of the url that comes after the "?" (which we have if we're updating a subsegment)
@@ -127,7 +128,7 @@ $(document).ready(function () {
     $('.hidden').removeClass('hidden');
     const rowsToAdd = [];
     for (let i = 0; i < data.length; i++) {
-      rowsToAdd.push(createRoutesRow(data[i]));
+      rowsToAdd.push(createRouteRow(data[i]));
     }
     routeSelect.empty();
     console.log(rowsToAdd);
@@ -145,10 +146,10 @@ $(document).ready(function () {
   }
 
   // Creates the segment options in the dropdown
-  function createRoutesRow(segment) {
+  function createRouteRow(routeData) {
     let route_id;
     const newTr = $('<tr>');
-    newTr.data('segment', segmentData);
+    newTr.data('segment', routeData);
     newTr.append('<td>' + '<input placeholder=' + routeData.route + ' id=' + route_id + ' type="text" />' + '</td>');
     return newTr;
   }
