@@ -168,3 +168,7 @@ footer {
   background-color: lightgray;
   font-family: 'Courier New', Courier, monospace;
 }
+
+.form-check-input {
+padding-left: 10px;
+}
