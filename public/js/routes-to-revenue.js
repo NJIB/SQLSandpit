@@ -119,7 +119,7 @@ $(document).ready(function () {
       newTr.append('<td>0</td>');
     }
     newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/subsegment?segment_id=' + segmentData.id + '\'>...</a></td>');
-    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/rms?segment_id=' + segmentData.id + '\'>+</a></td>');
+    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/sms?segment_id=' + segmentData.id + '\'>+</a></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-segment\'>X</a></td>');
 
     console.log("segmentData: ", segmentData);

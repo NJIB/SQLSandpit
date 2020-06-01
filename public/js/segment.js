@@ -103,7 +103,7 @@ $(document).ready(function () {
       newTr.append('<td>$' + segmentData.deal_count + '</td>');
     }
     else {
-    newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
+    newTr.append('<td>' + segmentData.next_year_deal_count + '</td>');
     }
 
     if (!segmentData.next_year_sgmt_rev) {
@@ -112,13 +112,13 @@ $(document).ready(function () {
     else {
       newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
     };
-    newTr.append('<td> <button class="btn btn-success update"><a style=\'cursor:pointer;color:white;\' href=\'/rms?segment_id=' + segmentData.id + '\' /a> >> </button></td>');
+    newTr.append('<td> <button class="btn btn-success update"><a style=\'cursor:pointer;color:white;\' href=\'/sms?segment_id=' + segmentData.id + '\' /a> >> </button></td>');
     if (segmentData.SubSegments) {
       newTr.append('<td> ' + segmentData.SubSegments.length + '</td>');
     } else {
       newTr.append('<td>0</td>');
     }
-    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/subsegment?segment_id=' + segmentData.id + '\'>...</a></td>');
+    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/sms?segment_id=' + segmentData.id + '\'>...</a></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-segment\'>X</a></td>');
 
     console.log("segmentData: ", segmentData);

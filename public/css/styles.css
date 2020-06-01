@@ -22,7 +22,7 @@ form#sms {
   width: 80%;
 }
 
-form#rms {
+form#sms {
   margin-top: 50px;
   width: 80%;
 }
@@ -35,7 +35,7 @@ form#rms {
   resize: none;
 }
 
-#rms textarea {
+#sms textarea {
   resize: none;
 }
 
@@ -159,7 +159,7 @@ header {
 
 
 footer {
-  position: relative;
+  position: absolute;
   height: 50px;
   width: 100%;
   margin-top: 100px;

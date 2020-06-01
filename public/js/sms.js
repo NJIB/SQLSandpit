@@ -2,10 +2,10 @@ $(document).ready(function() {
   // Getting jQuery references to the subsegment body, title, form, and segment select
   const bodyInput = $('#body');
   const titleInput = $('#title');
-  const rmsForm = $('#rms');
+  const smsForm = $('#sms');
   const segmentSelect = $('#segment');
   // Adding an event listener for when the form is submitted
-  $(rmsForm).on('submit', handleFormSubmit);
+  $(smsForm).on('submit', handleFormSubmit);
   // Gets the part of the url that comes after the "?" (which we have if we're updating a subsegment)
   const url = window.location.search;
   let subsegmentId;
@@ -81,7 +81,7 @@ $(document).ready(function() {
     $.get(queryUrl, function(data) {
       if (data) {
         console.log(data.SegmentId || data.id);
-        // If this subsegment exists, prefill our rms forms with its data
+        // If this subsegment exists, prefill our sms forms with its data
         titleInput.val(data.title);
         bodyInput.val(data.body);
         segmentId = data.SegmentId || data.id;

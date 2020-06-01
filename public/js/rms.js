@@ -1,12 +1,12 @@
 $(document).ready(function () {
   // Getting jQuery references to the subsegment body, title, form, and segment select
   // const bodyInput = $('#body');
-  const routeInput = $('#route');
-  const rmsForm = $('#rms');
+  const subsegmentInput = $('#subsegment');
+  const smsForm = $('#sms');
   const segmentSelect = $('#segment');
-  const routeSelect = $('#route');
+  const subsegmentSelect = $('#subsegment');
   // Adding an event listener for when the form is submitted
-  $(rmsForm).on('submit', handleFormSubmit);
+  $(smsForm).on('submit', handleFormSubmit);
   // Gets the part of the url that comes after the "?" (which we have if we're updating a subsegment)
   const url = window.location.search;
   let subsegmentId;
@@ -23,6 +23,7 @@ $(document).ready(function () {
   // Otherwise if we have an segment_id in our url, preset the segment select box to be our Segment
   else if (url.indexOf('?segment_id=') !== -1) {
     segmentId = url.split('=')[1];
+    console.log("segmentId: ", segmentId);
   }
 
   // Getting the segments, and their subsegments
@@ -35,12 +36,12 @@ $(document).ready(function () {
     event.preventDefault();
     // Wont submit the subsegment if we are missing a body, title, or segment
     // if (!titleInput.val().trim() || !bodyInput.val().trim() || !segmentSelect.val()) {
-      if (!routeInput.val().trim() || !segmentSelect.val()) {
-        return;
+    if (!subsegmentInput.val().trim() || !segmentSelect.val()) {
+      return;
     }
     // Constructing a newSubSegment object to hand to the database
     const newRoute = {
-      route: routeInput
+      subsegment: subsegmentInput
         .val()
         .trim(),
       SegmentId: segmentSelect.val(),
@@ -57,8 +58,8 @@ $(document).ready(function () {
   }
 
   // Submits a new subsegment and brings user to subsegment page upon completion
-  function submitRoute(route) {
-    $.post('/api/subsegments', route, function () {
+  function submitRoute(subsegment) {
+    $.post('/api/subsegments', subsegment, function () {
       window.location.href = '/subsegment';
     });
   }
@@ -82,7 +83,7 @@ $(document).ready(function () {
     $.get(queryUrl, function (data) {
       if (data) {
         console.log(data.SegmentId || data.id);
-        // If this subsegment exists, prefill our rms forms with its data
+        // If this subsegment exists, prefill our sms forms with its data
         titleInput.val(data.title);
         bodyInput.val(data.body);
         segmentId = data.SegmentId || data.id;
@@ -98,14 +99,15 @@ $(document).ready(function () {
     $.get('/api/segments', renderSegmentList);
   }
 
-    // A function to get Routes and then render our list of Routes
-    function getRoutes() {
-      $.get('/api/routes', renderRouteList);
-    }
-  
+  // A function to get Routes and then render our list of Routes
+  function getRoutes() {
+    $.get('/api/subsegments', renderRouteList);
+  }
+
   // Function to either render a list of segments, or if there are none, direct the user to the page
   // to create an segment first
   function renderSegmentList(data) {
+
     if (!data.length) {
       window.location.href = '/segments';
     }
@@ -125,33 +127,59 @@ $(document).ready(function () {
     // if (!data.length) {
     //   window.location.href = '/segments';
     // }
+
+    console.log("Routes data: ", data);
+
     $('.hidden').removeClass('hidden');
     const rowsToAdd = [];
+
+    console.log("data: ", data);
+
     for (let i = 0; i < data.length; i++) {
       rowsToAdd.push(createRouteRow(data[i]));
     }
-    routeSelect.empty();
+
+    subsegmentSelect.empty();
     console.log(rowsToAdd);
-    console.log(routeSelect);
-    routeSelect.append(rowsToAdd);
-    routeSelect.val(segmentId);
+    console.log(subsegmentSelect);
+    subsegmentSelect.append(rowsToAdd);
+    subsegmentSelect.val(segmentId);
   }
 
   // Creates the segment options in the dropdown
   function createSegmentRow(segment) {
+
+    console.log("segment: ", segment);
+
     const listOption = $('<option>');
     listOption.attr('value', segment.id);
     listOption.text(segment.name);
     return listOption;
   }
 
-  // Creates the segment options in the dropdown
-  function createRouteRow(routeData) {
-    let route_id;
-    const newTr = $('<tr>');
-    newTr.data('segment', routeData);
-    newTr.append('<td>' + '<input placeholder=' + routeData.route + ' id=' + route_id + ' type="text" />' + '</td>');
-    return newTr;
+  // Creates the subsegment options in the dropdown
+  function createRouteRow(subsegmentData) {
+
+    console.log("subsegmentData: ", subsegmentData);
+
+    const listOption = $('<option>');
+    listOption.attr('value', subsegmentData.id);
+    listOption.text(subsegmentData.body);
+    return listOption;
+
+    // let subsegment_id;
+
+    // console.log("subsegmentData.SegmentId: ", subsegmentData.SegmentId);
+    // console.log("subsegmentData.id: ", subsegmentData.id);
+    // console.log("subsegmentData.title: ", subsegmentData.title);
+    // console.log("subsegmentData.body: ", subsegmentData.body);
+
+    // const newTr = $('<tr>');
+    // newTr.data('segment', subsegmentData);
+    // // newTr.append('<td>' + '<input placeholder=' + subsegmentData.body + ' id=' + subsegment_id + ' type="text" />' + '</td>');
+    // newTr.append('<td>' + '<input placeholder=' + subsegmentData.body + ' id=' + subsegmentData.id + ' type="text" />' + '</td>');
+    // // newTr.append('<td>' + '<input placeholder=' + subsegmentData.body + ' id=' + subsegmentData.SegmentId + ' type="text" />' + '</td>');
+    // return newTr;
   }
 
 
