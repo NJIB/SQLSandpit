@@ -170,5 +170,7 @@ footer {
 }
 
 .form-check-input {
-padding-left: 10px;
+margin-left: 25px;
+padding: auto;
+text-align: center;
 }

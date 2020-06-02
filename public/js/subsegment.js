@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   /* global moment */
 
   // blogContainer holds all of our subsegments
@@ -7,6 +7,12 @@ $(document).ready(function() {
   // Click events for the edit and delete buttons
   $(document).on('click', 'button.delete', handleSubSegmentDelete);
   $(document).on('click', 'button.edit', handleSubSegmentEdit);
+
+  $(document).on('click', '.form-check-input:checked', function (e) {
+    console.log("this: ", $(this).val());
+    console.log("this: ", $(this));
+  });
+
   // Variable to hold our subsegments
   let subsegments;
 
@@ -23,14 +29,13 @@ $(document).ready(function() {
     getSubSegments();
   }
 
-
   // This function grabs subsegments from the database and updates the view
   function getSubSegments(segment) {
     segmentId = segment || '';
     if (segmentId) {
       segmentId = '/?segment_id=' + segmentId;
     }
-    $.get('/api/subsegments' + segmentId, function(data) {
+    $.get('/api/subsegments' + segmentId, function (data) {
       console.log('SubSegments', data);
       subsegments = data;
       if (!subsegments || !subsegments.length) {
@@ -47,9 +52,9 @@ $(document).ready(function() {
       method: 'DELETE',
       url: '/api/subsegments/' + id,
     })
-        .then(function() {
-          getSubSegments(subsegmentCategorySelect.val());
-        });
+      .then(function () {
+        getSubSegments(subsegmentCategorySelect.val());
+      });
   }
 
   // InitializeRows handles appending all of our constructed subsegment HTML inside blogContainer
@@ -66,13 +71,13 @@ $(document).ready(function() {
   function createNewRow(subsegment) {
     let formattedDate = new Date(subsegment.createdAt);
     formattedDate = moment(formattedDate).format('MMMM Do YYYY, h:mm:ss a');
-    
+
     const newSubSegmentCard = $('<div>');
     newSubSegmentCard.addClass('card');
-    
+
     const newSubSegmentCardHeading = $('<div>');
     newSubSegmentCardHeading.addClass('card-header');
-    
+
     const deleteBtn = $('<button>');
     deleteBtn.text('x');
     deleteBtn.addClass('delete btn btn-danger');
@@ -80,7 +85,7 @@ $(document).ready(function() {
     const editBtn = $('<button>');
     editBtn.text('EDIT');
     editBtn.addClass('edit btn btn-info');
-    
+
     const newSubSegmentTitle = $('<h2>');
     const newSubSegmentDate = $('<small>');
     const newSubSegmentSegment = $('<h5>');
@@ -89,12 +94,12 @@ $(document).ready(function() {
       'float': 'right',
       'color': 'blue',
       'margin-top':
-      '-10px',
+        '-10px',
     });
 
     const newSubSegmentCardBody = $('<div>');
     newSubSegmentCardBody.addClass('card-body');
-    
+
     const newSubSegmentBody = $('<p>');
     newSubSegmentTitle.text(subsegment.title + ' ');
     newSubSegmentBody.text(subsegment.body);
@@ -114,18 +119,18 @@ $(document).ready(function() {
   // This function figures out which subsegment we want to delete and then calls deleteSubSegment
   function handleSubSegmentDelete() {
     const currentSubSegment = $(this)
-        .parent()
-        .parent()
-        .data('subsegment');
+      .parent()
+      .parent()
+      .data('subsegment');
     deleteSubSegment(currentSubSegment.id);
   }
 
   // This function figures out which subsegment we want to edit and takes it to the appropriate url
   function handleSubSegmentEdit() {
     const currentSubSegment = $(this)
-        .parent()
-        .parent()
-        .data('subsegment');
+      .parent()
+      .parent()
+      .data('subsegment');
     window.location.href = '/sms?subsegment_id=' + currentSubSegment.id;
   }
 
@@ -138,9 +143,9 @@ $(document).ready(function() {
     }
     blogContainer.empty();
     const messageH2 = $('<h2>');
-    messageH2.css({'text-align': 'center', 'margin-top': '50px'});
+    messageH2.css({ 'text-align': 'center', 'margin-top': '50px' });
     messageH2.html('No subsegments yet' + partial + ', navigate <a href=\'/sms' + query +
-    '\'>here</a> in order to get started.');
+      '\'>here</a> in order to get started.');
     blogContainer.append(messageH2);
   }
 
@@ -232,21 +237,21 @@ $(document).ready(function() {
     if (segmentData.deal_count_yoy) {
       newTr.append('<td>' + segmentData.deal_count_yoy + '%' + '</td>');
     } else {
-      newTr.append('<td>' +  '-' + '</td>');
+      newTr.append('<td>' + '-' + '</td>');
     }
 
     if (!segmentData.next_year_deal_size) {
       newTr.append('<td>$' + segmentData.deal_size + '</td>');
     }
     else {
-    newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
+      newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
     }
 
     if (!segmentData.next_year_deal_count) {
       newTr.append('<td>$' + segmentData.deal_count + '</td>');
     }
     else {
-    newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
+      newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
     }
 
     if (!segmentData.next_year_sgmt_rev) {
@@ -257,11 +262,11 @@ $(document).ready(function() {
     };
 
     newTr.append('<td>' + '<input placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_'+ segmentData.id +'" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_'+ segmentData.id +'" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_'+ segmentData.id +'" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_'+ segmentData.id +'" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_'+ segmentData.id +'" value="unchecked">' + '</td>');
 
     buildChartObject(segmentData);
 
