@@ -8,9 +8,18 @@ $(document).ready(function () {
   $(document).on('click', 'button.delete', handleSubSegmentDelete);
   $(document).on('click', 'button.edit', handleSubSegmentEdit);
 
-  $(document).on('click', '.form-check-input:checked', function (e) {
-    console.log("this: ", $(this).val());
-    console.log("this: ", $(this));
+  // $(document).on('click', '.form-check-input:checked', function (e) {
+  $(document).on('click', '.form-check-input', function (e) {
+    // console.log("e.target.id: ", e.target.id);
+    // console.log("this: ", $(this).val());
+    if(e.target.value == 'unchecked'){
+      e.target.value = 'checked';
+    } else {
+      e.target.value = 'unchecked';
+    }
+    // console.log("this.val(): ", $(this).val());
+    console.log(e.target.id,": ",e.target.value);
+    // console.log("e: ", e);
   });
 
   // Variable to hold our subsegments
