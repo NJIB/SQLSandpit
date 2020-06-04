@@ -1,9 +1,13 @@
 $(document).ready(function () {
   /* global moment */
 
-  // blogContainer holds all of our subsegments
+    // blogContainer holds all of our subsegments
   const blogContainer = $('.subsegment-container');
   const subsegmentCategorySelect = $('#category');
+
+  //Array of objects to hold data for upsert to Routes table
+  let routesData = [{}];
+
   // Click events for the edit and delete buttons
   $(document).on('click', 'button.delete', handleSubSegmentDelete);
   $(document).on('click', 'button.edit', handleSubSegmentEdit);
@@ -11,7 +15,6 @@ $(document).ready(function () {
   // $(document).on('click', '.form-check-input:checked', function (e) {
   $(document).on('click', '.form-check-input', function (e) {
     // console.log("e.target.id: ", e.target.id);
-    // console.log("this: ", $(this).val());
     if(e.target.value == 'unchecked'){
       e.target.value = 'checked';
     } else {
@@ -159,75 +162,72 @@ $(document).ready(function () {
   }
 
   //INSERTING ROUTES TO REVENUE CODE
-  // Getting references to the name input and segment container, as well as the table body
-  const nameInput = $('#segment-name');
-  const dealsizeInput = $('#segment-deal_size');
-  const dealcountInput = $('#segment-deal_count');
+  // // Getting references to the name input and segment container, as well as the table body
+  // const nameInput = $('#segment-name');
+  // const dealsizeInput = $('#segment-deal_size');
+  // const dealcountInput = $('#segment-deal_count');
 
   const segmentList = $('tbody');
   const segmentTotals = $('tfooter');
   const segmentContainer = $('.segment-container');
   let segmentRevTotal = 0;
 
-  // const chart1Area = $('#myBubbleChart1');
-  // const chart2Area = $('#myBubbleChart2');
-  // var ctx = $('#myBubbleChart');
   let chart1Data = [{}];
   let chart2Data = [{}];
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Segment
-  $(document).on('submit', '#segment-form', handleSegmentFormSubmit);
-  $(document).on('click', '.delete-segment', handleDeleteButtonPress);
-  $(document).on('click', '.update', handleUpdateButtonPress);
+  $(document).on('submit', '#routes-form', handleRoutesFormSubmit);
+  // $(document).on('click', '.delete-segment', handleDeleteButtonPress);
+  // $(document).on('click', '.update', handleUpdateButtonPress);
 
   // Getting the initial list of Segments
   getSegments();
 
   // A function to handle what happens when the form is submitted to create a new Segment
-  function handleSegmentFormSubmit(event) {
+  function handleRoutesFormSubmit(event) {
     event.preventDefault();
 
-    // Don't do anything if the name fields hasn't been filled out
-    if (!nameInput.val().trim().trim()) {
-      return;
-    }
+    console.log("event: ", event);
 
-    console.log("nameInput: ", nameInput.val().trim());
-    console.log("dealsizeInput: ", dealsizeInput.val().trim());
-    console.log("dealcountInput: ", dealcountInput.val().trim());
-
-    const segmentData = {
-      name: nameInput
+    const routesData = {
+      hurdle: nameInput
         .val()
         .trim(),
-      deal_size: dealsizeInput
+      markets: 1
         .val()
         .trim(),
-      deal_count: dealcountInput
+      buyers: 1
+        .val()
+        .trim(),
+      offerings: 1
+        .val()
+        .trim(),
+      productivity: 1
+        .val()
+        .trim(),
+      acquisition: 1
         .val()
         .trim()
     }
 
-    console.log("segmentData object: ", segmentData)
+    console.log("routesData object: ", routesData)
 
-    upsertSegment(segmentData);
+    upsertRoutes(routesData);
 
   }
 
   // A function for creating an segment. Calls getSegments upon completion
-  function upsertSegment(segmentData) {
-    $.post('/api/segments', segmentData)
-      .then(getSegments);
+  function upsertRoutes(routesData) {
+    $.post('/api/routes', routesData)
+      // .then(getSegments);
   }
 
   // Function for creating a new list row for segments
   function createSegmentRow(segmentData) {
 
     // console.log('segmentData: ', segmentData);
-    // const deal_size_yoy_id = "deal_size_yoy" + (i + 1);
     const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
-    // const deal_count_yoy_id = "deal_count_yoy" + (i + 1);
     const deal_count_yoy_id = "deal_count_yoy" + segmentData.id;
 
     const newTr = $('<tr>');
@@ -270,7 +270,7 @@ $(document).ready(function () {
       newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
     };
 
-    newTr.append('<td>' + '<input placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="hurdle_' + segmentData.id +'" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_'+ segmentData.id +'" value="unchecked">' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_'+ segmentData.id +'" value="unchecked">' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_'+ segmentData.id +'" value="unchecked">' + '</td>');
@@ -315,7 +315,6 @@ $(document).ready(function () {
       const rowsToAdd = [];
 
       for (let i = 0; i < data.length; i++) {
-        // rowsToAdd.push(createSegmentRow(data[i]));
         rowsToAdd.push(createSegmentRow(data[i], i));
 
         // Calculating total segment revenue
@@ -468,76 +467,4 @@ $(document).ready(function () {
     segmentContainer.append(alertDiv);
   }
 
-  // Function for handling what happens when the delete button is pressed
-  function handleDeleteButtonPress() {
-    const listItemData = $(this).parent('td').parent('tr').data('segment');
-
-    const id = listItemData.id;
-    $.ajax({
-      method: 'DELETE',
-      url: '/api/segments/' + id,
-    })
-      .then(getSegments);
-  }
-
-  function handleUpdateButtonPress() {
-
-    const listItemData = $(this).parent('td').parent('tr').data('segment');
-    // console.log("listItemData: ", listItemData);
-
-    const id = listItemData.id;
-    // console.log("listItemData.id: ", listItemData.id);
-
-    let nextyearDealsize = 0;
-    let nextyearDealcount = 0;
-
-    const dealsizeyoychangeInput = $('#deal_size_yoy' + listItemData.id);
-    const dealcountyoychangeInput = $('#deal_count_yoy' + listItemData.id);
-
-    // console.log('dealsizeyoychangeInput: ', dealsizeyoychangeInput.val());
-    if (dealsizeyoychangeInput === '') {
-      nextyearDealsize = listItemData.deal_size;
-      // console.log("nextyearDealsize: ", nextyearDealsize);
-    } else {
-      nextyearDealsize = (listItemData.deal_size * (1 + (dealsizeyoychangeInput.val() / 100)));
-      // console.log("nextyearDealsize: ", nextyearDealsize);
-    }
-
-    // console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
-    if (dealcountyoychangeInput === '') {
-      nextyearDealcount = listItemData.deal_count;
-      // console.log("nextyearDealcount: ", nextyearDealcount);
-    } else {
-      nextyearDealcount = (listItemData.deal_count * (1 + (dealcountyoychangeInput.val() / 100)));
-      // console.log("nextyearDealcount: ", nextyearDealcount);
-    }
-
-    const nextyearSgmtrev = (nextyearDealsize * nextyearDealcount);
-    // console.log("nextyearSgmtrev: ", nextyearSgmtrev);
-
-
-    const segmentData = {
-      id: listItemData.id,
-      name: listItemData.name,
-      deal_size: listItemData.deal_size,
-      deal_count: listItemData.deal_count,
-      deal_size_yoy: dealsizeyoychangeInput.val() * 1,
-      deal_count_yoy: dealcountyoychangeInput.val() * 1,
-      next_year_deal_size: nextyearDealsize,
-      next_year_deal_count: nextyearDealcount,
-      next_year_sgmt_rev: nextyearSgmtrev
-    }
-
-    console.log("segmentData object: ", segmentData)
-
-
-    $.ajax({
-      method: 'PUT',
-      url: '/api/segments',
-      data: segmentData,
-    })
-      .then(getSegments);
-  }
-
-  //END OF ROUTES TO REVENUE CODE ADDED
 });

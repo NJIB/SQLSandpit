@@ -12,7 +12,7 @@ const db = require('../models');
 // =============================================================
 module.exports = function(app) {
   // GET route for getting all of the comments
-  app.get('/api/subsegments', async (req, res) => {
+  app.get('/api/routes', async (req, res) => {
     // Add sequelize code to find all comments, and return them to the user with res.json
     const query = {};
     if (req.query.segment_id) {
@@ -24,7 +24,7 @@ module.exports = function(app) {
     // We set the value to an array of the models we want to include in a left outer join
     // In this case, just db.Segment
     try {
-      const data = await db.SubSegment.findAll({
+      const data = await db.Route.findAll({
         where: query,
         include: [db.Segment],
       });
@@ -35,7 +35,7 @@ module.exports = function(app) {
   });
 
   // Get route for returning comments of a specific category
-  app.get('/api/subsegments/category/:category', async (req, res) => {
+  app.get('/api/routes/category/:category', async (req, res) => {
     // Add sequelize code to find all comments where the category is equal to req.params.category,
     // return the result to the user with res.json
     // We build up the query object with a category property.
@@ -52,7 +52,7 @@ module.exports = function(app) {
     // We set the value to an array of the models we want to include in a left outer join
     // In this case, just db.Segment
     try {
-      const data = await db.SubSegment.findAll({
+      const data = await db.Route.findAll({
         where: query,
         include: [db.Segment],
       });
@@ -63,14 +63,14 @@ module.exports = function(app) {
   });
 
   // Get route for retrieving a single comment
-  app.get('/api/subsegments/:id', async (req, res) => {
+  app.get('/api/routes/:id', async (req, res) => {
     // Add sequelize code to find a single comment where the id is equal to req.params.id,
     // return the result to the user with res.json
     // We add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
     // In this case, just db.Segment
     try {
-      const data = await db.SubSegment.findOne({
+      const data = await db.Route.findOne({
         where: {id: req.params.id},
         include: [db.Segment],
       });
@@ -81,11 +81,11 @@ module.exports = function(app) {
   });
 
   // POST route for saving a new comment
-  app.post('/api/subsegments', async (req, res) => {
+  app.post('/api/routes', async (req, res) => {
     // Add sequelize code for creating a comment using req.body,
     // then return the result using res.json
     try {
-      const result = await db.SubSegment.create(req.body);
+      const result = await db.Route.create(req.body);
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});
@@ -97,7 +97,7 @@ module.exports = function(app) {
       // Add sequelize code for creating a comment using req.body,
       // then return the result using res.json
       try {
-        const result = await db.SubSegment.create(req.body);
+        const result = await db.Route.create(req.body);
         res.json({created: result.dataValues});
       } catch (error) {
         res.status(400).json({error: {name: error.name, msg: error.message}});
@@ -106,11 +106,11 @@ module.exports = function(app) {
   
 
   // DELETE route for deleting comments
-  app.delete('/api/subsegments/:id', async (req, res) => {
+  app.delete('/api/routes/:id', async (req, res) => {
     // Add sequelize code to delete a comment where the id is equal to req.params.id,
     // then return the result to the user using res.json
     try {
-      const result = await db.SubSegment.destroy(
+      const result = await db.Route.destroy(
           {
             where: {id: req.params.id},
           },
@@ -124,13 +124,13 @@ module.exports = function(app) {
   });
 
   // PUT route for updating comments
-  app.put('/api/subsegmentss', async (req, res) => {
+  app.put('/api/routess', async (req, res) => {
     // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     const {id, title, body, category} = req.body;
 
     try {
-      const result = await db.SubSegment.update(
+      const result = await db.Route.update(
           {title, body, category},
           {where: {id}},
       );
