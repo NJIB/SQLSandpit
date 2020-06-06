@@ -85,27 +85,13 @@ module.exports = function(app) {
     // Add sequelize code for creating a comment using req.body,
     // then return the result using res.json
 
-    console.log("req.body: ",req.body);
     try {
       const result = await db.Route.create(req.body);
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});
     }
-  });
-
-    // POST route for saving a new comment
-    app.post('/api/routes', async (req, res) => {
-      // Add sequelize code for creating a comment using req.body,
-      // then return the result using res.json
-      try {
-        const result = await db.Route.create(req.body);
-        res.json({created: result.dataValues});
-      } catch (error) {
-        res.status(400).json({error: {name: error.name, msg: error.message}});
-      }
-    });
-  
+  }); 
 
   // DELETE route for deleting comments
   app.delete('/api/routes/:id', async (req, res) => {
@@ -126,7 +112,7 @@ module.exports = function(app) {
   });
 
   // PUT route for updating comments
-  app.put('/api/routess', async (req, res) => {
+  app.put('/api/routes', async (req, res) => {
     // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     const {id, title, body, category} = req.body;

@@ -93,7 +93,7 @@ module.exports = function(app) {
   });
 
     // POST route for saving a new comment
-    app.post('/api/routes', async (req, res) => {
+    app.post('/api/subsegment', async (req, res) => {
       // Add sequelize code for creating a comment using req.body,
       // then return the result using res.json
       try {
@@ -124,7 +124,7 @@ module.exports = function(app) {
   });
 
   // PUT route for updating comments
-  app.put('/api/subsegmentss', async (req, res) => {
+  app.put('/api/subsegments', async (req, res) => {
     // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     const {id, title, body, category} = req.body;
