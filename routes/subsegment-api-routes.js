@@ -84,7 +84,10 @@ module.exports = function(app) {
   app.post('/api/subsegments', async (req, res) => {
     // Add sequelize code for creating a comment using req.body,
     // then return the result using res.json
+    console.log("req.body: ", req.body);
+    
     try {
+      console.log("req.body: ", req.body);
       const result = await db.SubSegment.create(req.body);
       res.json({created: result.dataValues});
     } catch (error) {
@@ -92,18 +95,17 @@ module.exports = function(app) {
     }
   });
 
-    // POST route for saving a new comment
-    app.post('/api/subsegment', async (req, res) => {
-      // Add sequelize code for creating a comment using req.body,
-      // then return the result using res.json
-      try {
-        const result = await db.SubSegment.create(req.body);
-        res.json({created: result.dataValues});
-      } catch (error) {
-        res.status(400).json({error: {name: error.name, msg: error.message}});
-      }
-    });
-  
+  // // POST route for saving a new comment
+  // app.post('/api/subsegments', async (req, res) => {
+  //   // Add sequelize code for creating a comment using req.body,
+  //   // then return the result using res.json
+  //   try {
+  //     const result = await db.Route.create(req.body);
+  //     res.json({created: result.dataValues});
+  //   } catch (error) {
+  //     res.status(400).json({error: {name: error.name, msg: error.message}});
+  //   }
+  // });
 
   // DELETE route for deleting comments
   app.delete('/api/subsegments/:id', async (req, res) => {
@@ -130,7 +132,8 @@ module.exports = function(app) {
     const {id, title, body, category} = req.body;
 
     try {
-      const result = await db.SubSegment.update(
+      // const result = await db.SubSegment.update(
+        const result = await db.SubSegment.update(
           {title, body, category},
           {where: {id}},
       );

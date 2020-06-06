@@ -2,41 +2,41 @@ module.exports = function(sequelize, DataTypes) {
     const Route = sequelize.define('Route', {
       hurdle: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1, 160],
         },
       },
       markets: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          len: [1],
+          len: [1, 160],
         },
       },
       buyers: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          len: [1],
+          len: [1, 160],
         },
       },
       offerings: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          len: [1],
+          len: [1, 160],
         },
       },
       productivity: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          len: [1],
+          len: [1, 160],
         },
       },
       acquisition: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true,
         validate: {
           len: [1],

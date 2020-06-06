@@ -1,66 +1,61 @@
 $(document).ready(function () {
   /* global moment */
 
-  // blogContainer holds all of our subsegments
-  const blogContainer = $('.subsegment-container');
-  const subsegmentCategorySelect = $('#category');
+  // blogContainer holds all of our routes
+  const blogContainer = $('.route-container');
+  const routeCategorySelect = $('#category');
 
   //Array of objects to hold data for upsert to Routes table
-  let subsegmentsData = [];
+  let routesData = [];
 
   // Click events for the edit and delete buttons
   $(document).on('click', 'button.delete', handleSubSegmentDelete);
   $(document).on('click', 'button.edit', handleSubSegmentEdit);
   $(document).on('click', '.form-check-input', handleCheckboxClick);
-  $(document).on('submit', '#subsegments-form', handleRoutesFormSubmit);
+  $(document).on('submit', '#routes-form', handleRoutesFormSubmit);
 
   // $(document).on('click', '.form-check-input:checked', function (e) {
   // $(document).on('click', '.form-check-input', function (e) {
   function handleCheckboxClick(e) {
-    console.log("subsegmentsData: ", subsegmentsData)
-    console.log("e.target.id: ", e.target.id);
+    // console.log("e.target.id: ", e.target.id);
     if (e.target.value == 'unchecked') {
       e.target.value = 'checked';
     } else {
       e.target.value = 'unchecked';
     }
     // console.log("this.val(): ", $(this).val());
-    // console.log(e.target.id, ": ", e.target.value);
+    console.log(e.target.id, ": ", e.target.value);
     // console.log("e: ", e);
 
-    for (var i = 0; i < subsegmentsData.length; i++) {
+    for (var i = 0; i < routesData.length; i++) {
       // console.log(e.target.id.substr((e.target.id.indexOf('_') + 1),e.target.id.length));
-      if (subsegmentsData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1),e.target.id.length)) {
-        const hurdle_id = ("hurdle_" + subsegmentsData[i].id);
-        const hurdle_desc = $('#' + hurdle_id);
-        console.log('hurdle_desc:', hurdle_desc.val().trim());
-        subsegmentsData[i].hurdle = hurdle_desc.val().trim();
+      if (routesData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1),e.target.id.length)) {
         switch (e.target.id.substr(0, e.target.id.indexOf('_'))) {
           case "markets":
-            subsegmentsData[i].markets = e.target.value;
+            routesData[i].markets = e.target.value;
             break;
           case "buyers":
-            subsegmentsData[i].buyers = e.target.value;
+            routesData[i].buyers = e.target.value;
             break;
           case "offerings":
-            subsegmentsData[i].offerings = e.target.value;
+            routesData[i].offerings = e.target.value;
             break;
           case "productivity":
-            subsegmentsData[i].productivity = e.target.value;
+            routesData[i].productivity = e.target.value;
             break;
           case "acquisition":
-            subsegmentsData[i].acquisition = e.target.value;
+            routesData[i].acquisition = e.target.value;
             break;
         }
       }
     }
-    console.log("subsegmentsData: ", subsegmentsData);
+    console.log("routesData: ", routesData);
   };
 
-  // Variable to hold our subsegments
-  let subsegments;
+  // Variable to hold our routes
+  let routes;
 
-  // The code below handles the case where we want to get subsegment subsegments for a specific segment
+  // The code below handles the case where we want to get route routes for a specific segment
   // Looks for a query param in the url for segment_id
   const url = window.location.search;
   let segmentId;
@@ -68,21 +63,21 @@ $(document).ready(function () {
     segmentId = url.split('=')[1];
     getSubSegments(segmentId);
   }
-  // If there's no segmentId we just get all subsegments as usual
+  // If there's no segmentId we just get all routes as usual
   else {
     getSubSegments();
   }
 
-  // This function grabs subsegments from the database and updates the view
+  // This function grabs routes from the database and updates the view
   function getSubSegments(segment) {
     segmentId = segment || '';
     if (segmentId) {
       segmentId = '/?segment_id=' + segmentId;
     }
-    $.get('/api/subsegments' + segmentId, function (data) {
+    $.get('/api/route' + segmentId, function (data) {
       console.log('SubSegments', data);
-      subsegments = data;
-      if (!subsegments || !subsegments.length) {
+      routes = data;
+      if (!routes || !routes.length) {
         displayEmpty(segment);
       } else {
         initializeRows();
@@ -90,30 +85,30 @@ $(document).ready(function () {
     });
   }
 
-  // This function does an API call to delete subsegments
+  // This function does an API call to delete routes
   function deleteSubSegment(id) {
     $.ajax({
       method: 'DELETE',
-      url: '/api/subsegments/' + id,
+      url: '/api/route/' + id,
     })
       .then(function () {
-        getSubSegments(subsegmentCategorySelect.val());
+        getSubSegments(routeCategorySelect.val());
       });
   }
 
-  // InitializeRows handles appending all of our constructed subsegment HTML inside blogContainer
+  // InitializeRows handles appending all of our constructed route HTML inside blogContainer
   function initializeRows() {
     blogContainer.empty();
-    const subsegmentsToAdd = [];
-    for (let i = 0; i < subsegments.length; i++) {
-      subsegmentsToAdd.push(createNewRow(subsegments[i]));
+    const routesToAdd = [];
+    for (let i = 0; i < routes.length; i++) {
+      routesToAdd.push(createNewRow(routes[i]));
     }
-    blogContainer.append(subsegmentsToAdd);
+    blogContainer.append(routesToAdd);
   }
 
-  // This function constructs a subsegment's HTML
-  function createNewRow(subsegment) {
-    let formattedDate = new Date(subsegment.createdAt);
+  // This function constructs a route's HTML
+  function createNewRow(route) {
+    let formattedDate = new Date(route.createdAt);
     formattedDate = moment(formattedDate).format('MMMM Do YYYY, h:mm:ss a');
 
     const newSubSegmentCard = $('<div>');
@@ -133,7 +128,7 @@ $(document).ready(function () {
     const newSubSegmentTitle = $('<h2>');
     const newSubSegmentDate = $('<small>');
     const newSubSegmentSegment = $('<h5>');
-    newSubSegmentSegment.text('Written by: ' + subsegment.Segment.name);
+    newSubSegmentSegment.text('Written by: ' + route.Segment.name);
     newSubSegmentSegment.css({
       'float': 'right',
       'color': 'blue',
@@ -145,8 +140,8 @@ $(document).ready(function () {
     newSubSegmentCardBody.addClass('card-body');
 
     const newSubSegmentBody = $('<p>');
-    newSubSegmentTitle.text(subsegment.title + ' ');
-    newSubSegmentBody.text(subsegment.body);
+    newSubSegmentTitle.text(route.title + ' ');
+    newSubSegmentBody.text(route.body);
     newSubSegmentDate.text(formattedDate);
     newSubSegmentTitle.append(newSubSegmentDate);
     newSubSegmentCardHeading.append(deleteBtn);
@@ -156,29 +151,29 @@ $(document).ready(function () {
     newSubSegmentCardBody.append(newSubSegmentBody);
     newSubSegmentCard.append(newSubSegmentCardHeading);
     newSubSegmentCard.append(newSubSegmentCardBody);
-    newSubSegmentCard.data('subsegment', subsegment);
+    newSubSegmentCard.data('route', route);
     return newSubSegmentCard;
   }
 
-  // This function figures out which subsegment we want to delete and then calls deleteSubSegment
+  // This function figures out which route we want to delete and then calls deleteSubSegment
   function handleSubSegmentDelete() {
     const currentSubSegment = $(this)
       .parent()
       .parent()
-      .data('subsegment');
+      .data('route');
     deleteSubSegment(currentSubSegment.id);
   }
 
-  // This function figures out which subsegment we want to edit and takes it to the appropriate url
+  // This function figures out which route we want to edit and takes it to the appropriate url
   function handleSubSegmentEdit() {
     const currentSubSegment = $(this)
       .parent()
       .parent()
-      .data('subsegment');
-    window.location.href = '/sms?subsegment_id=' + currentSubSegment.id;
+      .data('route');
+    window.location.href = '/sms?route_id=' + currentSubSegment.id;
   }
 
-  // This function displays a message when there are no subsegments
+  // This function displays a message when there are no routes
   function displayEmpty(id) {
     const query = window.location.search;
     let partial = '';
@@ -188,7 +183,7 @@ $(document).ready(function () {
     blogContainer.empty();
     const messageH2 = $('<h2>');
     messageH2.css({ 'text-align': 'center', 'margin-top': '50px' });
-    messageH2.html('No subsegments yet' + partial + ', navigate <a href=\'/sms' + query +
+    messageH2.html('No routes yet' + partial + ', navigate <a href=\'/sms' + query +
       '\'>here</a> in order to get started.');
     blogContainer.append(messageH2);
   }
@@ -205,7 +200,7 @@ $(document).ready(function () {
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Segment
-  // $(document).on('submit', '#subsegments-form', handleRoutesFormSubmit);
+  // $(document).on('submit', '#routes-form', handleRoutesFormSubmit);
 
   // Getting the initial list of Segments
   getSegments();
@@ -213,19 +208,19 @@ $(document).ready(function () {
   // A function to handle what happens when the form is submitted to create a new Segment
   function handleRoutesFormSubmit(event) {
     event.preventDefault();
+    console.log("Submit button clicked!!")
+    console.log("event: ", event);
+    console.log("routesData object: ", routesData)
+    upsertRoutes(routesData);
 
-    for (let i = 0; i < subsegmentsData.length; i++) {
-    console.log("subsegmentsData object: ", subsegmentsData[i])
-    upsertRoutes(subsegmentsData[i]);
-    };
   }
 
   // A function for creating an segment. Calls getSegments upon completion
-  function upsertRoutes(subsegmentObj) {
-    console.log("subsegmentObj in upsert: ", subsegmentObj);
+  function upsertRoutes(routesData) {
 
-    $.post('/api/subsegments', subsegmentObj)
-    // .then(getSegments);
+    console.log("routesData in upsert function: ", routesData);
+    $.post('/api/route', routesData)
+    .then(getSegments);
   }
 
   // Function for creating a new list row for segments
@@ -324,23 +319,17 @@ $(document).ready(function () {
       for (let i = 0; i < data.length; i++) {
         rowsToAdd.push(createSegmentRow(data[i], i));
 
-        // Populate object for [ultimate] upload to Routes table
-        const subsegmentsDetails = {
+        // Populate object for [ulitmate] upload to Routes table
+        const routesDetails = {
           id: data[i].id,
-          hurdle: "",
           markets: "",
           buyers: "",
           offerings: "",
           productivity: "",
-          acquisition: "",
-          SegmentId: data[i].id,
+          acquisition: ""
         };
-
-        console.log("subsegmentsDetails: ", subsegmentsDetails);
-
-        subsegmentsData.push(subsegmentsDetails);
-        // subsegmentsDetails.push(subsegmentsData);
-        console.log("subsegmentsData: ", subsegmentsData);
+        routesData.push(routesDetails);
+        console.log("routesData: ", routesData);
 
         // Calculating total segment revenue
         segmentRevTotal += data[i].sgmt_rev;

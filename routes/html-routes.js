@@ -61,9 +61,9 @@ module.exports = function (app) {
     res.sendFile(path.join(__dirname, '../public/segment-manager.html'));
   });
 
-  // routes_to_revenue route loads routes-to-revenue.html
-  app.get('/revroutes', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/routes-to-revenue.html'));
-  });
+  // // routes_to_revenue route loads routes-to-revenue.html
+  // app.get('/route', function (req, res) {
+  //   res.sendFile(path.join(__dirname, '../public/route.html'));
+  // });
 
 };

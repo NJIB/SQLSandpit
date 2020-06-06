@@ -84,7 +84,6 @@ module.exports = function(app) {
   app.post('/api/routes', async (req, res) => {
     // Add sequelize code for creating a comment using req.body,
     // then return the result using res.json
-
     try {
       const result = await db.Route.create(req.body);
       res.json({created: result.dataValues});

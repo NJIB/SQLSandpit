@@ -30,6 +30,7 @@ require('./routes/html-routes')(app);
 // require('./routes/comment-api-routes')(app);
 require('./routes/segment-api-routes')(app);
 require('./routes/subsegment-api-routes')(app);
+// require('./routes/route-api-routes')(app);
 
 // Syncing our sequelize models Starting our Express app
 // =============================================================
