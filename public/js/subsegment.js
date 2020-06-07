@@ -30,7 +30,7 @@ $(document).ready(function () {
 
     for (var i = 0; i < subsegmentsData.length; i++) {
       // console.log(e.target.id.substr((e.target.id.indexOf('_') + 1),e.target.id.length));
-      if (subsegmentsData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1),e.target.id.length)) {
+      if (subsegmentsData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
         const hurdle_id = ("hurdle_" + subsegmentsData[i].id);
         const hurdle_desc = $('#' + hurdle_id);
         console.log('hurdle_desc:', hurdle_desc.val().trim());
@@ -210,15 +210,79 @@ $(document).ready(function () {
   // Getting the initial list of Segments
   getSegments();
 
-  // A function to handle what happens when the form is submitted to create a new Segment
+  // A function to handle what happens when the form is submitted to create a new route
   function handleRoutesFormSubmit(event) {
     event.preventDefault();
 
+    //Need to pull down existing records from the database - to determine if it needs to be POST or a PUT
     for (let i = 0; i < subsegmentsData.length; i++) {
-    console.log("subsegmentsData object: ", subsegmentsData[i])
-    upsertRoutes(subsegmentsData[i]);
+      console.log("subsegmentsData object: ", subsegmentsData[i])
+
+      let segmentId = subsegmentsData[i].SegmentId || '';
+      if (segmentId) {
+        segmentId = '/?segment_id=' + segmentId;
+        console.log("segmentId: ", segmentId);
+      }
+
+      $.get('/api/subsegments' + segmentId, function (data) {
+        console.log('SubSegments: ', data);
+        subsegments = data;
+        if (!subsegments || !subsegments.length) {
+          upsertRoutes(subsegmentsData[i]);
+        } else {
+          console.log("UPDATING!");
+          updateRouteInfo(data, subsegmentsData[i])
+          console.log("subsegments: ", subsegments);
+        }
+      });
     };
-  }
+
+    // for (let i = 0; i < subsegmentsData.length; i++) {
+    // console.log("subsegmentsData object: ", subsegmentsData[i])
+    // upsertRoutes(subsegmentsData[i]);
+    // };
+  };
+
+  // A function for updating the SubSegment table record
+  function updateRouteInfo(oldRecord, newDetails) {
+    console.log("oldRecord: ", oldRecord);
+    console.log("newDetails: ", newDetails);
+
+    let newRecord = {
+      id: oldRecord[0].id,
+      hurdle: oldRecord[0].hurdle,
+      markets: oldRecord[0].markets,
+      buyers: oldRecord[0].buyers,
+      offerings: oldRecord[0].offerings,
+      productivity: oldRecord[0].productivity,
+      acquisition: oldRecord[0].acquisition,
+      SegmentId: oldRecord[0].SegmentId,
+    };
+    console.log("newRecord: ", newRecord);
+
+    if (oldRecord.hurdle !== newDetails.hurdle) {
+      newRecord.hurdle = newDetails.hurdle;
+    }
+    if (oldRecord.markets !== newDetails.markets) {
+      newRecord.markets = newDetails.markets;
+    }
+    if (oldRecord.buyers !== newDetails.buyers) {
+      newRecord.buyers = newDetails.buyers;
+    }
+    if (oldRecord.offerings !== newDetails.offerings) {
+      newRecord.offerings = newDetails.offerings;
+    }
+    if (oldRecord.productivity !== newDetails.productivity) {
+      newRecord.productivity = newDetails.productivity;
+    }
+    if (oldRecord.acquisition !== newDetails.acquisition) {
+      newRecord.acquisition = newDetails.acquisition;
+    }
+
+    console.log("newRecord: ", newRecord)
+
+    updateRouteInfo(newRecord);
+  };
 
   // A function for creating an segment. Calls getSegments upon completion
   function upsertRoutes(subsegmentObj) {
@@ -227,6 +291,21 @@ $(document).ready(function () {
     $.post('/api/subsegments', subsegmentObj)
     // .then(getSegments);
   }
+
+  // A function for updating SubSegment records. Calls getSubSegments upon completion
+  function updateRouteInfo(subsegmentUpdate) {
+    console.log("subsegmentUpdate in update: ", subsegmentUpdate[0]);
+
+      $.ajax({
+        method: 'PUT',
+        url: '/api/subsegments',
+        data: subsegmentUpdate,
+      })
+          // .then(function() {
+          //   window.location.href = '/subsegment';
+          // });
+    }
+
 
   // Function for creating a new list row for segments
   function createSegmentRow(segmentData) {

@@ -129,12 +129,13 @@ module.exports = function(app) {
   app.put('/api/subsegments', async (req, res) => {
     // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
-    const {id, title, body, category} = req.body;
+    const {id, hurdle, markets, buyers, offerings, productivity, acquisition} = req.body;
+    console.log("id: ", id);
 
     try {
       // const result = await db.SubSegment.update(
         const result = await db.SubSegment.update(
-          {title, body, category},
+          {hurdle, markets, buyers, offerings, productivity, acquisition},
           {where: {id}},
       );
       const affectedRowCount = result[0];
