@@ -231,8 +231,7 @@ $(document).ready(function () {
           upsertRoutes(subsegmentsData[i]);
         } else {
           console.log("UPDATING!");
-          updateRouteInfo(data, subsegmentsData[i])
-          console.log("subsegments: ", subsegments);
+          updateRouteInfo(subsegments, subsegmentsData[i])
         }
       });
     };
@@ -281,7 +280,12 @@ $(document).ready(function () {
 
     console.log("newRecord: ", newRecord)
 
-    updateRouteInfo(newRecord);
+    $.ajax({
+      method: 'PUT',
+      url: '/api/subsegments',
+      data: newRecord,
+    });
+
   };
 
   // A function for creating an segment. Calls getSegments upon completion
@@ -293,18 +297,18 @@ $(document).ready(function () {
   }
 
   // A function for updating SubSegment records. Calls getSubSegments upon completion
-  function updateRouteInfo(subsegmentUpdate) {
-    console.log("subsegmentUpdate in update: ", subsegmentUpdate[0]);
+  // function updateRouteInfo(subsegmentUpdate) {
+  //   console.log("subsegmentUpdate in update: ", subsegmentUpdate[0]);
 
-      $.ajax({
-        method: 'PUT',
-        url: '/api/subsegments',
-        data: subsegmentUpdate,
-      })
+  //     $.ajax({
+  //       method: 'PUT',
+  //       url: '/api/subsegments',
+  //       data: subsegmentUpdate,
+  //     })
           // .then(function() {
           //   window.location.href = '/subsegment';
           // });
-    }
+    // }
 
 
   // Function for creating a new list row for segments
@@ -441,9 +445,9 @@ $(document).ready(function () {
       // console.log("rowsToAdd: ", rowsToAdd);
 
       renderSegmentList(rowsToAdd);
-      nameInput.val('');
-      dealsizeInput.val('');
-      dealcountInput.val('');
+      // nameInput.val('');
+      // dealsizeInput.val('');
+      // dealcountInput.val('');
     });
 
   }
