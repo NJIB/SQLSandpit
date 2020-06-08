@@ -17,8 +17,8 @@ $(document).ready(function () {
   // $(document).on('click', '.form-check-input:checked', function (e) {
   // $(document).on('click', '.form-check-input', function (e) {
   function handleCheckboxClick(e) {
-    console.log("subsegmentsData: ", subsegmentsData)
-    console.log("e.target.id: ", e.target.id);
+    // console.log("subsegmentsData: ", subsegmentsData)
+    // console.log("e.target.id: ", e.target.id);
     if (e.target.value == 'unchecked') {
       e.target.value = 'checked';
     } else {
@@ -33,7 +33,7 @@ $(document).ready(function () {
       if (subsegmentsData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
         const hurdle_id = ("hurdle_" + subsegmentsData[i].id);
         const hurdle_desc = $('#' + hurdle_id);
-        console.log('hurdle_desc:', hurdle_desc.val().trim());
+        // console.log('hurdle_desc:', hurdle_desc.val().trim());
         subsegmentsData[i].hurdle = hurdle_desc.val().trim();
         switch (e.target.id.substr(0, e.target.id.indexOf('_'))) {
           case "markets":
@@ -54,7 +54,7 @@ $(document).ready(function () {
         }
       }
     }
-    console.log("subsegmentsData: ", subsegmentsData);
+    // console.log("subsegmentsData: ", subsegmentsData);
   };
 
   // Variable to hold our subsegments
@@ -193,8 +193,6 @@ $(document).ready(function () {
     blogContainer.append(messageH2);
   }
 
-  //INSERTING ROUTES TO REVENUE CODE
-
   const segmentList = $('tbody');
   const segmentTotals = $('tfooter');
   const segmentContainer = $('.segment-container');
@@ -227,6 +225,9 @@ $(document).ready(function () {
       $.get('/api/subsegments' + segmentId, function (data) {
         console.log('SubSegments: ', data);
         subsegments = data;
+        console.log("subsegments: ", subsegments);
+        console.log("subsegments.length: ", subsegments.length);
+        
         if (!subsegments || !subsegments.length) {
           upsertRoutes(subsegmentsData[i]);
         } else {
@@ -244,7 +245,7 @@ $(document).ready(function () {
 
   // A function for updating the SubSegment table record
   function updateRouteInfo(oldRecord, newDetails) {
-    console.log("oldRecord: ", oldRecord);
+    console.log("oldRecord: ", oldRecord[0]);
     console.log("newDetails: ", newDetails);
 
     let newRecord = {
@@ -259,26 +260,29 @@ $(document).ready(function () {
     };
     console.log("newRecord: ", newRecord);
 
-    if (oldRecord.hurdle !== newDetails.hurdle) {
+    console.log("oldRecord[0].hurdle: ", oldRecord[0].hurdle);
+    console.log("newDetails.hurdle: ", newDetails.hurdle);
+
+    if (oldRecord[0].hurdle !== newDetails.hurdle) {
       newRecord.hurdle = newDetails.hurdle;
     }
-    if (oldRecord.markets !== newDetails.markets) {
+    if (oldRecord[0].markets !== newDetails.markets) {
       newRecord.markets = newDetails.markets;
     }
-    if (oldRecord.buyers !== newDetails.buyers) {
+    if (oldRecord[0].buyers !== newDetails.buyers) {
       newRecord.buyers = newDetails.buyers;
     }
-    if (oldRecord.offerings !== newDetails.offerings) {
+    if (oldRecord[0].offerings !== newDetails.offerings) {
       newRecord.offerings = newDetails.offerings;
     }
-    if (oldRecord.productivity !== newDetails.productivity) {
+    if (oldRecord[0].productivity !== newDetails.productivity) {
       newRecord.productivity = newDetails.productivity;
     }
-    if (oldRecord.acquisition !== newDetails.acquisition) {
+    if (oldRecord[0].acquisition !== newDetails.acquisition) {
       newRecord.acquisition = newDetails.acquisition;
     }
 
-    console.log("newRecord: ", newRecord)
+    console.log("newRecord (updated): ", newRecord)
 
     $.ajax({
       method: 'PUT',
@@ -419,11 +423,11 @@ $(document).ready(function () {
           SegmentId: data[i].id,
         };
 
-        console.log("subsegmentsDetails: ", subsegmentsDetails);
+        // console.log("subsegmentsDetails: ", subsegmentsDetails);
 
         subsegmentsData.push(subsegmentsDetails);
         // subsegmentsDetails.push(subsegmentsData);
-        console.log("subsegmentsData: ", subsegmentsData);
+        // console.log("subsegmentsData: ", subsegmentsData);
 
         // Calculating total segment revenue
         segmentRevTotal += data[i].sgmt_rev;
@@ -434,14 +438,14 @@ $(document).ready(function () {
           nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
         };
 
-        console.log("i: ", i);
-        console.log("data.length: ", data.length);
+        // console.log("i: ", i);
+        // console.log("data.length: ", data.length);
         if ((i + 1) == data.length) {
           rowsToAdd.push(createSegmentTotals("TOTAL", segmentRevTotal, nextyearSgmtRevTotal));
         }
       }
 
-      console.log("segmentRevTotal: ", segmentRevTotal);
+      // console.log("segmentRevTotal: ", segmentRevTotal);
       // console.log("rowsToAdd: ", rowsToAdd);
 
       renderSegmentList(rowsToAdd);
