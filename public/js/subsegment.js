@@ -227,11 +227,10 @@ $(document).ready(function () {
         subsegments = data;
         console.log("subsegments: ", subsegments);
         console.log("subsegments.length: ", subsegments.length);
-        
+
         if (!subsegments || !subsegments.length) {
           upsertRoutes(subsegmentsData[i]);
         } else {
-          console.log("UPDATING!");
           updateRouteInfo(subsegments, subsegmentsData[i])
         }
       });
@@ -309,16 +308,16 @@ $(document).ready(function () {
   //       url: '/api/subsegments',
   //       data: subsegmentUpdate,
   //     })
-          // .then(function() {
-          //   window.location.href = '/subsegment';
-          // });
-    // }
+  // .then(function() {
+  //   window.location.href = '/subsegment';
+  // });
+  // }
 
 
   // Function for creating a new list row for segments
-  function createSegmentRow(segmentData) {
+  function createSegmentRow(segmentData, subsegmentsDetails) {
 
-    // console.log('segmentData: ', segmentData);
+    console.log('segmentData: ', segmentData);
     const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
     const deal_count_yoy_id = "deal_count_yoy" + segmentData.id;
 
@@ -362,9 +361,14 @@ $(document).ready(function () {
       newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
     };
 
+    console.log("subsegmentsDetails: ", subsegmentsDetails);
+    console.log("subsegmentsDetails.markets: ", subsegmentsDetails.markets);
+
     newTr.append('<td>' + '<input id="hurdle_' + segmentData.id + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + segmentData.id + '" value="unchecked">' + '</td>');
+    // newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + segmentData.id + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + segmentData.id + '" value=' + subsegmentsDetails.markets + '>' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + segmentData.id + '" value="unchecked">' + '</td>');
+    // newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + segmentData.id + '" value=' + subsegmentsDetails.buyers + '>' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + segmentData.id + '" value="unchecked">' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + segmentData.id + '" value="unchecked">' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + segmentData.id + '" value="unchecked">' + '</td>');
@@ -411,23 +415,29 @@ $(document).ready(function () {
       for (let i = 0; i < data.length; i++) {
         rowsToAdd.push(createSegmentRow(data[i], i));
 
+        const subsegmentId = '/?segment_id=' + data[i].id;
+
+        $.get('/api/subsegments' + subsegmentId, function (subsegData) {
+
+          console.log("subsegData: ", subsegData);
+          const subsegmentsDetails = {
+            id: subsegData[0].id,
+            hurdle: subsegData[0].hurdle,
+            markets: subsegData[0].markets,
+            buyers: subsegData[0].buyers,
+            offerings: subsegData[0].offerings,
+            productivity: subsegData[0].productivity,
+            acquisition: subsegData[0].acquisition,
+            SegmentId: subsegData[0].id,
+          };
+          console.log("subsegmentsDetails: ", subsegmentsDetails);
+
+          // 6/8/2020 - THIS NEEDS TO BE FIXED. NOT WORKING
+          // rowsToAdd.push(createSegmentRow(data[i], subsegmentsDetails));
+
         // Populate object for [ultimate] upload to Routes table
-        const subsegmentsDetails = {
-          id: data[i].id,
-          hurdle: "",
-          markets: "",
-          buyers: "",
-          offerings: "",
-          productivity: "",
-          acquisition: "",
-          SegmentId: data[i].id,
-        };
-
-        // console.log("subsegmentsDetails: ", subsegmentsDetails);
-
-        subsegmentsData.push(subsegmentsDetails);
-        // subsegmentsDetails.push(subsegmentsData);
-        // console.log("subsegmentsData: ", subsegmentsData);
+        // subsegmentsData.push(subsegmentsDetails);
+      });
 
         // Calculating total segment revenue
         segmentRevTotal += data[i].sgmt_rev;
@@ -438,20 +448,14 @@ $(document).ready(function () {
           nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
         };
 
-        // console.log("i: ", i);
-        // console.log("data.length: ", data.length);
         if ((i + 1) == data.length) {
           rowsToAdd.push(createSegmentTotals("TOTAL", segmentRevTotal, nextyearSgmtRevTotal));
         }
       }
 
-      // console.log("segmentRevTotal: ", segmentRevTotal);
       // console.log("rowsToAdd: ", rowsToAdd);
 
       renderSegmentList(rowsToAdd);
-      // nameInput.val('');
-      // dealsizeInput.val('');
-      // dealcountInput.val('');
     });
 
   }
@@ -461,7 +465,7 @@ $(document).ready(function () {
     segmentList.children().not(':last').remove();
     segmentContainer.children('.alert').remove();
     if (rows.length) {
-      // console.log("rows: ", rows);
+      console.log("rows: ", rows);
       segmentList.prepend(rows);
     } else {
       renderEmpty();
