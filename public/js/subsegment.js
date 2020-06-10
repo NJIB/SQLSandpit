@@ -8,6 +8,13 @@ $(document).ready(function () {
   //Array of objects to hold data for upsert to Routes table
   let subsegmentsData = [];
   const rowsToAdd = [];
+  const segmentList = $('tbody');
+  const segmentTotals = $('tfooter');
+  const segmentContainer = $('.segment-container');
+  let segmentRevTotal = 0;
+
+  let chart1Data = [{}];
+  let chart2Data = [{}];
 
   // Click events for the edit and delete buttons
   $(document).on('click', 'button.delete', handleSubSegmentDelete);
@@ -15,53 +22,10 @@ $(document).ready(function () {
   $(document).on('click', '.form-check-input', handleCheckboxClick);
   $(document).on('submit', '#subsegments-form', handleRoutesFormSubmit);
 
-  // $(document).on('click', '.form-check-input:checked', function (e) {
-  // $(document).on('click', '.form-check-input', function (e) {
-  function handleCheckboxClick(e) {
-    // console.log("subsegmentsData: ", subsegmentsData)
-    // console.log("e.target.id: ", e.target.id);
-    if (e.target.value == 'unchecked') {
-      e.target.value = 'checked';
-    } else {
-      e.target.value = 'unchecked';
-    }
-    // console.log("this.val(): ", $(this).val());
-    // console.log(e.target.id, ": ", e.target.value);
-    // console.log("e: ", e);
-
-    for (var i = 0; i < subsegmentsData.length; i++) {
-      // console.log(e.target.id.substr((e.target.id.indexOf('_') + 1),e.target.id.length));
-      if (subsegmentsData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
-        const hurdle_id = ("hurdle_" + subsegmentsData[i].id);
-        const hurdle_desc = $('#' + hurdle_id);
-        // console.log('hurdle_desc:', hurdle_desc.val().trim());
-        subsegmentsData[i].hurdle = hurdle_desc.val().trim();
-        switch (e.target.id.substr(0, e.target.id.indexOf('_'))) {
-          case "markets":
-            subsegmentsData[i].markets = e.target.value;
-            break;
-          case "buyers":
-            subsegmentsData[i].buyers = e.target.value;
-            break;
-          case "offerings":
-            subsegmentsData[i].offerings = e.target.value;
-            break;
-          case "productivity":
-            subsegmentsData[i].productivity = e.target.value;
-            break;
-          case "acquisition":
-            subsegmentsData[i].acquisition = e.target.value;
-            break;
-        }
-      }
-    }
-    // console.log("subsegmentsData: ", subsegmentsData);
-  };
-
   // Variable to hold our subsegments
   let subsegments;
 
-  // The code below handles the case where we want to get subsegment subsegments for a specific segment
+  // The code below handles the case where we want to get subsegments for a specific segment
   // Looks for a query param in the url for segment_id
   const url = window.location.search;
   let segmentId;
@@ -73,6 +37,10 @@ $(document).ready(function () {
   else {
     getSubSegments();
   }
+
+    // Getting the initial list of Segments
+    getSegments();
+    getSubSegmentDetails();
 
   // This function grabs subsegments from the database and updates the view
   function getSubSegments(segment) {
@@ -161,6 +129,47 @@ $(document).ready(function () {
     return newSubSegmentCard;
   }
 
+  function handleCheckboxClick(e) {
+    // console.log("subsegmentsData: ", subsegmentsData)
+    // console.log("e.target.id: ", e.target.id);
+    if (e.target.value == 'unchecked') {
+      e.target.value = 'checked';
+    } else {
+      e.target.value = 'unchecked';
+    }
+    // console.log("this.val(): ", $(this).val());
+    // console.log(e.target.id, ": ", e.target.value);
+    // console.log("e: ", e);
+
+    for (var i = 0; i < subsegmentsData.length; i++) {
+      // console.log(e.target.id.substr((e.target.id.indexOf('_') + 1),e.target.id.length));
+      if (subsegmentsData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
+        const hurdle_id = ("hurdle_" + subsegmentsData[i].id);
+        const hurdle_desc = $('#' + hurdle_id);
+        // console.log('hurdle_desc:', hurdle_desc.val().trim());
+        subsegmentsData[i].hurdle = hurdle_desc.val().trim();
+        switch (e.target.id.substr(0, e.target.id.indexOf('_'))) {
+          case "markets":
+            subsegmentsData[i].markets = e.target.value;
+            break;
+          case "buyers":
+            subsegmentsData[i].buyers = e.target.value;
+            break;
+          case "offerings":
+            subsegmentsData[i].offerings = e.target.value;
+            break;
+          case "productivity":
+            subsegmentsData[i].productivity = e.target.value;
+            break;
+          case "acquisition":
+            subsegmentsData[i].acquisition = e.target.value;
+            break;
+        }
+      }
+    }
+    // console.log("subsegmentsData: ", subsegmentsData);
+  };
+
   // This function figures out which subsegment we want to delete and then calls deleteSubSegment
   function handleSubSegmentDelete() {
     const currentSubSegment = $(this)
@@ -194,23 +203,6 @@ $(document).ready(function () {
     blogContainer.append(messageH2);
   }
 
-  //INSERTING ROUTES TO REVENUE CODE
-
-  const segmentList = $('tbody');
-  const segmentTotals = $('tfooter');
-  const segmentContainer = $('.segment-container');
-  let segmentRevTotal = 0;
-
-  let chart1Data = [{}];
-  let chart2Data = [{}];
-
-  // Adding event listeners to the form to create a new object, and the button to delete
-  // an Segment
-  // $(document).on('submit', '#subsegments-form', handleRoutesFormSubmit);
-
-  // Getting the initial list of Segments
-  getSegments();
-
   // A function to handle what happens when the form is submitted to create a new route
   function handleRoutesFormSubmit(event) {
     event.preventDefault();
@@ -243,7 +235,7 @@ $(document).ready(function () {
     // };
   };
 
-  
+
   // A function for updating the SubSegment table record
   function updateRouteInfo(oldRecord, newDetails) {
     console.log("oldRecord: ", oldRecord[0]);
@@ -307,10 +299,10 @@ $(document).ready(function () {
   //       url: '/api/subsegments',
   //       data: subsegmentUpdate,
   //     })
-          // .then(function() {
-          //   window.location.href = '/subsegment';
-          // });
-    // }
+  // .then(function() {
+  //   window.location.href = '/subsegment';
+  // });
+  // }
 
 
   // Function for creating a new list row for segments
@@ -360,12 +352,12 @@ $(document).ready(function () {
       newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
     };
 
-    newTr.append('<td>' + '<input id="hurdle_' + segmentData.id + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + segmentData.id + '" value="unchecked">' + '</td>');
+    // newTr.append('<td>' + '<input id="hurdle_' + segmentData.id + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
+    // newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + segmentData.id + '" value="unchecked">' + '</td>');
+    // newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + segmentData.id + '" value="unchecked">' + '</td>');
+    // newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + segmentData.id + '" value="unchecked">' + '</td>');
+    // newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + segmentData.id + '" value="unchecked">' + '</td>');
+    // newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + segmentData.id + '" value="unchecked">' + '</td>');
 
     buildChartObject(segmentData);
 
@@ -373,18 +365,27 @@ $(document).ready(function () {
   }
   // End of createSegmentRow
 
-  
-  function createSubSegmentRow(subSegmentData) {
 
-    newTr.append('<td>' + '<input id="hurdle_' + segmentData.id + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + segmentData.id + '" value="unchecked">' + '</td>');
+  //This function builds the SubSegment details, to be appended to rowsToAdd
+  function createSubSegmentRow(subsegments) {
 
-    return newTr;
+    console.log("subsegments: ", subsegments);
+
+    for (let i = 0; i < rowsToAdd.length; i++) {
+
+    const trAppend = $('<tr>');
+    trAppend.append('<td>' + '<input id="hurdle_' + subsegments.id + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
+    trAppend.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + subsegments.id + '" value="unchecked">' + '</td>');
+    trAppend.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + subsegments.id + '" value="unchecked">' + '</td>');
+    trAppend.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + subsegments.id + '" value="unchecked">' + '</td>');
+    trAppend.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + subsegments.id + '" value="unchecked">' + '</td>');
+    trAppend.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + subsegments.id + '" value="unchecked">' + '</td>');
+
+    rowsToAdd[i].append(trAppend);
+
+    console.log("rowsToAdd: ", rowsToAdd);
   }
+};
   // End of createSubSegmentRow
 
 
@@ -459,8 +460,10 @@ $(document).ready(function () {
 
       console.log("rowsToAdd: ", rowsToAdd);
 
-      console.log("segmentRevTotal: ", segmentRevTotal);
-      // console.log("rowsToAdd: ", rowsToAdd);
+      getSubSegmentDetails();
+      createSubSegmentRow(subsegments);
+
+      // console.log("segmentRevTotal: ", segmentRevTotal);
 
       renderSegmentList(rowsToAdd);
       // nameInput.val('');
@@ -469,6 +472,33 @@ $(document).ready(function () {
     });
 
   }
+
+  // This function grabs subsegments from the database and updates the view
+  function getSubSegmentDetails() {
+
+    for (let i = 0; i < rowsToAdd.length; i++) {
+
+      console.log("rowsToAdd: ", rowsToAdd)
+
+      segmentId = rowsToAdd.SegmentId || '';
+      console.log("rowsToAdd.SegmentId: ", rowsToAdd.SegmentId)
+
+      if (segmentId) {
+        segmentId = '/?segment_id=' + segmentId;
+      }
+      $.get('/api/subsegments' + segmentId, function (data) {
+        console.log('SubSegment data', data);
+        subsegments = data;
+
+        // if (!subsegments || !subsegments.length) {
+        //   displayEmpty(segment);
+        // } else {
+        //   initializeRows();
+        // }
+      });
+    }
+  };
+
 
   // A function for rendering the list of segments to the page
   function renderSegmentList(rows) {
