@@ -159,7 +159,7 @@ $(document).ready(function () {
 
     $.get('/api/segments', function (data) {
 
-      // console.log('data: ', data);
+      console.log('data: ', data);
 
       segmentRevTotal = 0;
       nextyearSgmtRevTotal = 0;
@@ -230,6 +230,7 @@ $(document).ready(function () {
 
   // This creates the display object for the Revenue Bubble Chart(s)
   function renderChart1(chartData) {
+    console.log("chart1 data: ", chartData);
     var ctx = $('#myBubbleChart1');
 
     var myBubbleChart = new Chart(ctx, {
@@ -237,7 +238,7 @@ $(document).ready(function () {
       data: {
         "datasets": [{
           label: "Segment Revenue - This Year",
-          data: chart1Data,
+          data: chartData,
           backgroundColor:
             'red'
         }]
@@ -271,6 +272,7 @@ $(document).ready(function () {
 
   // This creates the display object for the Revenue Bubble Chart(s)
   function renderChart2(chartData) {
+    console.log("chart2 data: ", chartData);
     var ctx = $('#myBubbleChart2');
 
     var myBubbleChart = new Chart(ctx, {
@@ -278,7 +280,7 @@ $(document).ready(function () {
       data: {
         "datasets": [{
           label: "Next Year Segment Revenue Plan",
-          data: chart2Data,
+          data: chartData,
           backgroundColor:
             'green'
         }]
@@ -389,6 +391,4 @@ $(document).ready(function () {
     })
       .then(getSegments);
   }
-
-
 });
