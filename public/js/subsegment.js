@@ -145,7 +145,24 @@ $(document).ready(function () {
     for (var i = 0; i < subsegmentsData.length; i++) {
       console.log(e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length));
       if (subsegmentsData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
+        // Defining IDs to be referenced when updating the SubSegments table
+
         const hurdle_id = ("hurdle_" + subsegmentsData[i].id);
+        console.log('hurdle_id:', hurdle_id);
+        const markets_id = ("markets_" + subsegmentsData[i].id);
+        console.log('markets_id:', markets_id);
+        const buyers_id = ("buyers_" + subsegmentsData[i].id);
+        console.log("buyers_id: ", $(buyers_id));
+        const offerings_id = ("offerings_" + subsegmentsData[i].id);
+        console.log('offerings_id:', offerings_id);
+        const productivity_id = ("productivity_" + subsegmentsData[i].id);
+        console.log('productivity_id:', productivity_id);
+        const acquisition_id = ("acquisition_" + subsegmentsData[i].id);
+        console.log('acquisition_id:', acquisition_id);
+
+        const change_id = e.target.id;
+        console.log("change_id: ", change_id);
+
         const hurdle_desc = $('#' + hurdle_id);
         console.log('hurdle_desc:', hurdle_desc.val().trim());
         subsegmentsData[i].hurdle = hurdle_desc.val().trim();
@@ -255,30 +272,32 @@ $(document).ready(function () {
     console.log("newRecord: ", newRecord);
 
     if (oldRecord[0].hurdle !== newDetails.hurdle) {
-      newRecord.hurdle = newDetails.hurdle;
+      oldRecord.hurdle = newDetails.hurdle;
     }
     if (oldRecord[0].markets !== newDetails.markets) {
-      newRecord.markets = newDetails.markets;
+      oldRecord.markets = newDetails.markets;
     }
     if (oldRecord[0].buyers !== newDetails.buyers) {
-      newRecord.buyers = newDetails.buyers;
+      oldRecord.buyers = newDetails.buyers;
     }
     if (oldRecord[0].offerings !== newDetails.offerings) {
-      newRecord.offerings = newDetails.offerings;
+      oldRecord.offerings = newDetails.offerings;
     }
     if (oldRecord[0].productivity !== newDetails.productivity) {
-      newRecord.productivity = newDetails.productivity;
+      oldRecord.productivity = newDetails.productivity;
     }
     if (oldRecord[0].acquisition !== newDetails.acquisition) {
-      newRecord.acquisition = newDetails.acquisition;
+      oldRecord.acquisition = newDetails.acquisition;
     }
 
-    console.log("newRecord (updated): ", newRecord)
+    // console.log("newRecord (updated): ", newRecord)
+    console.log("oldRecord (updated): ", oldRecord)
 
     $.ajax({
       method: 'PUT',
       url: '/api/subsegments',
-      data: newRecord,
+      // data: newRecord,
+      data: oldRecord,
     });
 
   };
