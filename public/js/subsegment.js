@@ -604,10 +604,6 @@ $(document).ready(function () {
         
           }
         };
-        rowsToAdd[i].append(newTr);
-        console.log("rowsToAdd: ", rowsToAdd);
-  
-        // END 6/22 LATE TEST
       }
     });
 
@@ -624,7 +620,6 @@ $(document).ready(function () {
 
     for (let i = 0; i < subsegmentRecord.length; i++) {
 
-      // console.log("segmentId being searched: ", segmentId);
       console.log("subsegmentRecord.id being searched: ", subsegmentRecord[i].id);
       console.log("subsegmentRecord[i]: ", subsegmentRecord[i]);
 
@@ -639,8 +634,14 @@ $(document).ready(function () {
         acquisition: subsegmentRecord[i].acquisition,
         SegmentId: subsegmentRecord[i].SegmentId,
       };
+      console.log("subsegmentsDetails: ", subsegmentsDetails);
 
+      if(subsegmentsData.indexOf(subsegmentsDetails.id)){
+        console.log("Details for subsegment", subsegmentsDetails.id, "already exists!");
+      }
+      else {
       subsegmentsData.push(subsegmentsDetails);
+      }
       console.log("subsegmentsData: ", subsegmentsData);
 
       if (subsegmentRecord[i].id === segmentId) {
@@ -746,9 +747,9 @@ $(document).ready(function () {
         console.log("acquisitionScript: ", acquisitionScript);
         newTr.append(acquisitionScript);
 
-        // return newTr;
+        return newTr;
 
-        rowsToAdd[i].append(newTr);
+        // rowsToAdd[i].append(newTr);
         // console.log("rowsToAdd: ", rowsToAdd);
       }
     }
