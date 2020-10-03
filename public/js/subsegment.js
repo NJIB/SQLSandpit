@@ -34,6 +34,7 @@ $(document).ready(function () {
 
   if (url.indexOf('?segment_id=') !== -1) {
     segmentId = url.split('=')[1];
+    console.log("segmentId: ", segmentId);
     getSubSegments(segmentId);
   }
   // If there's no segmentId we just get all subsegments as usual
@@ -42,22 +43,40 @@ $(document).ready(function () {
   }
 
   // Getting the initial list of Segments
+  //10.02 commenting out
   getSegments();
-  getSubSegmentDetails();
+  //10.02 End  test
+
+  //10.02 Temporarily commenting out
+  // getSubSegmentDetails();
+  //10.02 End test
 
   // This function grabs subsegments from the database and updates the view
   function getSubSegments(segment) {
+
     segmentId = segment || '';
+    console.log("segmentId: ", segmentId);
+
     if (segmentId) {
-      segmentId = '/?segment_id=' + segmentId;
+      //10.01 Updated to segmentURL for clarity//
+      // segmentId = '/?segment_id=' + segmentId;
+      // console.log("segmentId: ", segmentId);
+      segmentURL = '/?segment_id=' + segmentId;
+      console.log("segmentURL: ", segmentURL);
     }
-    $.get('/api/subsegments' + segmentId, function (data) {
+
+    $.get('/api/subsegments' + segmentURL, function (data) {
+      // $.get('/api/subsegments' + segmentId, function (data) {
       subsegments = data;
       console.log("subsegments: ", subsegments);
       if (!subsegments || !subsegments.length) {
         displayEmpty(segment);
       } else {
         initializeRows();
+        //10.02 Trying inserting getSubSegmentDetails function here, instead of on 47
+        console.log("subsegments: ", subsegments);
+        // getSubSegmentDetails(subsegments);
+        //10.02 End test
       }
     });
   }
@@ -76,6 +95,8 @@ $(document).ready(function () {
   // InitializeRows handles appending all of our constructed subsegment HTML inside blogContainer
   function initializeRows() {
     blogContainer.empty();
+    console.log("subsegments: ", subsegments);
+    console.log("subsegments.length: ", subsegments.length);
     const subsegmentsToAdd = [];
     for (let i = 0; i < subsegments.length; i++) {
       subsegmentsToAdd.push(createNewRow(subsegments[i]));
@@ -87,6 +108,8 @@ $(document).ready(function () {
   function createNewRow(subsegment) {
     let formattedDate = new Date(subsegment.createdAt);
     formattedDate = moment(formattedDate).format('MMMM Do YYYY, h:mm:ss a');
+
+    // console.log("subsegment: ", subsegment);
 
     const newSubSegmentCard = $('<div>');
     newSubSegmentCard.addClass('card');
@@ -304,7 +327,7 @@ $(document).ready(function () {
         // console.log("change.id: ", change.id);
         // console.log("change.value: ", change.value);
         // console.log("markets_ + oldRecord[i].SegmentId: ", ("markets_" + oldRecord[i].SegmentId));
-                
+
         switch (change.id) {
           case ("markets_" + oldRecord[i].SegmentId):
             oldRecord[i].markets = change.value;
@@ -467,13 +490,13 @@ $(document).ready(function () {
         // 6/22 LATE TEST
         console.log("subsegmentRecord: ", subsegmentRecord);
         // console.log("subsegmentsData: ", subsegmentsData);
-    
+
         for (let i = 0; i < subsegmentRecord.length; i++) {
-    
+
           // console.log("segmentId being searched: ", segmentId);
           console.log("subsegmentRecord.id being searched: ", subsegmentRecord[i].id);
           console.log("subsegmentRecord[i]: ", subsegmentRecord[i]);
-    
+
           // Populate object for [ultimate] upload to Routes table
           const subsegmentsDetails = {
             id: subsegmentRecord[i].id,
@@ -486,7 +509,7 @@ $(document).ready(function () {
             SegmentId: subsegmentRecord[i].SegmentId,
           };
           console.log("subsegmentsDetails: ", subsegmentsDetails);
-    
+
           subsegmentsData.push(subsegmentsDetails);
           console.log("subsegmentsData: ", subsegmentsData);
 
@@ -494,8 +517,8 @@ $(document).ready(function () {
           console.log("subsegmentRecord[i].id:", subsegmentRecord[i].id);
           if (subsegmentRecord[i].id === segmentDataId) {
             // if (subsegmentRecord[i].id === segmentId) {
-              console.log("segmentDataId found:", segmentId);
-    
+            console.log("segmentDataId found:", segmentId);
+
             let hurdle_value;
             if (subsegmentRecord[i].hurdle) {
               hurdle_value = '"' + subsegmentRecord[i].hurdle + '"'
@@ -503,7 +526,7 @@ $(document).ready(function () {
               hurdle_value = '"E.g. Retention"';
             }
             console.log("hurdle_value: ", hurdle_value);
-    
+
             const markets_value = subsegmentRecord[i].markets;
             console.log("markets_value: ", markets_value);
             const buyers_value = subsegmentRecord[i].buyers;
@@ -514,19 +537,19 @@ $(document).ready(function () {
             console.log("productivity_value: ", productivity_value);
             const acquisition_value = subsegmentRecord[i].acquisition;
             console.log("acquisition_value: ", acquisition_value);
-    
+
             // const trAppend = $('<tr>');
             const hurdleScript = '<td>' + '<input id="hurdle_' + subsegmentRecord[i].id + '" placeholder=' + hurdle_value + ' type="text" />' + '</td>'
             console.log('hurdleScript: ', hurdleScript);
             newTr.append(hurdleScript);
-    
+
             // Setting checkboxes to checked or unchecked, depending on results from GET from Subsegments table
             let marketsScript = "";
             // let marketsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + subsegmentRecord[i].id + '" value=' + markets_value + '>' + '</td>';
             // let marketsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="markets_' + subsegmentRecord[i].id + '" value=' + markets_value + '>' + '</td>';
             let marketsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + subsegmentRecord[i].id + '" value="unchecked"' + '>' + '</td>';
             let marketsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="markets_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
-    
+
             console.log("markets_value: ", markets_value);
             if (markets_value == "checked") {
               marketsScript = marketsChecked;
@@ -535,13 +558,13 @@ $(document).ready(function () {
             }
             console.log("marketsScript: ", marketsScript);
             newTr.append(marketsScript);
-    
+
             let buyersScript = "";
             // let buyersUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + subsegments[i].id + '" value=' + buyers_value + '>' + '</td>';
             // let buyersChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="buyers_' + subsegments[i].id + '" value=' + buyers_value + '>' + '</td>';
             let buyersUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td>';
             let buyersChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="buyers_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
-    
+
             console.log("buyers_value: ", buyers_value);
             if (buyers_value == "checked") {
               buyersScript = buyersChecked;
@@ -550,13 +573,13 @@ $(document).ready(function () {
             }
             console.log("buyersScript: ", buyersScript);
             newTr.append(buyersScript);
-    
+
             let offeringsScript = "";
             // let offeringsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + subsegments[i].id + '" value=' + offerings_value + '>' + '</td>';
             // let offeringsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="offerings_' + subsegments[i].id + '" value=' + offerings_value + '>' + '</td>';
             let offeringsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td>';
             let offeringsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="offerings_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
-    
+
             console.log("offerings_value: ", offerings_value);
             if (offerings_value == "checked") {
               offeringsScript = offeringsChecked;
@@ -565,13 +588,13 @@ $(document).ready(function () {
             }
             console.log("offeringsScript: ", offeringsScript);
             newTr.append(offeringsScript);
-    
+
             let productivityScript = "";
             // let productivityUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + subsegments[i].id + '" value=' + productivity_value + '>' + '</td>';
             // let productivityChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="productivity_' + subsegments[i].id + '" value=' + productivity_value + '>' + '</td>';
             let productivityUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td>';
             let productivityChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="productivity_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
-    
+
             console.log("productivity_value: ", productivity_value);
             if (productivity_value == "checked") {
               productivityScript = productivityChecked;
@@ -580,7 +603,7 @@ $(document).ready(function () {
             }
             console.log("productivityScript: ", productivityScript);
             newTr.append(productivityScript);
-    
+
             let acquisitionScript = "";
             // let acquisitionUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + subsegments[i].id + '" value=' + acquisition_value + '>' + '</td>';
             // let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + subsegments[i].id + '" value=' + acquisition_value + '>' + '</td>';
@@ -588,7 +611,7 @@ $(document).ready(function () {
             // let acquisitionUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td></tr>';
             let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
             // let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + subsegments[i].id + '" value="checked"' + '>' + '</td></tr>';
-    
+
             console.log("acquisition_value: ", acquisition_value);
             if (acquisition_value == "checked") {
               acquisitionScript = acquisitionChecked;
@@ -601,13 +624,14 @@ $(document).ready(function () {
             // return newTr;
             newTr.append('</tr>');
             console.log("newTr: ", newTr);
-        
+
           }
         };
       }
     });
 
-    buildChartObject(segmentData);
+    //UNHIDE IF CHARTS REQUIRED ON SUBSEGMENTS PAGE
+    // buildChartObject(segmentData);
 
     return newTr;
   }
@@ -636,11 +660,11 @@ $(document).ready(function () {
       };
       console.log("subsegmentsDetails: ", subsegmentsDetails);
 
-      if(subsegmentsData.indexOf(subsegmentsDetails.id)){
+      if (subsegmentsData.indexOf(subsegmentsDetails.id)) {
         console.log("Details for subsegment", subsegmentsDetails.id, "already exists!");
       }
       else {
-      subsegmentsData.push(subsegmentsDetails);
+        subsegmentsData.push(subsegmentsDetails);
       }
       console.log("subsegmentsData: ", subsegmentsData);
 
@@ -783,46 +807,62 @@ $(document).ready(function () {
     chart2Data = [{}];
 
     $.get('/api/segments', function (data) {
+      let segment = data;
 
       segmentRevTotal = 0;
       nextyearSgmtRevTotal = 0;
 
       for (let i = 0; i < data.length; i++) {
-        rowsToAdd.push(createSegmentRow(data[i], i));
+        // console.log("data.id: ", data[i].id);
+        // console.log("segmentId: ", segmentId/1);
+        const idMatch = ((data[i].id / 1) - (segmentId / 1));
+        console.log("idMatch: ", idMatch);
 
-        // // Populate object for [ultimate] upload to Routes table
-        const subsegmentsDetails = {
-          id: data[i].id,
-          hurdle: "",
-          markets: "",
-          buyers: "",
-          offerings: "",
-          productivity: "",
-          acquisition: "",
-          SegmentId: data[i].id,
+        if (idMatch == 0) {
+          console.log("*** Segment id matches ***")
+          rowsToAdd.push(createSegmentRow(data[i], i));
+          console.log("rowsToAdd: ", rowsToAdd);
         };
 
-        subsegmentsData.push(subsegmentsDetails);
+        //10.02 Commenting out Subsegments section
+        // Populate object for [ultimate] upload to Routes table
+        // const subsegmentsDetails = {
+        //   id: data[i].id,
+        //   hurdle: "",
+        //   markets: "",
+        //   buyers: "",
+        //   offerings: "",
+        //   productivity: "",
+        //   acquisition: "",
+        //   SegmentId: data[i].id,
+        // };
+
+        // subsegmentsData.push(subsegmentsDetails);
+        // console.log("subsegmentsData: ", subsegmentsData);
 
         // Calculating total segment revenue
-        segmentRevTotal += data[i].sgmt_rev;
-        if (!data[i].next_year_sgmt_rev) {
-          nextyearSgmtRevTotal += data[i].sgmt_rev;
-        }
-        else {
-          nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
-        };
+        // segmentRevTotal += data[i].sgmt_rev;
+        // if (!data[i].next_year_sgmt_rev) {
+        //   nextyearSgmtRevTotal += data[i].sgmt_rev;
+        // }
+        // else {
+        //   nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
+        // };
 
         // console.log("i: ", i);
         // console.log("data.length: ", data.length);
-        if ((i + 1) == data.length) {
-          rowsToAdd.push(createSegmentTotals("TOTAL", segmentRevTotal, nextyearSgmtRevTotal));
-        }
+        // if ((i + 1) == data.length) {
+        //   rowsToAdd.push(createSegmentTotals("TOTAL", segmentRevTotal, nextyearSgmtRevTotal));
+        // }
       }
 
-      getSubSegmentDetails();
+      //10.02 Commenting out getSubSegmentDetails();
+      // getSubSegmentDetails();
+      //10.02 End Test
+
       // createSubSegmentRow(subsegments);
-      rowsToAdd.push(createSubSegmentRow(subsegments));
+      // rowsToAdd.push(createSubSegmentRow(subsegments));
+      console.log("rowsToAdd: ", rowsToAdd);
 
       renderSegmentList(rowsToAdd);
     });
@@ -830,21 +870,26 @@ $(document).ready(function () {
   }
 
   // This function grabs subsegments from the database and updates the view
-  function getSubSegmentDetails() {
+  //10.02 Calling this function from 76 not 49 (so only pulling records with specific segmentId)
+  // function getSubSegmentDetails() {
+  function getSubSegmentDetails(subsegmentsData) {
+    console.log("subsegmentsData: ", subsegmentsData);
 
     for (let i = 0; i < subsegmentsData.length; i++) {
 
       segmentId = subsegmentsData[i].id || '';
+      console.log("subsegmentsData[i].id: ", subsegmentsData[i].id);
+      console.log("segmentId: ", segmentId);
 
       if (segmentId) {
         segmentId = '/?segment_id=' + segmentId;
       }
       $.get('/api/subsegments' + segmentId, function (data) {
-        // console.log('SubSegment data', data);
+        console.log('SubSegment data', data);
         subsegments = data;
       });
     }
-    // console.log("subsegments: ", subsegments);
+    console.log("subsegments: ", subsegments);
   };
 
 
@@ -881,86 +926,86 @@ $(document).ready(function () {
   }
 
   // This creates the display object for the Revenue Bubble Chart(s)
-  function renderChart1(chartData) {
-    var ctx = $('#myBubbleChart1');
+  // function renderChart1(chartData) {
+  //   var ctx = $('#myBubbleChart1');
 
-    var myBubbleChart = new Chart(ctx, {
-      type: 'bubble',
-      data: {
-        "datasets": [{
-          label: "Segment Revenue - This Year",
-          data: chart1Data,
-          backgroundColor:
-            'red'
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Size ($)',
-            },
-            ticks: {
-              beginAtZero: false
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Count (#)',
-            },
-            ticks: {
-              beginAtZero: false
-            },
-          }],
-        }
-      }
-    });
+  //   var myBubbleChart = new Chart(ctx, {
+  //     type: 'bubble',
+  //     data: {
+  //       "datasets": [{
+  //         label: "Segment Revenue - This Year",
+  //         data: chart1Data,
+  //         backgroundColor:
+  //           'red'
+  //       }]
+  //     },
+  //     options: {
+  //       scales: {
+  //         xAxes: [{
+  //           scaleLabel: {
+  //             display: true,
+  //             labelString: 'Deal Size ($)',
+  //           },
+  //           ticks: {
+  //             beginAtZero: false
+  //           }
+  //         }],
+  //         yAxes: [{
+  //           scaleLabel: {
+  //             display: true,
+  //             labelString: 'Deal Count (#)',
+  //           },
+  //           ticks: {
+  //             beginAtZero: false
+  //           },
+  //         }],
+  //       }
+  //     }
+  //   });
 
-    ctx.prepend(myBubbleChart);
-  }
+  //   ctx.prepend(myBubbleChart);
+  // }
 
-  // This creates the display object for the Revenue Bubble Chart(s)
-  function renderChart2(chartData) {
-    var ctx = $('#myBubbleChart2');
+  // // This creates the display object for the Revenue Bubble Chart(s)
+  // function renderChart2(chartData) {
+  //   var ctx = $('#myBubbleChart2');
 
-    var myBubbleChart = new Chart(ctx, {
-      type: 'bubble',
-      data: {
-        "datasets": [{
-          label: "Next Year Segment Revenue Plan",
-          data: chart2Data,
-          backgroundColor:
-            'green'
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Size ($)',
-            },
-            ticks: {
-              beginAtZero: false
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Count (#)',
-            },
-            ticks: {
-              beginAtZero: false
-            }
-          }],
-        }
-      }
-    });
+  //   var myBubbleChart = new Chart(ctx, {
+  //     type: 'bubble',
+  //     data: {
+  //       "datasets": [{
+  //         label: "Next Year Segment Revenue Plan",
+  //         data: chart2Data,
+  //         backgroundColor:
+  //           'green'
+  //       }]
+  //     },
+  //     options: {
+  //       scales: {
+  //         xAxes: [{
+  //           scaleLabel: {
+  //             display: true,
+  //             labelString: 'Deal Size ($)',
+  //           },
+  //           ticks: {
+  //             beginAtZero: false
+  //           }
+  //         }],
+  //         yAxes: [{
+  //           scaleLabel: {
+  //             display: true,
+  //             labelString: 'Deal Count (#)',
+  //           },
+  //           ticks: {
+  //             beginAtZero: false
+  //           }
+  //         }],
+  //       }
+  //     }
+  //   });
 
-    ctx.prepend(myBubbleChart);
-  }
+  //   ctx.prepend(myBubbleChart);
+  // }
 
 
   // Function for handling what to render when there are no segments
