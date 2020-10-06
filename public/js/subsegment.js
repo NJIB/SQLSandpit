@@ -803,11 +803,12 @@ $(document).ready(function () {
   // Function for retrieving segments and getting them ready to be rendered to the page
   function getSegments() {
 
-    chart1Data = [{}];
-    chart2Data = [{}];
+    // chart1Data = [{}];
+    // chart2Data = [{}];
 
     $.get('/api/segments', function (data) {
       let segment = data;
+      console.log("segment: ", segment);
 
       segmentRevTotal = 0;
       nextyearSgmtRevTotal = 0;
@@ -816,10 +817,10 @@ $(document).ready(function () {
         // console.log("data.id: ", data[i].id);
         // console.log("segmentId: ", segmentId/1);
         const idMatch = ((data[i].id / 1) - (segmentId / 1));
-        console.log("idMatch: ", idMatch);
+        // console.log("idMatch: ", idMatch);
 
         if (idMatch == 0) {
-          console.log("*** Segment id matches ***")
+          console.log("*** Segment id matches: ",segmentId," ***")
           rowsToAdd.push(createSegmentRow(data[i], i));
           console.log("rowsToAdd: ", rowsToAdd);
         };

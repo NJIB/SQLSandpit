@@ -77,6 +77,7 @@ $(document).ready(function () {
     newTr.append('<td>' + segmentData.deal_count + '</td>');
     newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
 
+    console.log("segmentData.deal_size_yoy: ",segmentData.deal_size_yoy);
     if (segmentData.deal_size_yoy) {
       newTr.append('<td>' + '<input placeholder=' + segmentData.deal_size_yoy + ' id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
     } else {
@@ -112,9 +113,11 @@ $(document).ready(function () {
     else {
       newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
     };
-    // newTr.append('<td> <button class="btn btn-success update"><a style=\'cursor:pointer;color:white;\' href=\'/sms?segment_id=' + segmentData.id + '\' /a> >> </button></td>');
+    //10.05 Testing change to button class
     // newTr.append('<td> <button class="btn btn-success update"><a style=\'cursor:pointer;color:white;\' href=\'/subsegment?segment_id=' + segmentData.id + '\' /a> >> </button></td>');
-    newTr.append('<td> <button class="btn btn-success update"><a style=\'cursor:pointer;color:white;\' href=\'/subsegment?segment_id=' + segmentData.id + '\' /a> >> </button></td>');
+    newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/subsegment?segment_id=' + segmentData.id + '\' /a> >> </button></td>');
+    //10.05 End test
+
     if (segmentData.SubSegments) {
       newTr.append('<td> ' + segmentData.SubSegments.length + '</td>');
     } else {
