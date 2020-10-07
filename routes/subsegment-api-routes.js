@@ -130,7 +130,7 @@ module.exports = function(app) {
     // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     const {id, hurdle, markets, buyers, offerings, productivity, acquisition} = req.body;
-    console.log("id: ", id);
+    console.log("req.body: ",req.body);
 
     try {
       // const result = await db.SubSegment.update(

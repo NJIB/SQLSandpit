@@ -306,6 +306,8 @@ $(document).ready(function () {
 
       $.get('/api/subsegments' + segmentId, function (data) {
         subsegments = data;
+        console.log("subsegments: ", subsegments);
+
         if (!subsegments || !subsegments.length) {
           upsertRoutes(subsegmentsData[i]);
         } else {
@@ -321,7 +323,6 @@ $(document).ready(function () {
     console.log("oldRecord: ", oldRecord[0]);
     console.log("newDetails: ", newDetails);
 
-    // 6/22 TEST 
     for (let i = 0; i < oldRecord.length; i++) {
       subsegmentChangeLog.forEach(change => {
         // console.log("change.id: ", change.id);
@@ -349,45 +350,11 @@ $(document).ready(function () {
     }
     console.log("oldRecord (updated): ", oldRecord);
 
-
-    // let newRecord = {
-    //   id: oldRecord[0].id,
-    //   hurdle: oldRecord[0].hurdle,
-    //   markets: oldRecord[0].markets,
-    //   buyers: oldRecord[0].buyers,
-    //   offerings: oldRecord[0].offerings,
-    //   productivity: oldRecord[0].productivity,
-    //   acquisition: oldRecord[0].acquisition,
-    //   SegmentId: oldRecord[0].SegmentId,
-    // };
-    // console.log("newRecord: ", newRecord);
-
-    // if (oldRecord[0].hurdle !== newDetails.hurdle) {
-    //   oldRecord.hurdle = newDetails.hurdle;
-    // }
-    // if (oldRecord[0].markets !== newDetails.markets) {
-    //   oldRecord.markets = newDetails.markets;
-    // }
-    // if (oldRecord[0].buyers !== newDetails.buyers) {
-    //   oldRecord.buyers = newDetails.buyers;
-    // }
-    // if (oldRecord[0].offerings !== newDetails.offerings) {
-    //   oldRecord.offerings = newDetails.offerings;
-    // }
-    // if (oldRecord[0].productivity !== newDetails.productivity) {
-    //   oldRecord.productivity = newDetails.productivity;
-    // }
-    // if (oldRecord[0].acquisition !== newDetails.acquisition) {
-    //   oldRecord.acquisition = newDetails.acquisition;
-    // }
-
-    // console.log("oldRecord (updated): ", oldRecord)
-
     $.ajax({
       method: 'PUT',
       url: '/api/subsegments',
-      // data: newRecord,
-      data: oldRecord,
+      // data: oldRecord,
+      data: oldRecord[0],
     });
 
   };
