@@ -43,13 +43,7 @@ $(document).ready(function () {
   }
 
   // Getting the initial list of Segments
-  //10.02 commenting out
   getSegments();
-  //10.02 End  test
-
-  //10.02 Temporarily commenting out
-  // getSubSegmentDetails();
-  //10.02 End test
 
   // This function grabs subsegments from the database and updates the view
   function getSubSegments(segment) {
@@ -58,9 +52,6 @@ $(document).ready(function () {
     console.log("segmentId: ", segmentId);
 
     if (segmentId) {
-      //10.01 Updated to segmentURL for clarity//
-      // segmentId = '/?segment_id=' + segmentId;
-      // console.log("segmentId: ", segmentId);
       segmentURL = '/?segment_id=' + segmentId;
       console.log("segmentURL: ", segmentURL);
     }
@@ -73,10 +64,7 @@ $(document).ready(function () {
         displayEmpty(segment);
       } else {
         initializeRows();
-        //10.02 Trying inserting getSubSegmentDetails function here, instead of on 47
         console.log("subsegments: ", subsegments);
-        // getSubSegmentDetails(subsegments);
-        //10.02 End test
       }
     });
   }
@@ -325,9 +313,6 @@ $(document).ready(function () {
 
     for (let i = 0; i < oldRecord.length; i++) {
       subsegmentChangeLog.forEach(change => {
-        // console.log("change.id: ", change.id);
-        // console.log("change.value: ", change.value);
-        // console.log("markets_ + oldRecord[i].SegmentId: ", ("markets_" + oldRecord[i].SegmentId));
 
         switch (change.id) {
           case ("markets_" + oldRecord[i].SegmentId):
@@ -353,7 +338,6 @@ $(document).ready(function () {
     $.ajax({
       method: 'PUT',
       url: '/api/subsegments',
-      // data: oldRecord,
       data: oldRecord[0],
     });
 
@@ -366,21 +350,6 @@ $(document).ready(function () {
     $.post('/api/subsegments', subsegmentObj)
     // .then(getSegments);
   }
-
-  // A function for updating SubSegment records. Calls getSubSegments upon completion
-  // function updateRouteInfo(subsegmentUpdate) {
-  //   console.log("subsegmentUpdate in update: ", subsegmentUpdate[0]);
-
-  //     $.ajax({
-  //       method: 'PUT',
-  //       url: '/api/subsegments',
-  //       data: subsegmentUpdate,
-  //     })
-  // .then(function() {
-  //   window.location.href = '/subsegment';
-  // });
-  // }
-
 
   // Function for creating a new list row for segments
   function createSegmentRow(segmentData) {
@@ -454,13 +423,10 @@ $(document).ready(function () {
         console.log("Creating SubSegment row for segmentDataId:", segmentDataId);
         // createSubSegmentRow(subsegmentRecord, segmentDataId)
 
-        // 6/22 LATE TEST
         console.log("subsegmentRecord: ", subsegmentRecord);
-        // console.log("subsegmentsData: ", subsegmentsData);
 
         for (let i = 0; i < subsegmentRecord.length; i++) {
 
-          // console.log("segmentId being searched: ", segmentId);
           console.log("subsegmentRecord.id being searched: ", subsegmentRecord[i].id);
           console.log("subsegmentRecord[i]: ", subsegmentRecord[i]);
 
@@ -483,7 +449,6 @@ $(document).ready(function () {
           console.log("segmentDataId:", segmentDataId);
           console.log("subsegmentRecord[i].id:", subsegmentRecord[i].id);
           if (subsegmentRecord[i].id === segmentDataId) {
-            // if (subsegmentRecord[i].id === segmentId) {
             console.log("segmentDataId found:", segmentId);
 
             let hurdle_value;
@@ -512,8 +477,6 @@ $(document).ready(function () {
 
             // Setting checkboxes to checked or unchecked, depending on results from GET from Subsegments table
             let marketsScript = "";
-            // let marketsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + subsegmentRecord[i].id + '" value=' + markets_value + '>' + '</td>';
-            // let marketsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="markets_' + subsegmentRecord[i].id + '" value=' + markets_value + '>' + '</td>';
             let marketsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + subsegmentRecord[i].id + '" value="unchecked"' + '>' + '</td>';
             let marketsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="markets_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
 
@@ -527,8 +490,6 @@ $(document).ready(function () {
             newTr.append(marketsScript);
 
             let buyersScript = "";
-            // let buyersUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + subsegments[i].id + '" value=' + buyers_value + '>' + '</td>';
-            // let buyersChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="buyers_' + subsegments[i].id + '" value=' + buyers_value + '>' + '</td>';
             let buyersUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td>';
             let buyersChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="buyers_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
 
@@ -542,8 +503,6 @@ $(document).ready(function () {
             newTr.append(buyersScript);
 
             let offeringsScript = "";
-            // let offeringsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + subsegments[i].id + '" value=' + offerings_value + '>' + '</td>';
-            // let offeringsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="offerings_' + subsegments[i].id + '" value=' + offerings_value + '>' + '</td>';
             let offeringsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td>';
             let offeringsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="offerings_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
 
@@ -557,8 +516,6 @@ $(document).ready(function () {
             newTr.append(offeringsScript);
 
             let productivityScript = "";
-            // let productivityUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + subsegments[i].id + '" value=' + productivity_value + '>' + '</td>';
-            // let productivityChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="productivity_' + subsegments[i].id + '" value=' + productivity_value + '>' + '</td>';
             let productivityUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td>';
             let productivityChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="productivity_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
 
@@ -572,12 +529,8 @@ $(document).ready(function () {
             newTr.append(productivityScript);
 
             let acquisitionScript = "";
-            // let acquisitionUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + subsegments[i].id + '" value=' + acquisition_value + '>' + '</td>';
-            // let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + subsegments[i].id + '" value=' + acquisition_value + '>' + '</td>';
             let acquisitionUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td>';
-            // let acquisitionUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + subsegments[i].id + '" value="unchecked"' + '>' + '</td></tr>';
             let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + subsegments[i].id + '" value="checked"' + '>' + '</td>';
-            // let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + subsegments[i].id + '" value="checked"' + '>' + '</td></tr>';
 
             console.log("acquisition_value: ", acquisition_value);
             if (acquisition_value == "checked") {
@@ -787,7 +740,7 @@ $(document).ready(function () {
         // console.log("idMatch: ", idMatch);
 
         if (idMatch == 0) {
-          console.log("*** Segment id matches: ",segmentId," ***")
+          console.log("*** Segment id matches: ", segmentId, " ***")
           rowsToAdd.push(createSegmentRow(data[i], i));
           console.log("rowsToAdd: ", rowsToAdd);
         };
