@@ -316,7 +316,7 @@ $(document).ready(function () {
         console.log("TEST: ", (change.id.substr(0, (change.id.indexOf('_')))));
 
         // newSubsegment.id = change.id;
-        newSubsegment.SegmentId = change.id;
+        newSubsegment.SegmentId = change.id.substr((change.id.indexOf('_') + 1), change.id.length);
         console.log(" newSubsegment.SegmentId: ", newSubsegment.SegmentId);
 
         switch (change.id.substr(0, (change.id.indexOf('_')))) {
@@ -386,11 +386,6 @@ $(document).ready(function () {
           console.log("subsegments: ", subsegments);
 
           if (!subsegments || !subsegments.length) {
-            //10.12 test
-            subsegmentsData[i].id = '';
-            console.log("subsegmentsData[i]: ", subsegmentsData[i]);
-            //End 10.12 test
-
             upsertRoutes(subsegmentsData[i]);
           } else {
             console.log("UPDATING!");
@@ -443,7 +438,7 @@ $(document).ready(function () {
   function upsertRoutes(subsegmentObj) {
     console.log("subsegmentObj in upsert: ", subsegmentObj);
 
-    $.post('/api/subsegments', subsegmentObj)
+    $.post('/api/subsegments', subsegmentObj[0])
     // .then(getSegments);
   }
 
