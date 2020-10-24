@@ -15,6 +15,7 @@ module.exports = function(app) {
   app.get('/api/subsegments', async (req, res) => {
     // Add sequelize code to find all comments, and return them to the user with res.json
     const query = {};
+    console.log("req.query.segment_id: ", req.query.segment_id);
     if (req.query.segment_id) {
       query.SegmentId = req.query.segment_id;
     }

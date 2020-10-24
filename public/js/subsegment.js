@@ -51,6 +51,108 @@ $(document).ready(function () {
   // Getting the initial list of Segments
   getSegments();
 
+
+
+  // Function for retrieving segments and getting them ready to be rendered to the page
+  function getSegments() {
+
+    // chart1Data = [{}];
+    // chart2Data = [{}];
+
+    $.get('/api/segments', function (data) {
+      let segment = data;
+      console.log("segment: ", segment);
+
+      segmentRevTotal = 0;
+      nextyearSgmtRevTotal = 0;
+
+      for (let i = 0; i < segment.length; i++) {
+        // for (let i = 0; i < data.length; i++) {
+        // console.log("data.id: ", data[i].id);
+        // console.log("segmentId: ", segmentId/1);
+        const idMatch = ((segment[i].id / 1) - (segmentId / 1));
+        // const idMatch = ((data[i].id / 1) - (segmentId / 1));
+        // console.log("idMatch: ", idMatch);
+
+        if (idMatch == 0) {
+          console.log("*** Segment id matches: ", segmentId, " ***")
+          console.log("data[i]: ", data[i])
+          console.log("segment[i]: ", segment[i])
+          // rowsToAdd.push(createSegmentRow(segment[i], i));
+
+          const indexPlus1 = i + 1;
+          let subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          console.log("subsegmentIndex.substring(i,indexPlus1): ", subsegmentIndex.substring(i, indexPlus1));
+
+          //10.19 code added
+          let additionalSubsegmentRow = segment[i];
+
+          // additionalSubsegmentRow.id = (additionalSubsegmentRow.id + subsegmentIndex.substring(i,indexPlus1));
+          console.log(" additionalSubsegmentRow.id ", additionalSubsegmentRow.id);
+          additionalSubsegmentRow.name = '';
+          additionalSubsegmentRow.deal_count = '';
+          additionalSubsegmentRow.deal_count_yoy = '';
+          additionalSubsegmentRow.deal_size = '';
+          additionalSubsegmentRow.deal_size_yoy = '';
+          additionalSubsegmentRow.sgmt_rev = '';
+          additionalSubsegmentRow.next_year_deal_count = '';
+          additionalSubsegmentRow.next_year_deal_size = '';
+          additionalSubsegmentRow.next_year_sgmt_rev = '';
+          console.log("additionalSubsegmentRow: ", additionalSubsegmentRow);
+          //End 10.19 code
+
+          rowsToAdd.push(createSegmentRow(segment[i], i));
+          rowsToAdd.push(createSegmentRow(additionalSubsegmentRow, i));
+          console.log("rowsToAdd: ", rowsToAdd);
+
+        };
+
+        //10.02 Commenting out Subsegments section
+        // Populate object for [ultimate] upload to Routes table
+        // const subsegmentsDetails = {
+        //   id: data[i].id,
+        //   hurdle: "",
+        //   markets: "",
+        //   buyers: "",
+        //   offerings: "",
+        //   productivity: "",
+        //   acquisition: "",
+        //   SegmentId: data[i].id,
+        // };
+
+        // subsegmentsData.push(subsegmentsDetails);
+        // console.log("subsegmentsData: ", subsegmentsData);
+
+        // Calculating total segment revenue
+        // segmentRevTotal += data[i].sgmt_rev;
+        // if (!data[i].next_year_sgmt_rev) {
+        //   nextyearSgmtRevTotal += data[i].sgmt_rev;
+        // }
+        // else {
+        //   nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
+        // };
+
+        // console.log("i: ", i);
+        // console.log("data.length: ", data.length);
+        // if ((i + 1) == data.length) {
+        //   rowsToAdd.push(createSegmentTotals("TOTAL", segmentRevTotal, nextyearSgmtRevTotal));
+        // }
+      }
+
+      //10.02 Commenting out getSubSegmentDetails();
+      // getSubSegmentDetails();
+      //10.02 End Test
+
+      // createSubSegmentRow(subsegments);
+      // rowsToAdd.push(createSubSegmentRow(subsegments));
+      console.log("rowsToAdd: ", rowsToAdd);
+
+      renderSegmentList(rowsToAdd);
+    });
+  }
+
+
+
   // This function grabs subsegments from the database and updates the view
   function getSubSegments(segment) {
 
@@ -71,10 +173,12 @@ $(document).ready(function () {
       // if (!subsegments || !subsegments.length) {
       //   displayEmpty(segment);
       // } else {
-        // initializeRows();
+      // initializeRows();
       // }
     });
   }
+
+
 
   // This function does an API call to delete subsegments
   function deleteSubSegment(id) {
@@ -86,6 +190,8 @@ $(document).ready(function () {
         getSubSegments(subsegmentCategorySelect.val());
       });
   }
+
+
 
   // InitializeRows handles appending all of our constructed subsegment HTML inside blogContainer
   function initializeRows() {
@@ -150,7 +256,7 @@ $(document).ready(function () {
   //   return newSubSegmentCard;
   // }
 
-    // This function displays a message when there are no subsegments
+  // This function displays a message when there are no subsegments
   // function displayEmpty(id) {
   //   const query = window.location.search;
   //   let partial = '';
@@ -164,6 +270,8 @@ $(document).ready(function () {
   //     '\'>here</a> in order to get started.');
   //   blogContainer.append(messageH2);
   // }
+
+
 
   function handleCheckboxClick(e) {
     console.log("subsegmentsData: ", subsegmentsData)
@@ -264,6 +372,8 @@ $(document).ready(function () {
     console.log("subsegments: ", subsegments);
   };
 
+
+
   // This function figures out which subsegment we want to delete and then calls deleteSubSegment
   function handleSubSegmentDelete() {
     const currentSubSegment = $(this)
@@ -273,6 +383,8 @@ $(document).ready(function () {
     deleteSubSegment(currentSubSegment.id);
   }
 
+
+
   // This function figures out which subsegment we want to edit and takes it to the appropriate url
   function handleSubSegmentEdit() {
     const currentSubSegment = $(this)
@@ -281,6 +393,8 @@ $(document).ready(function () {
       .data('subsegment');
     window.location.href = '/sms?subsegment_id=' + currentSubSegment.id;
   }
+
+
 
   // A function to handle what happens when the form is submitted to create a new subsegment record
   function handleRoutesFormSubmit(event) {
@@ -359,7 +473,6 @@ $(document).ready(function () {
           segmentId = '/?segment_id=' + segmentId;
           console.log("segmentId: ", segmentId);
 
-          // 10.12 TEST
           let hurdle_id = ($('#hurdle_' + segmentId.substr((segmentId.indexOf('=') + 1), segmentId.length)));
           console.log("hurdle_id: ", hurdle_id);
           // console.log("hurdle_id: ", hurdle_id.val());
@@ -369,8 +482,6 @@ $(document).ready(function () {
           subsegmentsData[i].hurdle = hurdle_value;
           console.log("subsegmentsData[i].hurdle: ", subsegmentsData[i].hurdle);
           console.log("subsegmentsData[i]: ", subsegmentsData[i]);
-          // End 10.12 TEST
-
         }
 
         $.get('/api/subsegments' + segmentId, function (data) {
@@ -387,6 +498,8 @@ $(document).ready(function () {
       };
     };
   };
+
+
 
   // A function for updating the SubSegment table record
   function updateRouteInfo(oldRecord, newDetails) {
@@ -426,6 +539,8 @@ $(document).ready(function () {
 
   };
 
+
+
   // A function for creating a subsegment.
   function upsertRoutes(subsegmentObj) {
     console.log("subsegmentObj in upsert: ", subsegmentObj);
@@ -434,9 +549,33 @@ $(document).ready(function () {
     // .then(getSegments);
   }
 
+
+
+  // Function for creating a new list row for segments
+  function createSegmentTotals(title, segmentTotals, nextyearSgmtTotals) {
+
+    const totalTr = $('<tr>');
+    // totalTr.data('totals', segmentTotals);
+    totalTr.append('<td><h4><b>' + title + '</b></h4></td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td><h4><b>$' + segmentTotals + '</b></h4></td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td>' + '</td>');
+    totalTr.append('<td><h4><b>$' + nextyearSgmtTotals + '</b></h4></td>');
+    return totalTr;
+  }
+
+
+
   // Function for creating a new list row for segments
   function createSegmentRow(segmentData) {
 
+    console.log("segmentData: ", segmentData);
+
+    console.log("Creating segment row");
     const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
     const deal_count_yoy_id = "deal_count_yoy" + segmentData.id;
 
@@ -482,12 +621,6 @@ $(document).ready(function () {
 
     // let segmentId = segmentData.id || '';
     let segmentId = segmentData.id;
-    console.log("segmentId: ", segmentId);
-
-    //10.15 test
-    console.log("Calling createSubSegmentRow");
-    createSubSegmentRow(segmentId);
-    //End 10.15 test
 
     if (segmentId) {
       console.log("segmentId: ", segmentId);
@@ -509,12 +642,11 @@ $(document).ready(function () {
         newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + segmentData.id + '" value="unchecked">' + '</td>');
         newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + segmentData.id + '" value="unchecked">' + '</td>');
       } else {
-        const segmentDataId = segmentData.id;
 
+        const segmentDataId = segmentData.id;
         console.log("Creating SubSegment row for segmentDataId:", segmentDataId);
 
         console.log("subsegmentRecord: ", subsegmentRecord);
-
         for (let i = 0; i < subsegmentRecord.length; i++) {
 
           console.log("subsegmentRecord.Segmentid being searched: ", subsegmentRecord[i].SegmentId);
@@ -540,7 +672,7 @@ $(document).ready(function () {
           console.log("subsegmentRecord[i].id:", subsegmentRecord[i].id);
 
           if (subsegmentRecord[i].SegmentId === segmentDataId) {
-              console.log("segmentDataId found:", segmentId);
+            console.log("segmentDataId found:", segmentId);
 
             let hurdle_value;
             if (subsegmentRecord[i].hurdle) {
@@ -648,7 +780,9 @@ $(document).ready(function () {
 
     return newTr;
   }
-  // End of createSegmentRow
+  // End of createSegmentRow 
+
+
 
   //This function builds the SubSegment details, to be appended to rowsToAdd
   function createSubSegmentRow(segmentId) {
@@ -704,7 +838,7 @@ $(document).ready(function () {
           console.log("subsegmentRecord[i].id:", subsegmentRecord[i].id);
 
           if (subsegmentRecord[i].SegmentId === segmentDataId) {
-              console.log("segmentDataId found:", segmentId);
+            console.log("segmentDataId found:", segmentId);
 
             let hurdle_value;
             if (subsegmentRecord[i].hurdle) {
@@ -816,99 +950,6 @@ $(document).ready(function () {
 
 
 
-  // Function for creating a new list row for segments
-  function createSegmentTotals(title, segmentTotals, nextyearSgmtTotals) {
-
-    const totalTr = $('<tr>');
-    // totalTr.data('totals', segmentTotals);
-    totalTr.append('<td><h4><b>' + title + '</b></h4></td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td><h4><b>$' + segmentTotals + '</b></h4></td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td><h4><b>$' + nextyearSgmtTotals + '</b></h4></td>');
-    return totalTr;
-  }
-
-
-  // Function for retrieving segments and getting them ready to be rendered to the page
-  function getSegments() {
-
-    // chart1Data = [{}];
-    // chart2Data = [{}];
-
-    $.get('/api/segments', function (data) {
-      let segment = data;
-      console.log("segment: ", segment);
-
-      segmentRevTotal = 0;
-      nextyearSgmtRevTotal = 0;
-
-      for (let i = 0; i < data.length; i++) {
-        // console.log("data.id: ", data[i].id);
-        // console.log("segmentId: ", segmentId/1);
-        const idMatch = ((data[i].id / 1) - (segmentId / 1));
-        // console.log("idMatch: ", idMatch);
-
-        if (idMatch == 0) {
-          console.log("*** Segment id matches: ", segmentId, " ***")
-          rowsToAdd.push(createSegmentRow(data[i], i));
-
-          //10.15 Adds second row - needs to be blank row however
-          rowsToAdd.push(createSubSegmentRow(data[i], i));
-          //End 10.15 new row add
-
-          console.log("rowsToAdd: ", rowsToAdd);
-        };
-
-        //10.02 Commenting out Subsegments section
-        // Populate object for [ultimate] upload to Routes table
-        // const subsegmentsDetails = {
-        //   id: data[i].id,
-        //   hurdle: "",
-        //   markets: "",
-        //   buyers: "",
-        //   offerings: "",
-        //   productivity: "",
-        //   acquisition: "",
-        //   SegmentId: data[i].id,
-        // };
-
-        // subsegmentsData.push(subsegmentsDetails);
-        // console.log("subsegmentsData: ", subsegmentsData);
-
-        // Calculating total segment revenue
-        // segmentRevTotal += data[i].sgmt_rev;
-        // if (!data[i].next_year_sgmt_rev) {
-        //   nextyearSgmtRevTotal += data[i].sgmt_rev;
-        // }
-        // else {
-        //   nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
-        // };
-
-        // console.log("i: ", i);
-        // console.log("data.length: ", data.length);
-        // if ((i + 1) == data.length) {
-        //   rowsToAdd.push(createSegmentTotals("TOTAL", segmentRevTotal, nextyearSgmtRevTotal));
-        // }
-      }
-
-      //10.02 Commenting out getSubSegmentDetails();
-      // getSubSegmentDetails();
-      //10.02 End Test
-
-      // createSubSegmentRow(subsegments);
-      // rowsToAdd.push(createSubSegmentRow(subsegments));
-      console.log("rowsToAdd: ", rowsToAdd);
-
-      renderSegmentList(rowsToAdd);
-    });
-
-  }
-
   // This function grabs subsegments from the database and updates the view
   //10.02 Calling this function from 76 not 49 (so only pulling records with specific segmentId)
   // function getSubSegmentDetails() {
@@ -933,6 +974,7 @@ $(document).ready(function () {
   };
 
 
+
   // A function for rendering the list of segments to the page
   function renderSegmentList(rows) {
     segmentList.children().not(':last').remove();
@@ -944,6 +986,8 @@ $(document).ready(function () {
       renderEmpty();
     }
   }
+
+
 
   // This populates the object for the Revenue Bubble Chart(s)
   function buildChartObject(segmentData) {
