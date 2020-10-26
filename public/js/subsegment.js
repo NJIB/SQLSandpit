@@ -28,6 +28,8 @@ $(document).ready(function () {
   // Variable to hold our subsegments
   let subsegments;
   let subsegmentRecord;
+  let rowCount = 0;
+  let lastSubsegmentId = '';
 
   // The code below handles the case where we want to get subsegments for a specific segment
   // Looks for a query param in the url for segment_id - DO I NEED?
@@ -78,32 +80,14 @@ $(document).ready(function () {
           console.log("*** Segment id matches: ", segmentId, " ***")
           console.log("data[i]: ", data[i])
           console.log("segment[i]: ", segment[i])
-          // rowsToAdd.push(createSegmentRow(segment[i], i));
-
-          const indexPlus1 = i + 1;
-          let subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          console.log("subsegmentIndex.substring(i,indexPlus1): ", subsegmentIndex.substring(i, indexPlus1));
-
-          //10.19 code added
-          let additionalSubsegmentRow = segment[i];
-
-          // additionalSubsegmentRow.id = (additionalSubsegmentRow.id + subsegmentIndex.substring(i,indexPlus1));
-          console.log(" additionalSubsegmentRow.id ", additionalSubsegmentRow.id);
-          additionalSubsegmentRow.name = '';
-          additionalSubsegmentRow.deal_count = '';
-          additionalSubsegmentRow.deal_count_yoy = '';
-          additionalSubsegmentRow.deal_size = '';
-          additionalSubsegmentRow.deal_size_yoy = '';
-          additionalSubsegmentRow.sgmt_rev = '';
-          additionalSubsegmentRow.next_year_deal_count = '';
-          additionalSubsegmentRow.next_year_deal_size = '';
-          additionalSubsegmentRow.next_year_sgmt_rev = '';
-          console.log("additionalSubsegmentRow: ", additionalSubsegmentRow);
-          //End 10.19 code
-
           rowsToAdd.push(createSegmentRow(segment[i], i));
-          rowsToAdd.push(createSegmentRow(additionalSubsegmentRow, i));
-          console.log("rowsToAdd: ", rowsToAdd);
+
+          // const indexPlus1 = i + 1;
+          // let subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          // console.log("subsegmentIndex.substring(i,indexPlus1): ", subsegmentIndex.substring(i, indexPlus1));
+
+          // rowsToAdd.push(createSegmentRow(segment[i], i));
+          // console.log("rowsToAdd: ", rowsToAdd);
 
         };
 
@@ -575,12 +559,15 @@ $(document).ready(function () {
 
     console.log("segmentData: ", segmentData);
 
-    console.log("Creating segment row");
     const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
     const deal_count_yoy_id = "deal_count_yoy" + segmentData.id;
 
     const newTr = $('<tr>');
     newTr.data('segment', segmentData);
+
+    console.log("rowCount: ", rowCount);
+
+    if(rowCount === 0) {
     newTr.append('<td>' + segmentData.name + '</td>');
     newTr.append('<td>$' + segmentData.deal_size + '</td>');
     newTr.append('<td>' + segmentData.deal_count + '</td>');
@@ -618,9 +605,21 @@ $(document).ready(function () {
     else {
       newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
     };
+  } else {
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+  }
 
     // let segmentId = segmentData.id || '';
     let segmentId = segmentData.id;
+    console.log("segmentId: ", segmentId);
 
     if (segmentId) {
       console.log("segmentId: ", segmentId);
@@ -692,6 +691,16 @@ $(document).ready(function () {
             console.log("productivity_value: ", productivity_value);
             const acquisition_value = subsegmentRecord[i].acquisition;
             console.log("acquisition_value: ", acquisition_value);
+
+            //10.25 test
+            const subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            console.log("i: ", i);
+            console.log("subsegmentIndex.substring(i,rowCount): ", subsegmentIndex.substring(i, rowCount));
+            const subsegmentId = subsegmentRecord[i].SegmentId + subsegmentIndex.substring(i, rowCount);
+            console.log("subsegmentId: ", subsegmentId);
+            lastSubsegmentId = subsegmentId;
+            console.log("lastSubsegmentId: ", lastSubsegmentId);
+
 
             // const trAppend = $('<tr>');
             const hurdleScript = '<td>' + '<input id="hurdle_' + subsegmentRecord[i].SegmentId + '" placeholder=' + hurdle_value + ' type="text" />' + '</td>'
@@ -770,8 +779,12 @@ $(document).ready(function () {
             newTr.append('</tr>');
             console.log("newTr: ", newTr);
 
+            rowCount++;
+            console.log("rowCount: ", rowCount);      
+
           }
         };
+        // End of subsegmentsRecord loop (bracket on line above this line)
       }
     });
 
