@@ -28,8 +28,10 @@ $(document).ready(function () {
   // Variable to hold our subsegments
   let subsegments;
   let subsegmentRecord;
+  const subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let rowCount = 0;
   let lastSubsegmentId = '';
+  let nextSubsegmentId = '';
 
   // The code below handles the case where we want to get subsegments for a specific segment
   // Looks for a query param in the url for segment_id - DO I NEED?
@@ -80,14 +82,12 @@ $(document).ready(function () {
           console.log("*** Segment id matches: ", segmentId, " ***")
           console.log("data[i]: ", data[i])
           console.log("segment[i]: ", segment[i])
+
           rowsToAdd.push(createSegmentRow(segment[i], i));
 
-          // const indexPlus1 = i + 1;
-          // let subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          // console.log("subsegmentIndex.substring(i,indexPlus1): ", subsegmentIndex.substring(i, indexPlus1));
-
-          // rowsToAdd.push(createSegmentRow(segment[i], i));
-          // console.log("rowsToAdd: ", rowsToAdd);
+          nextSubsegmentId = segmentId + subsegmentIndex.substring(0, 1);
+          console.log("nextSubsegmentId: ", nextSubsegmentId);
+          rowsToAdd.push(createBlankRow(segment[i], i));
 
         };
 
@@ -555,8 +555,8 @@ $(document).ready(function () {
 
 
   // Function for creating a new list row for segments
-  function createSegmentRow(segmentData) {
 
+  function createSegmentRow(segmentData) {
     console.log("segmentData: ", segmentData);
 
     const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
@@ -567,62 +567,61 @@ $(document).ready(function () {
 
     console.log("rowCount: ", rowCount);
 
-    if(rowCount === 0) {
-    newTr.append('<td>' + segmentData.name + '</td>');
-    newTr.append('<td>$' + segmentData.deal_size + '</td>');
-    newTr.append('<td>' + segmentData.deal_count + '</td>');
-    newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
-
-    if (segmentData.deal_size_yoy) {
-      newTr.append('<td>' + segmentData.deal_size_yoy + '</td>');
-    } else {
-      newTr.append('<td>' + ' - ' + '</td>');
-    }
-
-    if (segmentData.deal_count_yoy) {
-      newTr.append('<td>' + segmentData.deal_count_yoy + '%' + '</td>');
-    } else {
-      newTr.append('<td>' + '-' + '</td>');
-    }
-
-    if (!segmentData.next_year_deal_size) {
+    if (rowCount === 0) {
+      newTr.append('<td>' + segmentData.name + '</td>');
       newTr.append('<td>$' + segmentData.deal_size + '</td>');
-    }
-    else {
-      newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
-    }
-
-    if (!segmentData.next_year_deal_count) {
-      newTr.append('<td>$' + segmentData.deal_count + '</td>');
-    }
-    else {
-      newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
-    }
-
-    if (!segmentData.next_year_sgmt_rev) {
+      newTr.append('<td>' + segmentData.deal_count + '</td>');
       newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
+
+      if (segmentData.deal_size_yoy) {
+        newTr.append('<td>' + segmentData.deal_size_yoy + '</td>');
+      } else {
+        newTr.append('<td>' + ' - ' + '</td>');
+      }
+
+      if (segmentData.deal_count_yoy) {
+        newTr.append('<td>' + segmentData.deal_count_yoy + '%' + '</td>');
+      } else {
+        newTr.append('<td>' + '-' + '</td>');
+      }
+
+      if (!segmentData.next_year_deal_size) {
+        newTr.append('<td>$' + segmentData.deal_size + '</td>');
+      }
+      else {
+        newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
+      }
+
+      if (!segmentData.next_year_deal_count) {
+        newTr.append('<td>$' + segmentData.deal_count + '</td>');
+      }
+      else {
+        newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
+      }
+
+      if (!segmentData.next_year_sgmt_rev) {
+        newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
+      }
+      else {
+        newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
+      };
+    } else {
+      newTr.append('<td></td>');
+      newTr.append('<td></td>');
+      newTr.append('<td></td>');
+      newTr.append('<td></td>');
+      newTr.append('<td></td>');
+      newTr.append('<td></td>');
+      newTr.append('<td></td>');
+      newTr.append('<td></td>');
+      newTr.append('<td></td>');
     }
-    else {
-      newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
-    };
-  } else {
-    newTr.append('<td></td>');
-    newTr.append('<td></td>');
-    newTr.append('<td></td>');
-    newTr.append('<td></td>');
-    newTr.append('<td></td>');
-    newTr.append('<td></td>');
-    newTr.append('<td></td>');
-    newTr.append('<td></td>');
-    newTr.append('<td></td>');
-  }
 
     // let segmentId = segmentData.id || '';
     let segmentId = segmentData.id;
     console.log("segmentId: ", segmentId);
 
     if (segmentId) {
-      console.log("segmentId: ", segmentId);
       segmentId = '/?segment_id=' + segmentId;
     }
 
@@ -640,6 +639,10 @@ $(document).ready(function () {
         newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + segmentData.id + '" value="unchecked">' + '</td>');
         newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + segmentData.id + '" value="unchecked">' + '</td>');
         newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + segmentData.id + '" value="unchecked">' + '</td>');
+        nextSubsegmentId = segmentData.id + subsegmentIndex.substring(0, 1);
+        console.log("nextSubsegmentId: ", nextSubsegmentId);
+        console.log("Inserting blank row");
+
       } else {
 
         const segmentDataId = segmentData.id;
@@ -692,15 +695,14 @@ $(document).ready(function () {
             const acquisition_value = subsegmentRecord[i].acquisition;
             console.log("acquisition_value: ", acquisition_value);
 
-            //10.25 test
-            const subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             console.log("i: ", i);
-            console.log("subsegmentIndex.substring(i,rowCount): ", subsegmentIndex.substring(i, rowCount));
-            const subsegmentId = subsegmentRecord[i].SegmentId + subsegmentIndex.substring(i, rowCount);
+            console.log("subsegmentIndex.substring(i,rowCount): ", subsegmentIndex.substring(i, i + 1));
+            const subsegmentId = subsegmentRecord[i].SegmentId + subsegmentIndex.substring(i, i + 1);
             console.log("subsegmentId: ", subsegmentId);
             lastSubsegmentId = subsegmentId;
             console.log("lastSubsegmentId: ", lastSubsegmentId);
-
+            nextSubsegmentId = subsegmentRecord[i].SegmentId + subsegmentIndex.substring(i + 1, i + 2);
+            console.log("nextSubsegmentId: ", nextSubsegmentId);
 
             // const trAppend = $('<tr>');
             const hurdleScript = '<td>' + '<input id="hurdle_' + subsegmentRecord[i].SegmentId + '" placeholder=' + hurdle_value + ' type="text" />' + '</td>'
@@ -780,11 +782,14 @@ $(document).ready(function () {
             console.log("newTr: ", newTr);
 
             rowCount++;
-            console.log("rowCount: ", rowCount);      
+            console.log("rowCount: ", rowCount);
 
           }
         };
         // End of subsegmentsRecord loop (bracket on line above this line)
+
+        console.log("Inserting blank row");
+        rowsToAdd.push(createBlankRow(segmentData));
       }
     });
 
@@ -795,6 +800,32 @@ $(document).ready(function () {
   }
   // End of createSegmentRow 
 
+  // function createBlankRow for creating a blank row at the end
+  function createBlankRow(segmentData) {
+    console.log("segmentData: ", segmentData);
+    console.log("nextSubsegmentId: ", nextSubsegmentId);
+
+    const newTr = $('<tr>');
+    newTr.data('segment', segmentData);
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td></td>');
+    newTr.append('<td>' + '<input id="hurdle_' + nextSubsegmentId + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
+
+    return newTr;
+  }
+  // End of createBlankRow 
 
 
   //This function builds the SubSegment details, to be appended to rowsToAdd
