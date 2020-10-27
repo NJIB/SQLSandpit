@@ -287,8 +287,15 @@ $(document).ready(function () {
     console.log("subsegmentsData: ", subsegmentsData);
 
     for (var i = 0; i < subsegmentsData.length; i++) {
-      console.log(e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length));
+      
+      const testId = subsegmentsData[i].SegmentId.toString();
+      console.log("testId: ", testId);
+      const searchString = e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length);
+      console.log("searchString: ", searchString);
 
+      console.log(`${testId} ${searchString.includes(testId) ? 'is' : 'is not'} in`,searchString);
+
+      // if(searchString.includes(testId)){
       if (subsegmentsData[i].id == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
         // Defining IDs to be referenced when updating the SubSegments table
         const hurdle_id = ("hurdle_" + subsegmentsData[i].SegmentId);
@@ -304,9 +311,24 @@ $(document).ready(function () {
         const acquisition_id = ("acquisition_" + subsegmentsData[i].SegmentId);
         console.log("acquisition_id: ", acquisition_id);
 
+        // const hurdle_id = ("hurdle_" + searchString);
+        // console.log("hurdle_id: ", hurdle_id);
+        // const markets_id = ("markets_" + searchString);
+        // console.log("markets_id: ", markets_id);
+        // const buyers_id = ("buyers_" + searchString);
+        // console.log("buyers_id: ", buyers_id);
+        // const offerings_id = ("offerings_" + searchString);
+        // console.log("offerings_id: ", offerings_id);
+        // const productivity_id = ("productivity_" + searchString);
+        // console.log("productivity_id: ", productivity_id);
+        // const acquisition_id = ("acquisition_" + searchString);
+        // console.log("acquisition_id: ", acquisition_id);
+
         // const hurdle_desc = $('#' + hurdle_id);
         // console.log('hurdle_desc:', hurdle_desc.val().trim());
         // subsegmentsData[i].hurdle = hurdle_desc.val().trim();
+
+        console.log("subsegmentChangeLog: ", subsegmentChangeLog);
 
         //Identifying the ID and value of each checkbox clicked
         subsegmentChangeLog.forEach(change => {
