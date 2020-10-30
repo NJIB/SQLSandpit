@@ -40,7 +40,8 @@ $(document).ready(function () {
   // Variable to hold our subsegments
   let subsegments;
   let subsegmentRecord;
-  const subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  // const subsegmentIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const subsegmentIndex = "0123456789";
   let rowCount = 0;
   let lastSubsegmentId = '';
   let nextSubsegmentId = '';
@@ -274,6 +275,8 @@ $(document).ready(function () {
 
 
   function handleCheckboxClick(e) {
+
+    subsegmentRecordFound = false;
 
     console.log("e.target.id: ", e.target.id);
     if (e.target.value == 'unchecked') {
@@ -567,10 +570,11 @@ $(document).ready(function () {
           }
         });
       };
-      console.log("blankSubsegment: ", blankSubsegment);
-      // subsegmentsData.push(blankSubsegment);
-      console.log("subsegmentsData: ", subsegmentsData);
-      // upsertRoutes(blankSubsegment);
+      // console.log("blankSubsegment: ", blankSubsegment);
+      // let blankRowUpsert = [];
+      // blankRowUpsert.push(blankSubsegment);
+      // console.log("blankRowUpsert: ", blankRowUpsert);
+      // upsertBlankRoutes(blankRowUpsert);
     };
   };
 
@@ -623,7 +627,6 @@ $(document).ready(function () {
     $.post('/api/subsegments', subsegmentObj[0])
     // .then(getSegments);
   }
-
 
 
   // Function for creating a new list row for segments

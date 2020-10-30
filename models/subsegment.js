@@ -42,13 +42,13 @@ module.exports = function (sequelize, DataTypes) {
       //   len: [1],
       // },
     },
-    // title: {
-      //   type: DataTypes.STRING,
-      //   allowNull: false,
+    SegmentId: {
+        type: DataTypes.STRING,
+        // allowNull: false,
       //   validate: {
       //     len: [1, 160],
       //   },
-      // },
+      },
       // body: {
       //   type: DataTypes.TEXT,
       //   allowNull: false,
