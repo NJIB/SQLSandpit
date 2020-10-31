@@ -43,11 +43,18 @@ module.exports = function (sequelize, DataTypes) {
       // },
     },
     SegmentId: {
-        type: DataTypes.STRING,
-        // allowNull: false,
+        type: DataTypes.INTEGER,
+        allowNull: false,
       //   validate: {
       //     len: [1, 160],
       //   },
+      },
+      RouteId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      // //   validate: {
+      // //     len: [1, 160],
+      // //   },
       },
       // body: {
       //   type: DataTypes.TEXT,
