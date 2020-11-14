@@ -130,13 +130,15 @@ module.exports = function(app) {
   app.put('/api/subsegments', async (req, res) => {
     // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
-    const {id, hurdle, markets, buyers, offerings, productivity, acquisition} = req.body;
+    // const {id, hurdle, markets, buyers, offerings, productivity, acquisition} = req.body;
+    const {id, hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, SegmentId} = req.body;
     console.log("req.body: ",req.body);
 
     try {
       // const result = await db.SubSegment.update(
         const result = await db.SubSegment.update(
-          {hurdle, markets, buyers, offerings, productivity, acquisition},
+          // {hurdle, markets, buyers, offerings, productivity, acquisition},
+          {hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, SegmentId},
           {where: {id}},
       );
       const affectedRowCount = result[0];
