@@ -605,11 +605,11 @@ $(document).ready(function () {
         // console.log("blankSubsegment: ", blankSubsegment);
         // subsegmentsData = [];
         // blankRowUpsert = [];
-        // subsegmentChangeLog = [];
       };
 
     };
     // getSubsegData();
+    subsegmentChangeLog = [];
     location.reload();
   };
 
