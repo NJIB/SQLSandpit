@@ -49,6 +49,7 @@ $(document).ready(function () {
   let subsegmentRecordFound = false;
   let testId = '';
   let searchString = '';
+  let RouteIdRef = '';
 
   let NEWsegment = '';
   let NEWsubsegments = '';
@@ -125,8 +126,8 @@ $(document).ready(function () {
 
         //Create subsegment rows for this segment
         for (let i = 0; i < NEWsubsegments.length; i++) {
-          //Creating next ID for blank row
           subsegmentRowsToAdd.push(createSubSegmentRow(NEWsubsegments[i]));
+          console.log("subsegmentRowsToAdd: ", subsegmentRowsToAdd);
         };
 
         //Add in blank row in subsegment table - to capture new entries
@@ -339,7 +340,7 @@ $(document).ready(function () {
     console.log("searchString: ", searchString);
 
     //Looping through subsegmentsData, to update clicks
-    // console.log("subsegmentsData: ", subsegmentsData);
+    console.log("subsegmentsData: ", subsegmentsData);
     for (var i = 0; i < subsegmentsData.length; i++) {
 
       if (subsegmentsData[i].RouteId.toString() == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
@@ -669,6 +670,7 @@ $(document).ready(function () {
       subsegmentsData.push(newSubsegment);
       console.log("subsegmentsData: ", subsegmentsData);
     })
+    console.log("subsegmentsData: ", subsegmentsData);
     upsertRoutes(subsegmentsData);
   }
 
@@ -1036,13 +1038,15 @@ $(document).ready(function () {
       RouteId: NEWsubsegments.RouteId,
     };
 
-    // console.log("subsegmentDetails: ", subsegmentDetails);
+    console.log("subsegmentDetails: ", subsegmentDetails);
+    console.log("Check if subsegmentsData already populated: ", subsegmentsData);
+
 
     //Building up array of subsegment detail objects (for this segment)
     subsegmentsData.push(subsegmentDetails);
     // console.log("subsegmentsData: ", subsegmentsData);
 
-    if (subsegmentDetails.SegmentId.toString() === segmentId) {
+    if ((subsegmentDetails.SegmentId.toString() === segmentId) && (subsegmentDetails.RouteId != RouteIdRef)) {
       // console.log("segmentId found:", segmentId);
 
       let hurdle_value;
@@ -1142,6 +1146,9 @@ $(document).ready(function () {
       // console.log("newTr: ", newTr);
 
     }
+
+    RouteIdRef = subsegmentDetails.RouteId;
+    console.log("RouteIdRef: ", RouteIdRef);
 
     //UNHIDE IF CHARTS REQUIRED ON SUBSEGMENTS PAGE
     // buildChartObject(segmentData);
