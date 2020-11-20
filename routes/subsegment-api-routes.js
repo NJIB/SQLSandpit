@@ -115,6 +115,7 @@ module.exports = function(app) {
     try {
       const result = await db.SubSegment.destroy(
           {
+            // where: {id: req.params.id},
             where: {id: req.params.id},
           },
       );

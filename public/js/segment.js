@@ -169,7 +169,6 @@ $(document).ready(function () {
       const rowsToAdd = [];
 
       for (let i = 0; i < data.length; i++) {
-        // rowsToAdd.push(createSegmentRow(data[i]));
         rowsToAdd.push(createSegmentRow(data[i], i));
 
         // Calculating total segment revenue

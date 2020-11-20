@@ -35,7 +35,8 @@ $(document).ready(function () {
   // let chart2Data = [{}];
 
   // Click events for the edit and delete buttons
-  $(document).on('click', 'button.delete', handleSubSegmentDelete);
+  // $(document).on('click', 'button.delete-subsegment', handleSubSegmentDelete);
+  $(document).on('click', '.delete-subsegment', handleSubSegmentDelete);
   $(document).on('click', 'button.edit', handleSubSegmentEdit);
   $(document).on('click', '.form-check-input', handleCheckboxClick);
   $(document).on('submit', '#subsegments-form', handleRoutesFormSubmit);
@@ -204,12 +205,15 @@ $(document).ready(function () {
 
   // This function does an API call to delete subsegments
   function deleteSubSegment(id) {
+    console.log("id: ", id);
+
     $.ajax({
       method: 'DELETE',
       url: '/api/subsegments/' + id,
     })
       .then(function () {
-        getSubSegments(subsegmentCategorySelect.val());
+        location.reload();
+        // getSubSegments(subsegmentCategorySelect.val());
       });
   }
 
@@ -450,12 +454,18 @@ $(document).ready(function () {
 
   // This function figures out which subsegment we want to delete and then calls deleteSubSegment
   function handleSubSegmentDelete() {
+    console.log("Deleting subsegment record!");
+
     const currentSubSegment = $(this)
       .parent()
       .parent()
       .data('subsegment');
-    deleteSubSegment(currentSubSegment.id);
-  }
+
+      console.log("currentSubSegment: ", currentSubSegment);
+      console.log("currentSubSegment.RouteId: ", currentSubSegment.id);
+      
+      deleteSubSegment(currentSubSegment.id);
+    }
 
 
 
@@ -1001,16 +1011,7 @@ $(document).ready(function () {
     }
 
     const newTr = $('<tr>');
-    newTr.data('segment', segmentData);
-    // newTr.append('<td></td>');
-    // newTr.append('<td></td>');
-    // newTr.append('<td></td>');
-    // newTr.append('<td></td>');
-    // newTr.append('<td></td>');
-    // newTr.append('<td></td>');
-    // newTr.append('<td></td>');
-    // newTr.append('<td></td>');
-    // newTr.append('<td></td>');
+    newTr.data('subsegment', segmentData);
     newTr.append('<td>' + '<input id="hurdle_' + nextSubsegmentId + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
@@ -1030,7 +1031,7 @@ $(document).ready(function () {
 
     //Creating row string for subsegment
     const newTr = $('<tr>');
-    newTr.data('segment', NEWsubsegments);
+    newTr.data('subsegment', NEWsubsegments);
 
     const subsegmentDetails = {
       id: NEWsubsegments.id,
@@ -1146,10 +1147,9 @@ $(document).ready(function () {
       newTr.append(acquisitionScript);
 
       newTr.append('<td>' + '<button class="btn btn-success update"> Save </button>' + '</td>');
+      newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-subsegment\'>X</a></td>');
 
-      // return newTr;
       newTr.append('</tr>');
-      // console.log("newTr: ", newTr);
     }
 
     RouteIdRef = subsegmentDetails.RouteId;
