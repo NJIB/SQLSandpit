@@ -482,12 +482,14 @@ $(document).ready(function () {
     console.log("blankRowUpsert: ", blankRowUpsert);
     upsertRoutes(blankRowUpsert);
 
-
     //Need to pull down existing records from the database - to determine if it needs to be POST or a PUT
 
     //If no subsegment records exist
     // if (!subsegmentsData || !subsegmentsData.length) {
+    console.log("subsegmentRecordFound: ", subsegmentRecordFound);
     if (subsegmentRecordFound == false) {
+
+      console.log("subsegmentRecordFound false -- creating new row");
 
       createNewRoute();
 
@@ -549,56 +551,60 @@ $(document).ready(function () {
 
     }
     else
-    //If subsegment records do exist
+      //If subsegment records do exist
+      console.log("subsegmentRecordFound true -- updating existing row");
+
     {
+      console.log("subsegmentsData: ", subsegmentsData);
+
       for (let i = 0; i < subsegmentsData.length; i++) {
         console.log("subsegmentsData object: ", subsegmentsData[i]);
 
         //Checking each item in change log, to see if it matches the subsegment record
         subsegmentChangeLog.forEach(update => {
 
-          let searchId = update.id.substr((update.id.indexOf('_') + 1), update.id.length);
-          console.log("searchId: ", searchId);
+            let searchId = update.id.substr((update.id.indexOf('_') + 1), update.id.length);
+            console.log("searchId: ", searchId);
 
-          if (searchId == subsegmentsData[i].RouteId) {
-            console.log("*** Subsegment match: ", searchId, subsegmentsData[i].RouteId, " ***");
+            if (searchId == subsegmentsData[i].RouteId) {
+              console.log("*** Subsegment match: ", searchId, subsegmentsData[i].RouteId, " ***");
 
-            subsegmentRecordFound = true;
-            console.log("subsegmentRecordFound: ", subsegmentRecordFound);
+              subsegmentRecordFound = true;
+              console.log("subsegmentRecordFound: ", subsegmentRecordFound);
 
-            switch (update.id) {
-              case ("markets_" + searchId):
-                subsegmentsData[i].markets = update.value;
-                break;
-              case ("buyers_" + searchId):
-                subsegmentsData[i].buyers = update.value;
-                break;
-              case ("offerings_" + searchId):
-                subsegmentsData[i].offerings = update.value;
-                break;
-              case ("productivity_" + searchId):
-                subsegmentsData[i].productivity = update.value;
-                break;
-              case ("acquisition_" + searchId):
-                subsegmentsData[i].acquisition = update.value;
-                break;
+              switch (update.id) {
+                case ("markets_" + searchId):
+                  subsegmentsData[i].markets = update.value;
+                  break;
+                case ("buyers_" + searchId):
+                  subsegmentsData[i].buyers = update.value;
+                  break;
+                case ("offerings_" + searchId):
+                  subsegmentsData[i].offerings = update.value;
+                  break;
+                case ("productivity_" + searchId):
+                  subsegmentsData[i].productivity = update.value;
+                  break;
+                case ("acquisition_" + searchId):
+                  subsegmentsData[i].acquisition = update.value;
+                  break;
+              }
+
+              let hurdle_id = ('#hurdle_' + searchId);
+              let hurdle_value = $(hurdle_id).val();
+              console.log("hurdle_value: ", hurdle_value);
+              if (hurdle_value != subsegmentsData[i].hurdle && hurdle_value != '') {
+                console.log("Updating hurdle value!")
+                subsegmentsData[i].hurdle = hurdle_value;
+              }
+
+              console.log("subsegmentsData[i]: ", subsegmentsData[i]);
+
+              console.log("UPDATING!");
+              // updateRouteInfo(subsegments, subsegmentsData[i])
+              updateRouteInfo(subsegmentsData[i])
+
             }
-
-            let hurdle_id = ('#hurdle_' + searchId);
-            let hurdle_value = $(hurdle_id).val();
-            console.log("hurdle_value: ", hurdle_value);
-            if (hurdle_value != subsegmentsData[i].hurdle && hurdle_value != '') {
-              console.log("Updating hurdle value!")
-              subsegmentsData[i].hurdle = hurdle_value;
-            }
-
-            console.log("subsegmentsData[i]: ", subsegmentsData[i]);
-
-            console.log("UPDATING!");
-            // updateRouteInfo(subsegments, subsegmentsData[i])
-            updateRouteInfo(subsegmentsData[i])
-
-          }
         });
         console.log("subsegmentsData: ", subsegmentsData);
 
@@ -617,7 +623,7 @@ $(document).ready(function () {
 
   function createNewRoute() {
     console.log("*** Creating new route in database ***")
-
+ 
     let newSubsegment = {
       SegmentId: '',
       RouteId: '',
@@ -671,7 +677,7 @@ $(document).ready(function () {
       console.log("subsegmentsData: ", subsegmentsData);
     })
     console.log("subsegmentsData: ", subsegmentsData);
-    upsertRoutes(subsegmentsData);
+    // upsertRoutes(subsegmentsData);
   }
 
 
@@ -1144,7 +1150,6 @@ $(document).ready(function () {
       // return newTr;
       newTr.append('</tr>');
       // console.log("newTr: ", newTr);
-
     }
 
     RouteIdRef = subsegmentDetails.RouteId;
@@ -1162,25 +1167,26 @@ $(document).ready(function () {
   // This function grabs NEWsubsegments from the database and updates the view
   //10.02 Calling this function from 76 not 49 (so only pulling records with specific segmentId)
   // function getSubSegmentDetails() {
-  function getSubSegmentDetails(subsegmentsData) {
-    console.log("subsegmentsData: ", subsegmentsData);
+  // function getSubSegmentDetails(subsegmentsData) {
+  //   console.log("subsegmentsData: ", subsegmentsData);
 
-    for (let i = 0; i < subsegmentsData.length; i++) {
+  //   for (let i = 0; i < subsegmentsData.length; i++) {
 
-      segmentId = subsegmentsData[i].id || '';
-      console.log("subsegmentsData[i].id: ", subsegmentsData[i].id);
-      console.log("segmentId: ", segmentId);
+  //     segmentId = subsegmentsData[i].id || '';
+  //     console.log("subsegmentsData[i].id: ", subsegmentsData[i].id);
+  //     console.log("segmentId: ", segmentId);
 
-      if (segmentId) {
-        segmentId = '/?segment_id=' + segmentId;
-      }
-      $.get('/api/subsegments' + segmentId, function (data) {
-        console.log('SubSegment data', data);
-        subsegments = data;
-      });
-    }
-    console.log("subsegments: ", subsegments);
-  };
+  //     if (segmentId) {
+  //       segmentId = '/?segment_id=' + segmentId;
+  //     }
+  //     $.get('/api/subsegments' + segmentId, function (data) {
+  //       console.log('SubSegment data', data);
+  //       subsegments = data;
+  //     });
+  //   }
+  //   console.log("subsegments: ", subsegments);
+  // };
+
 
 
 
