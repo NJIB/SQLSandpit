@@ -174,3 +174,24 @@ margin-left: 25px;
 padding: auto;
 text-align: center;
 }
+
+.vertext {
+  width: 0;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  text-align:center;
+  /* white-space:nowrap; */
+  transform-origin:50% 50%;
+  transform: rotate(270deg);
+}
+
+.vertext:before {
+  content:'';
+  padding-top:110%;
+  display:inline-block;
+  vertical-align:middle;
+}
+
+.headnav {
+  padding-bottom: 50px;
+}

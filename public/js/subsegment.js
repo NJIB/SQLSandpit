@@ -1019,6 +1019,14 @@ $(document).ready(function () {
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
 
+    // 11/20 Program Family add-in
+    newTr.append('<td>' + '<input id="reputation_' + nextSubsegmentId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="demand_' + nextSubsegmentId + '" placeholder=' + 'Insert demand action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="engagement_' + nextSubsegmentId + '" placeholder=' + 'Insert engagement action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="enablement_' + nextSubsegmentId + '" placeholder=' + 'Insert enablement action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="intelligence_' + nextSubsegmentId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
+    // End 11/20 Program Family add-in
+
     return newTr;
   }
   // End of createBlankRow 
@@ -1146,8 +1154,16 @@ $(document).ready(function () {
       // console.log("acquisitionScript: ", acquisitionScript);
       newTr.append(acquisitionScript);
 
-      newTr.append('<td>' + '<button class="btn btn-success update"> Save </button>' + '</td>');
-      newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-subsegment\'>X</a></td>');
+    // 11/20 Program Family add-in
+    newTr.append('<td>' + '<input id="reputation_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="demand_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert demand action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="engagement_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert engagement action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="enablement_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert enablement action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input id="intelligence_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
+    // End 11/20 Program Family add-in
+
+    newTr.append('<td>' + '<button class="btn btn-success update"> Save </button>' + '</td>');
+    newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-subsegment\'>X</a></td>');
 
       newTr.append('</tr>');
     }

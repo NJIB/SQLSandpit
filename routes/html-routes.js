@@ -18,7 +18,8 @@ module.exports = function (app) {
 
   // index route loads view.html
   app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/subsegment.html'));
+    // res.sendFile(path.join(__dirname, '../public/subsegment.html'));
+    res.sendFile(path.join(__dirname, '../public/segment-manager.html'));
   });
 
   // Route to the cms page
