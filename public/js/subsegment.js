@@ -18,7 +18,12 @@ $(document).ready(function () {
     hurdle: '',
     markets: '',
     offerings: '',
-    productivity: ''
+    productivity: '',
+    reputation: '',
+    demand: '',
+    engagement: '',
+    enablement: '',
+    intelligence: ''
   };
 
   const newTr = $('<tr>');
@@ -39,6 +44,7 @@ $(document).ready(function () {
   $(document).on('click', '.delete-subsegment', handleSubSegmentDelete);
   $(document).on('click', 'button.edit', handleSubSegmentEdit);
   $(document).on('click', '.form-check-input', handleCheckboxClick);
+  $(document).on('change', '.progfam-input', programFamilyUpdate);
   $(document).on('submit', '#subsegments-form', handleRoutesFormSubmit);
   $(document).on('click', '.update', handleRoutesFormSubmit);
 
@@ -298,6 +304,29 @@ $(document).ready(function () {
   // }
 
 
+  function programFamilyUpdate(e) {
+
+    //Reads value of field clicked 
+    // console.log("this.val(): ", $(this).val());
+    console.log("e.target.id: ", e.target.id);
+    console.log("e.target.value: ", e.target.value);
+    // console.log("e: ", e);
+
+    // Build object to capture each change
+    const progfam_id = e.target.id;
+    const progfam_value = e.target.value;
+
+    const progfam_data = {
+      id: progfam_id,
+      value: progfam_value,
+      segmentId: segmentId
+    };
+    console.log("progfam_data: ", progfam_data);
+
+    //Building log of changes to upload to db
+    progfamChangeLog.push(progfam_data);
+    console.log("progfamChangeLog: ", progfamChangeLog);
+  }
 
   function handleCheckboxClick(e) {
 
@@ -1020,11 +1049,11 @@ $(document).ready(function () {
     newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
 
     // 11/20 Program Family add-in
-    newTr.append('<td>' + '<input id="reputation_' + nextSubsegmentId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input id="demand_' + nextSubsegmentId + '" placeholder=' + 'Insert demand action' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input id="engagement_' + nextSubsegmentId + '" placeholder=' + 'Insert engagement action' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input id="enablement_' + nextSubsegmentId + '" placeholder=' + 'Insert enablement action' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input id="intelligence_' + nextSubsegmentId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="reputation_' + nextSubsegmentId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="demand_' + nextSubsegmentId + '" placeholder=' + 'Insert demand action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="engagement_' + nextSubsegmentId + '" placeholder=' + 'Insert engagement action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="enablement_' + nextSubsegmentId + '" placeholder=' + 'Insert enablement action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="intelligence_' + nextSubsegmentId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
     // End 11/20 Program Family add-in
 
     return newTr;

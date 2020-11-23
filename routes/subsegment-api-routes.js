@@ -132,7 +132,9 @@ module.exports = function(app) {
     // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     // const {id, hurdle, markets, buyers, offerings, productivity, acquisition} = req.body;
-    const {id, hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, SegmentId} = req.body;
+    const {id, hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, SegmentId
+    // , reputation, demand, engagement, enablement, intelligence
+    } = req.body;
     console.log("req.body: ",req.body);
 
     try {

@@ -16,9 +16,10 @@ module.exports = function (app) {
   //   res.sendFile(path.join(__dirname, '../public/comment.html'));
   // });
 
+
+  // THIS IS THE START-UP ROUTING
   // index route loads view.html
   app.get('/', function (req, res) {
-    // res.sendFile(path.join(__dirname, '../public/subsegment.html'));
     res.sendFile(path.join(__dirname, '../public/segment-manager.html'));
   });
 
