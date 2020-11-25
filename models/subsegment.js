@@ -68,41 +68,41 @@ module.exports = function (sequelize, DataTypes) {
       //   defaultValue: 'Personal',
       //   allowNull: false,
       // },
-      reputation: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      // reputation: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
       // //   validate: {
       // //     len: [1, 160],
       // //   },
-      },
-      demand: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      // },
+      // demand: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
       // //   validate: {
       // //     len: [1, 160],
       // //   },
-      },
-      engagement: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      // },
+      // engagement: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
       // //   validate: {
       // //     len: [1, 160],
       // //   },
-      },
-      enablement: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      // },
+      // enablement: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
       // //   validate: {
       // //     len: [1, 160],
       // //   },
-      },
-      intelligence: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      // },
+      // intelligence: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
       // //   validate: {
       // //     len: [1, 160],
       // //   },
-      },
+      // },
     });
 
   SubSegment.associate = function (models) {
