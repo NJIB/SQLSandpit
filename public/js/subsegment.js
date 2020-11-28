@@ -8,8 +8,8 @@ $(document).ready(function () {
   //Array of objects to hold data for upsert to Routes table
   let subsegmentChangeLog = [];
   let progfamChangeLog = [];
+  let togChangeLog = [];
   let subsegmentsData = [];
-  // let blankSubsegment = [];
 
   let blankSubsegment = {
     SegmentId: '',
@@ -47,6 +47,8 @@ $(document).ready(function () {
   $(document).on('click', '.form-check-input', handleCheckboxClick);
   $(document).on('change', '.progfam-input', programFamilyUpdate);
   $(document).on('submit', '#subsegments-form', handleRoutesFormSubmit);
+  // $(document).on('click', '#subseg_submit', handleRoutesFormSubmit);
+  $(document).on('click', '.ddSelect', dropdownValue);
   $(document).on('click', '.update', handleRoutesFormSubmit);
 
   // Variable to hold our subsegments
@@ -58,6 +60,7 @@ $(document).ready(function () {
   let testId = '';
   let searchString = '';
   let RouteIdRef = '';
+  let menuvar = '';
 
   let NEWsegment = '';
   let NEWsubsegments = '';
@@ -309,6 +312,29 @@ $(document).ready(function () {
   //     '\'>here</a> in order to get started.');
   //   blogContainer.append(messageH2);
   // }
+
+  function dropdownValue(e) {
+    menuvar = $(this).text();
+    console.log("menuvar: ", menuvar);
+    const menuvarId = $(this)[0].id;
+    console.log("menuvarId: ", menuvarId);
+
+    const tog_data = {
+      id: menuvarId,
+      value: menuvar,
+      segmentId: segmentId
+    };
+    console.log("tog_data: ", tog_data);
+
+    //Building log of changes to upload to db
+    togChangeLog.push(tog_data);
+    console.log("togChangeLog: ", togChangeLog);
+
+
+
+
+    renderSubsegmentList(subsegmentRowsToAdd);
+  }
 
 
   function programFamilyUpdate(e) {
@@ -891,6 +917,8 @@ $(document).ready(function () {
     newTr.append('<td>' + '<input class="progfam-input" id="intelligence_' + nextSubsegmentId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
     // End 11/20 Program Family add-in
 
+    newTr.append('<td>' + '<button type="submit" class="btn btn-primary">Submit > </button>' + '</td>');
+
     return newTr;
   }
   // End of createBlankRow 
@@ -914,7 +942,9 @@ $(document).ready(function () {
       productivity: NEWsubsegments.productivity,
       acquisition: NEWsubsegments.acquisition,
       SegmentId: NEWsubsegments.SegmentId,
-      RouteId: NEWsubsegments.RouteId,
+      RouteId: NEWsubsegments.RouteId
+      // togId: menuvarId,
+      // togValue: menuvar
     };
 
     console.log("subsegmentDetails: ", subsegmentDetails);
@@ -934,7 +964,6 @@ $(document).ready(function () {
       } else {
         hurdle_value = '"E.g. Retention"';
       }
-      // console.log("hurdle_value: ", hurdle_value);
 
       const markets_value = subsegmentDetails.markets;
       // console.log("markets_value: ", markets_value);
@@ -947,9 +976,7 @@ $(document).ready(function () {
       const acquisition_value = subsegmentDetails.acquisition;
       // console.log("acquisition_value: ", acquisition_value);
 
-      // const trAppend = $('<tr>');
       const hurdleScript = '<td>' + '<input id="hurdle_' + subsegmentDetails.RouteId + '" placeholder=' + hurdle_value + ' type="text" />' + '</td>'
-      // console.log('hurdleScript: ', hurdleScript);
       newTr.append(hurdleScript);
 
       // Setting checkboxes to checked or unchecked, depending on results from GET from Subsegments table
@@ -957,69 +984,67 @@ $(document).ready(function () {
       let marketsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
       let marketsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="markets_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
-      // console.log("markets_value: ", markets_value);
       if (markets_value == "checked") {
         marketsScript = marketsChecked;
       } else {
         marketsScript = marketsUnchecked;
       }
-      // console.log("marketsScript: ", marketsScript);
       newTr.append(marketsScript);
 
       let buyersScript = "";
       let buyersUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
       let buyersChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="buyers_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
-      // console.log("buyers_value: ", buyers_value);
       if (buyers_value == "checked") {
         buyersScript = buyersChecked;
       } else {
         buyersScript = buyersUnchecked;
       }
-      // console.log("buyersScript: ", buyersScript);
       newTr.append(buyersScript);
 
       let offeringsScript = "";
       let offeringsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
       let offeringsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="offerings_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
-      // console.log("offerings_value: ", offerings_value);
       if (offerings_value == "checked") {
         offeringsScript = offeringsChecked;
       } else {
         offeringsScript = offeringsUnchecked;
       }
-      // console.log("offeringsScript: ", offeringsScript);
       newTr.append(offeringsScript);
 
       let productivityScript = "";
       let productivityUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
       let productivityChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="productivity_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
-      // console.log("productivity_value: ", productivity_value);
       if (productivity_value == "checked") {
         productivityScript = productivityChecked;
       } else {
         productivityScript = productivityUnchecked;
       }
-      // console.log("productivityScript: ", productivityScript);
       newTr.append(productivityScript);
 
       let acquisitionScript = "";
       let acquisitionUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
       let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
-      // console.log("acquisition_value: ", acquisition_value);
       if (acquisition_value == "checked") {
         acquisitionScript = acquisitionChecked;
       } else {
         acquisitionScript = acquisitionUnchecked;
       }
-      // console.log("acquisitionScript: ", acquisitionScript);
       newTr.append(acquisitionScript);
 
-      {/* <div class="dropdown"> */ }
-      newTr.append('<td><button class="btn btn-default dropdown-toggle"type="button" id="menu1" data-toggle="dropdown">Program Type<span class="caret"></span></button><ul class="dropdown-menu" role="menu" aria-labelledby="menu1"><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reputation</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Demand</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Engagement</a></li><li role="presentation" class="divider"></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Enablement</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Intelligence</a></li></ul></td>');
+      console.log("subsegmentDetails: ", subsegmentDetails);
+      const repTogId = 'repTog_'+subsegmentDetails.RouteId;
+      const demTogId = 'demTog_'+subsegmentDetails.RouteId;
+      const engTogId = 'engTog_'+subsegmentDetails.RouteId;
+      const enabTogId = 'enabTog_'+subsegmentDetails.RouteId;
+      const intTogId = 'intTog_'+subsegmentDetails.RouteId;
+
+      /* <div class="dropdown"> */
+      newTr.append('<td><button class="btn btn-default dropdown-toggle "type="button" id="menu1" data-toggle="dropdown">Program Type<span class="caret"></span></button><ul class="dropdown-menu" role="menu" aria-labelledby="menu1"><li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="ddSelect" id="' + repTogId + '">Reputation</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="ddSelect" id="' + demTogId + '">Demand</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="ddSelect" id="' + engTogId + '">Engagement</a></li><li role="presentation" class="divider"></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="ddSelect" id="' + enabTogId + '">Enablement</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="ddSelect" id="' + intTogId + '">Intelligence</a></li></ul></td>');
+      newTr.append('<td>' + menuvar + "</td>");
       // </div>
 
       newTr.append('<td>' + '<input class="progfam-input" id="reputation_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
